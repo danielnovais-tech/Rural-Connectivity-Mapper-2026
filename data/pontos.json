@@ -1,0 +1,39 @@
+[
+  {
+    "lat": -15.7801,
+    "lon": -47.9292,
+    "provider": "Starlink",
+    "address": "Brasília, DF, Brazil",
+    "download": 150.5,
+    "upload": 20.3,
+    "latency": 25.0,
+    "stability": 98.5,
+    "timestamp": "2026-01-01T10:00:00",
+    "tags": ["rural", "satellite", "test"],
+    "quality_score": 3.395
+  },
+  {
+    "lat": -3.7319,
+    "lon": -38.5267,
+    "provider": "Starlink",
+    "address": "Fortaleza, CE, Brazil",
+    "download": 145.2,
+    "upload": 18.7,
+    "latency": 28.5,
+    "stability": 97.0,
+    "tags": ["rural", "satellite"],
+    "quality_score": 2.912
+  },
+  {
+    "lat": -9.6658,
+    "lon": -35.7353,
+    "provider": "Starlink",
+    "address": "Maceió, AL, Brazil",
+    "download": 138.9,
+    "upload": 19.5,
+    "latency": 30.2,
+    "stability": 96.5,
+    "tags": ["rural", "satellite", "expansion"],
+    "quality_score": 2.665
+  }
+]
