@@ -276,7 +276,7 @@ def backup_data(filepath: str = DATA_FILE, debug: bool = False) -> Optional[str]
         # Generate backup filename with timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = os.path.basename(filepath)
-        backup_path = os.path.join(BACKUP_DIR, f"{filename}.{timestamp}.bak")
+        backup_path = os.path.join(BACKUP_DIR, f"{filename}_{timestamp}.bak")
         
         # Copy file
         shutil.copy2(filepath, backup_path)
@@ -368,7 +368,9 @@ def export_csv(access_points: List[AccessPoint], filepath: str, debug: bool = Fa
     """
     try:
         # Ensure directory exists
-        os.makedirs(os.path.dirname(filepath) if os.path.dirname(filepath) else '.', exist_ok=True)
+        dirname = os.path.dirname(filepath)
+        if dirname:
+            os.makedirs(dirname, exist_ok=True)
         
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             fieldnames = ['lat', 'lon', 'provider', 'address', 'download', 'upload', 
