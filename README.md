@@ -34,6 +34,11 @@ cd Rural-Connectivity-Mapper-2026
 pip install -r requirements.txt
 ```
 
+3. (Optional) Install development dependencies:
+```bash
+pip install -r requirements-dev.txt
+```
+
 ## Usage
 
 ### Interactive Mode

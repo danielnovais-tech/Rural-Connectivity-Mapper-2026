@@ -1,5 +1,6 @@
 """Connectivity Point model representing a geographic location with connectivity data."""
 
+import hashlib
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 
@@ -41,7 +42,6 @@ class ConnectivityPoint:
     
     def _generate_id(self) -> str:
         """Generate a unique ID based on coordinates and timestamp."""
-        import hashlib
         data = f"{self.latitude}_{self.longitude}_{self.timestamp.isoformat()}"
         return hashlib.md5(data.encode()).hexdigest()[:12]
     
