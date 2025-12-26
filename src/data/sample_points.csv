@@ -1,0 +1,6 @@
+point_id,latitude,longitude,address,provider,tags,timestamp
+p001,-23.5505,-46.6333,"São Paulo, SP, Brazil",Starlink,"urban,test",2024-01-15T10:00:00
+p002,-22.9068,-43.1729,"Rio de Janeiro, RJ, Brazil",Starlink,"urban,coastal",2024-01-15T11:00:00
+p003,-15.7801,-47.9292,"Brasília, DF, Brazil",Starlink,"capital",2024-01-15T12:00:00
+p004,-12.9714,-38.5014,"Salvador, BA, Brazil",Viasat,"coastal,rural",2024-01-15T13:00:00
+p005,-3.7327,-38.5270,"Fortaleza, CE, Brazil",HughesNet,"coastal,rural",2024-01-15T14:00:00
