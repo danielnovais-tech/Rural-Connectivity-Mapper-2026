@@ -1,14 +1,14 @@
 """Tests for measurement utilities."""
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 from src.utils.measurement_utils import measure_speed
 
 
 def test_measure_speed():
     """Test speed measurement with mocked speedtest."""
-    with patch('src.utils.measurement_utils.speedtest.Speedtest') as mock_speedtest:
+    with patch('speedtest.Speedtest') as mock_speedtest:
         # Setup mock
         mock_st = Mock()
         mock_st.download.return_value = 100_000_000  # 100 Mbps in bits
