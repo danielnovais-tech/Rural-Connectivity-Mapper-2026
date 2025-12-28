@@ -1,0 +1,6 @@
+id,city,provider,latitude,longitude,download,upload,latency,jitter,packet_loss,timestamp
+1,São Paulo,Various,-23.5505,-46.6333,85.2,12.5,45.3,8.2,1.2,2026-01-15T10:30:00
+2,Rio de Janeiro,Claro,-22.9068,-43.1729,92.1,15.3,38.7,6.5,0.8,2026-01-15T11:00:00
+3,Brasília,Starlink,-15.7801,-47.9292,165.4,22.8,28.5,3.2,0.1,2026-01-15T11:30:00
+4,Salvador,Viasat,-12.9714,-38.5014,75.3,9.8,68.2,15.7,2.5,2026-01-15T12:00:00
+5,Fortaleza,HughesNet,-3.7172,-38.5433,62.8,7.2,95.4,22.3,3.8,2026-01-15T12:30:00
