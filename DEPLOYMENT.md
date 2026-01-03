@@ -215,7 +215,7 @@ cd /opt/rural-connectivity-mapper
 
 # 2. Clone repository
 git clone https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026.git .
-git checkout tags/v1.0.1  # Use specific version tag
+git checkout tags/v1.0.1  # Use specific version tag (check latest: git tag -l)
 
 # 3. Create virtual environment
 python3 -m venv venv
@@ -803,7 +803,7 @@ Use this checklist for new deployments:
 ---
 
 **Document Version:** 1.0  
-**Last Updated:** January 3, 2026  
+**Last Updated:** January 2026  
 **Maintained By:** Rural Connectivity Mapper Team  
 
 For questions or updates to this document, please open a GitHub issue or discussion.
