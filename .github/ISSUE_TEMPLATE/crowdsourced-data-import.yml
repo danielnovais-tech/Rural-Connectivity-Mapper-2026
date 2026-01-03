@@ -22,13 +22,13 @@ body:
         
         ### 1. CSV Validation ✅
         - [ ] Implement robust CSV file validation
-        - [ ] Validate required columns: location, provider, download_speed, upload_speed, latency
-        - [ ] Support optional columns: jitter, packet_loss, timestamp, tags
+        - [ ] Validate required columns: city, provider, download, upload, latency
+        - [ ] Support optional columns: id, latitude, longitude, jitter, packet_loss, timestamp
         - [ ] Validate data types (numeric values, proper date formats)
         - [ ] Validate data ranges (e.g., speeds > 0, latency > 0, quality score 0-100)
         - [ ] Provide clear error messages for invalid data
         - [ ] Handle missing values gracefully with defaults or warnings
-        - [ ] Support UTF-8 encoding for Brazilian location names
+        - [ ] Support UTF-8 encoding for Brazilian city names
         
         ### 2. Documentation 📚
         - [ ] Create comprehensive user guide in `docs/CROWDSOURCED_IMPORT.md`
@@ -77,10 +77,12 @@ body:
         ### CSV Format Example
         
         ```csv
-        location,provider,download_speed,upload_speed,latency,jitter,packet_loss,timestamp,tags
-        "São Paulo, SP",Starlink,165.4,22.8,28.5,2.1,0.1,2026-01-03T10:30:00,rural;satellite
-        "Curitiba, PR",Claro,92.1,15.3,38.7,3.2,0.2,2026-01-03T11:45:00,urban;fiber
+        id,city,provider,latitude,longitude,download,upload,latency,jitter,packet_loss,timestamp
+        1,São Paulo,Starlink,-23.5505,-46.6333,165.4,22.8,28.5,2.1,0.1,2026-01-03T10:30:00
+        2,Curitiba,Claro,-25.4284,-49.2733,92.1,15.3,38.7,3.2,0.2,2026-01-03T11:45:00
         ```
+        
+        **Note:** This format matches the existing `src/data/sample_data.csv` structure.
         
         ### Technical Requirements
         
@@ -102,7 +104,7 @@ body:
         
         1. **Fork** the repository
         2. **Create** a feature branch: `git checkout -b feature/crowdsourced-import`
-        3. **Read** the [CONTRIBUTING.md](../../CONTRIBUTING.md) guidelines
+        3. **Read** the README.md contributing guidelines
         4. **Run** existing tests: `pytest tests/ -v`
         5. **Implement** the feature following the guidance above
         6. **Add** tests for your changes
