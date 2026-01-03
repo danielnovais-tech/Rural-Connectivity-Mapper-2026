@@ -72,6 +72,13 @@ def test_generate_map_empty_data(tmp_path):
     
     # Should still create a map file
     assert Path(map_path).exists()
+    
+    # Verify coverage layer is still included even without data
+    with open(map_path, 'r') as f:
+        content = f.read()
+    
+    # Should contain coverage layer by default
+    assert 'Starlink Coverage Zones' in content
 
 
 def test_generate_map_default_path(sample_data, tmp_path, monkeypatch):

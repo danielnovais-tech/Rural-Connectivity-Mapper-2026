@@ -127,6 +127,33 @@ def generate_map(data: List[Dict], output_path: str = None, include_starlink_cov
             logger.warning("No data provided for map generation")
             # Create empty map centered on Brazil
             m = folium.Map(location=[-15.7801, -47.9292], zoom_start=4)
+            
+            # Add Starlink coverage layer even without data points
+            if include_starlink_coverage:
+                starlink_layer = folium.FeatureGroup(name='Starlink Coverage Zones', show=True)
+                coverage_zones = get_starlink_coverage_zones()
+                
+                for zone in coverage_zones:
+                    folium.Circle(
+                        location=zone['center'],
+                        radius=zone['radius'],
+                        color=zone['color'],
+                        fill=True,
+                        fillColor=zone['color'],
+                        fillOpacity=zone['opacity'],
+                        opacity=0.3,
+                        popup=folium.Popup(
+                            f"<b>{zone['name']}</b><br>"
+                            f"Coverage: {zone['coverage'].title()}<br>"
+                            f"Radius: ~{zone['radius']//1000} km",
+                            max_width=200
+                        ),
+                        tooltip=f"{zone['name']} - {zone['coverage'].title()} coverage"
+                    ).add_to(starlink_layer)
+                
+                starlink_layer.add_to(m)
+                folium.LayerControl(position='topright', collapsed=False).add_to(m)
+            
             m.save(str(path))
             return str(path)
         
@@ -246,7 +273,7 @@ def generate_map(data: List[Dict], output_path: str = None, include_starlink_cov
         # Add legend
         legend_html = '''
         <div style="position: fixed; 
-                    bottom: 50px; right: 50px; width: 200px; height: AUTO; 
+                    bottom: 50px; right: 50px; width: 200px; height: auto; 
                     background-color: white; border:2px solid grey; z-index:9999; 
                     font-size:14px; padding: 10px">
         <p style="margin: 0; font-weight: bold;">Quality Rating</p>
