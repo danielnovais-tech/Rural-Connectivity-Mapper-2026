@@ -431,6 +431,91 @@ for insight in analysis['insights']:
 
 ---
 
+## Alternative Data Submission Methods
+
+The Rural Connectivity Mapper 2026 supports multiple methods for submitting connectivity data to accommodate users with different technical skill levels:
+
+### 1. Direct CSV Import (Current)
+
+**Best for:** Bulk data import, automated systems, users comfortable with CSV files
+
+```bash
+python main.py --importar src/data/sample_data.csv
+```
+
+**CSV Format:**
+```csv
+id,city,provider,latitude,longitude,download,upload,latency,jitter,packet_loss,timestamp
+1,São Paulo,Starlink,-23.5505,-46.6333,165.4,22.8,28.5,3.2,0.1,2026-01-15T10:30:00
+```
+
+**Required Fields:**
+- `id` - Unique identifier
+- `city` - City or location name
+- `provider` - ISP name (Starlink, Viasat, HughesNet, Claro, Vivo, TIM, Oi, etc.)
+- `latitude` - GPS latitude (-90 to 90)
+- `longitude` - GPS longitude (-180 to 180)
+- `download` - Download speed in Mbps
+- `upload` - Upload speed in Mbps
+- `latency` - Latency/ping in milliseconds
+- `jitter` - Jitter in milliseconds (optional, default: 0)
+- `packet_loss` - Packet loss percentage (optional, default: 0)
+- `timestamp` - ISO 8601 format timestamp
+
+### 2. Google Forms Integration (Recommended for Non-Technical Users)
+
+**Best for:** Field data collection, community participation, non-technical users
+
+Google Forms provides an easy-to-use web interface for collecting connectivity data without requiring any programming knowledge or CSV file handling skills.
+
+**Key Features:**
+- ✅ **User-Friendly** - Simple web form, no technical skills needed
+- ✅ **Mobile Compatible** - Works on smartphones for field data collection
+- ✅ **Free** - No cost for basic usage
+- ✅ **Automatic Validation** - Built-in field validation and required fields
+- ✅ **CSV Export** - Exports to CSV compatible with the mapper
+- ✅ **Shareable** - Easy to distribute via link, email, or social media
+
+**Workflow:**
+1. Create Google Form with connectivity data fields
+2. Share form link with users
+3. Collect responses automatically in Google Sheets
+4. Export to CSV format
+5. Import using standard CSV import command
+
+**Complete Setup Guide:**
+
+See **[docs/GOOGLE_FORMS_INTEGRATION.md](GOOGLE_FORMS_INTEGRATION.md)** for:
+- Step-by-step form creation instructions
+- Field configuration and validation rules
+- Data export and formatting procedures
+- Import instructions and troubleshooting
+- Sample form template
+
+**Example:**
+```bash
+# After exporting from Google Forms
+python main.py --importar google_forms_responses.csv --map --relatorio html
+```
+
+### 3. REST API (Future - Planned for v1.2.0)
+
+**Best for:** Real-time data submission, mobile apps, automated systems
+
+A REST API is planned for Q2 2026 that will allow:
+- Real-time data submission via HTTP POST
+- JSON-based data format
+- Authentication and rate limiting
+- Webhooks for data updates
+- Integration with mobile apps and IoT devices
+
+**Planned Endpoints:**
+- `POST /api/v1/points` - Submit new connectivity point
+- `GET /api/v1/points` - Retrieve connectivity points
+- `GET /api/v1/analysis` - Get analysis results
+
+---
+
 ## CLI Usage
 
 See README.md for complete CLI documentation.
@@ -438,6 +523,9 @@ See README.md for complete CLI documentation.
 ```bash
 # Import CSV data
 python main.py --debug --importar src/data/sample_data.csv
+
+# Import Google Forms export
+python main.py --importar google_forms_export.csv
 
 # Generate reports
 python main.py --relatorio json

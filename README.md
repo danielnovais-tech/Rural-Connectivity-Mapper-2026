@@ -144,6 +144,38 @@ python main.py --debug \
 | `--map` | Generate interactive map | Flag |
 | `--analyze` | Analyze temporal trends | Flag |
 
+### Alternative Data Submission Methods
+
+#### 📝 Google Forms Integration (Recommended for Non-Technical Users)
+
+For users who are not comfortable with CSV files or command-line tools, we provide **Google Forms integration** as an easy alternative for data collection.
+
+**Benefits:**
+- ✅ No technical knowledge required
+- ✅ Mobile-friendly for field data collection
+- ✅ Free and easy to share
+- ✅ Automatic data validation
+- ✅ Exports to CSV format compatible with the mapper
+
+**Quick Start:**
+1. Create a Google Form using our template
+2. Share the form link with users
+3. Collect responses in Google Sheets
+4. Export to CSV and import using `--importar`
+
+**📖 Complete Guide:** See [docs/GOOGLE_FORMS_INTEGRATION.md](docs/GOOGLE_FORMS_INTEGRATION.md) for detailed instructions on:
+- Setting up your Google Form
+- Configuring fields and validation
+- Exporting and formatting data
+- Importing into the mapper
+- Troubleshooting common issues
+
+**Example Workflow:**
+```bash
+# After exporting from Google Forms to CSV
+python main.py --importar google_forms_export.csv --map --relatorio html
+```
+
 ---
 
 ## 📁 Project Structure
@@ -189,7 +221,8 @@ Rural-Connectivity-Mapper-2026/
 │   └── test_analysis_utils.py
 │
 └── docs/
-    └── API.md                   # API reference
+    ├── API.md                   # API reference
+    └── GOOGLE_FORMS_INTEGRATION.md  # Google Forms setup guide
 ```
 
 ---
