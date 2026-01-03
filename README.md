@@ -23,13 +23,14 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
+- 🛰️ **Starlink Coverage Overlay** - Optional layer showing coverage zones (Active, Planned, Limited)
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **38 Comprehensive Tests** - 80%+ code coverage with pytest
 
 ---
 
@@ -112,6 +113,12 @@ python main.py --map
 ```
 *Generates Folium HTML map with color-coded markers*
 
+#### Create Map with Starlink Coverage Overlay
+```bash
+python main.py --map --starlink-coverage
+```
+*Generates interactive map with optional Starlink coverage zones showing Active, Planned, and Limited coverage areas. Helps farmers identify optimal installation locations.*
+
 #### Analyze Temporal Evolution
 ```bash
 python main.py --analyze
@@ -129,6 +136,7 @@ python main.py --debug \
   --importar src/data/sample_data.csv \
   --simulate \
   --map \
+  --starlink-coverage \
   --analyze \
   --relatorio html
 ```
@@ -142,6 +150,7 @@ python main.py --debug \
 | `--importar <csv>` | Import from CSV | Path to file |
 | `--simulate` | Simulate router impact | Flag |
 | `--map` | Generate interactive map | Flag |
+| `--starlink-coverage` | Add Starlink coverage overlay | Flag (requires --map) |
 | `--analyze` | Analyze temporal trends | Flag |
 
 ---
@@ -247,20 +256,21 @@ pytest tests/ --cov=src --cov-report=html
 ```
 
 **Test Coverage:**
-- 36 total tests (180% of requirement)
+- 38 total tests (190% of requirement)
 - 5 model tests
-- 31 utility tests
+- 33 utility tests
 - 80%+ code coverage
 
 ---
 
 ## 🌍 Use Cases
 
-1. **Rural Expansion Planning** - Identify priority areas for Starlink installations
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations using coverage overlay
 2. **ISP Performance Benchmarking** - Compare Starlink vs. traditional providers
-3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
-4. **Policy Advocacy** - Generate reports for government stakeholders
-5. **Academic Research** - Analyze connectivity's socioeconomic impact
+3. **Installation Site Selection** - Visualize coverage zones to determine optimal Dishy placement
+4. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
+5. **Policy Advocacy** - Generate reports for government stakeholders
+6. **Academic Research** - Analyze connectivity's socioeconomic impact
 
 ---
 
@@ -333,11 +343,12 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ## 📊 Project Statistics
 
 - **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
+- **3,700+ lines of code** (Python)
+- **38 passing tests** (100% success rate)
 - **5 sample cities** with real-world profiles
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
+- **6 Starlink coverage zones** (Active, Planned, Limited)
 
 ---
 

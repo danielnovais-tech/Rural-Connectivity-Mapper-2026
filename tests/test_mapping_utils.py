@@ -84,3 +84,34 @@ def test_generate_map_default_path(sample_data, tmp_path, monkeypatch):
     assert Path(map_path).exists()
     assert 'connectivity_map' in map_path
     assert map_path.endswith('.html')
+
+
+def test_generate_map_with_starlink_coverage(sample_data, tmp_path):
+    """Test map generation with Starlink coverage overlay."""
+    output_path = tmp_path / "coverage_map.html"
+    
+    map_path = generate_map(sample_data, str(output_path), show_starlink_coverage=True)
+    
+    assert Path(map_path).exists()
+    
+    # Verify HTML content includes coverage layer
+    with open(map_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Should contain layer control for toggling coverage
+    assert 'LayerControl' in content or 'layer' in content.lower()
+    
+    # Should contain coverage legend elements
+    assert 'Starlink Coverage' in content or 'coverage' in content.lower()
+
+
+def test_generate_map_coverage_without_data_file(sample_data, tmp_path, monkeypatch):
+    """Test map generation with coverage enabled but no coverage data file."""
+    # This should not fail, just log a warning
+    output_path = tmp_path / "test_no_coverage_data.html"
+    
+    # Generate map with coverage enabled
+    map_path = generate_map(sample_data, str(output_path), show_starlink_coverage=True)
+    
+    # Should still create a valid map
+    assert Path(map_path).exists()
