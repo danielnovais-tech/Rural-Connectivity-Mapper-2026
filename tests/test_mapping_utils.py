@@ -4,7 +4,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from src.utils.mapping_utils import generate_map
+from src.utils.mapping_utils import generate_map, get_starlink_coverage_zones
 
 
 @pytest.fixture
@@ -84,3 +84,69 @@ def test_generate_map_default_path(sample_data, tmp_path, monkeypatch):
     assert Path(map_path).exists()
     assert 'connectivity_map' in map_path
     assert map_path.endswith('.html')
+
+
+def test_get_starlink_coverage_zones():
+    """Test Starlink coverage zones retrieval."""
+    zones = get_starlink_coverage_zones()
+    
+    # Should return a list of zones
+    assert isinstance(zones, list)
+    assert len(zones) > 0
+    
+    # Each zone should have required fields
+    for zone in zones:
+        assert 'name' in zone
+        assert 'center' in zone
+        assert 'radius' in zone
+        assert 'coverage' in zone
+        assert 'color' in zone
+        assert 'opacity' in zone
+        
+        # Validate data types
+        assert isinstance(zone['name'], str)
+        assert isinstance(zone['center'], list)
+        assert len(zone['center']) == 2
+        assert isinstance(zone['radius'], int)
+        assert zone['coverage'] in ['excellent', 'good', 'moderate']
+
+
+def test_generate_map_with_starlink_coverage(sample_data, tmp_path):
+    """Test map generation with Starlink coverage layer enabled."""
+    output_path = tmp_path / "test_map_with_coverage.html"
+    
+    map_path = generate_map(sample_data, str(output_path), include_starlink_coverage=True)
+    
+    assert Path(map_path).exists()
+    
+    # Verify HTML content includes coverage layer
+    with open(map_path, 'r') as f:
+        content = f.read()
+    
+    # Should contain coverage layer name
+    assert 'Starlink Coverage Zones' in content
+    
+    # Should contain layer control
+    assert 'LayerControl' in content or 'layer' in content.lower()
+    
+    # Should contain coverage legend
+    assert 'Starlink Coverage' in content
+
+
+def test_generate_map_without_starlink_coverage(sample_data, tmp_path):
+    """Test map generation with Starlink coverage layer disabled."""
+    output_path = tmp_path / "test_map_no_coverage.html"
+    
+    map_path = generate_map(sample_data, str(output_path), include_starlink_coverage=False)
+    
+    assert Path(map_path).exists()
+    
+    # Verify HTML content doesn't include coverage layer elements
+    with open(map_path, 'r') as f:
+        content = f.read()
+    
+    # Should not contain coverage layer name
+    assert 'Starlink Coverage Zones' not in content
+    
+    # Should not contain coverage legend section
+    assert 'Starlink Coverage' not in content
