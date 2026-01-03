@@ -83,7 +83,7 @@ python main.py --help
 ### Python Style Guide
 
 - **Follow PEP 8** - Use consistent Python style conventions
-- **Line length:** Maximum 100 characters (120 for comments)
+- **Line length:** Maximum 79 characters for code, 72 for comments (per PEP 8)
 - **Indentation:** 4 spaces (no tabs)
 - **Naming conventions:**
   - Classes: `PascalCase`
@@ -231,7 +231,7 @@ For significant changes, consider adding an entry to the project's release notes
 
 ## Roadmap Alignment
 
-Our project follows a clear roadmap. Please consider how your contribution aligns with:
+Our project follows a clear roadmap (see [README.md](README.md#-roadmap) for details). Please consider how your contribution aligns with:
 
 ### v1.1.0 (Q1 2026)
 - Real-time speedtest integration
