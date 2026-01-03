@@ -26,10 +26,11 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
-- 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
+- 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
+- 🛰️ **Satellite Metrics** - Track jitter, packet loss, and obstruction for satellite ISPs
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
 
 ---
 
@@ -196,15 +197,20 @@ Rural-Connectivity-Mapper-2026/
 
 ## 📊 Sample Data
 
-Pre-configured connectivity data for 5 Brazilian cities:
+Pre-configured connectivity data for 10 Brazilian cities (2026 data):
 
-| City | Provider | Download | Upload | Latency | Quality Score |
-|------|----------|----------|--------|---------|---------------|
-| **São Paulo** | Various | 85.2 Mbps | 12.5 Mbps | 45.3 ms | 78.2/100 (Good) |
-| **Rio de Janeiro** | Claro | 92.1 Mbps | 15.3 Mbps | 38.7 ms | 82.2/100 (Excellent) |
-| **Brasília** | **Starlink** ⭐ | 165.4 Mbps | 22.8 Mbps | 28.5 ms | **100/100 (Excellent)** |
-| **Salvador** | Viasat | 75.3 Mbps | 9.8 Mbps | 68.2 ms | 50.6/100 (Fair) |
-| **Fortaleza** | HughesNet | 62.8 Mbps | 7.2 Mbps | 95.4 ms | 25.1/100 (Poor) |
+| City | Provider | Download | Upload | Latency | Jitter | Packet Loss | Obstruction | Quality Score |
+|------|----------|----------|--------|---------|--------|-------------|-------------|---------------|
+| **São Paulo** | Various | 85.2 Mbps | 12.5 Mbps | 45.3 ms | 8.2 ms | 1.2% | 0% | 63.0/100 (Good) |
+| **Rio de Janeiro** | Claro | 92.1 Mbps | 15.3 Mbps | 38.7 ms | 6.5 ms | 0.8% | 0% | 71.2/100 (Good) |
+| **Brasília** | **Starlink Gen2** ⭐ | 165.4 Mbps | 22.8 Mbps | 28.5 ms | 3.2 ms | 0.1% | 2.5% | **91.0/100 (Excellent)** |
+| **Salvador** | Viasat | 75.3 Mbps | 9.8 Mbps | 68.2 ms | 15.7 ms | 2.5% | 0% | 42.3/100 (Fair) |
+| **Fortaleza** | HughesNet | 62.8 Mbps | 7.2 Mbps | 95.4 ms | 22.3 ms | 3.8% | 0% | 21.8/100 (Poor) |
+| **Curitiba** | **Starlink High Perf** 🚀 | 220.5 Mbps | 28.4 Mbps | 24.8 ms | 2.1 ms | 0.05% | 1.2% | **96.7/100 (Excellent)** |
+| **Manaus** | Vivo | 68.4 Mbps | 10.2 Mbps | 52.3 ms | 12.4 ms | 1.8% | 0% | 52.1/100 (Fair) |
+| **Recife** | TIM | 78.9 Mbps | 11.6 Mbps | 41.5 ms | 9.3 ms | 1.4% | 0% | 61.6/100 (Good) |
+| **Porto Alegre** | Oi | 81.2 Mbps | 13.8 Mbps | 39.2 ms | 7.8 ms | 1.1% | 0% | 66.7/100 (Good) |
+| **Belo Horizonte** | **Starlink Gen2** ⭐ | 172.8 Mbps | 24.2 Mbps | 26.9 ms | 2.8 ms | 0.08% | 3.8% | **92.5/100 (Excellent)** |
 
 ---
 
@@ -223,8 +229,13 @@ Overall Score = (Speed Score × 0.40) + (Latency Score × 0.30) + (Stability Sco
 # Component calculations:
 Speed Score = ((download/200 + upload/20) / 2) × 100
 Latency Score = 100 - (latency - 20) × 1.25  # Capped at 100
-Stability Score = 100 - (jitter × 2 + packet_loss × 10)
+Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 0.2)
 ```
+
+**New 2026 Metrics:**
+- **Jitter**: Variation in latency (ms) - affects real-time applications
+- **Packet Loss**: Percentage of lost packets - critical for reliability
+- **Obstruction**: Percentage of sky view blocked (satellite-specific) - Starlink performance indicator
 
 ### Rating Tiers
 - **Excellent:** ≥80/100 (Starlink target)
@@ -315,7 +326,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 🙏 Acknowledgments
 
-- **SpaceX Starlink** - 2026 expansion targets and satellite innovation
+- **SpaceX Starlink** - 2026 expansion targets and Gen2/High Performance dish innovation
 - **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
 - **Satellite ISPs** - Viasat, HughesNet for rural comparisons
 - **Open Source Community** - geopy, folium, pytest, pandas
@@ -333,9 +344,10 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ## 📊 Project Statistics
 
 - **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
-- **5 sample cities** with real-world profiles
+- **3,800+ lines of code** (Python)
+- **39 passing tests** (100% success rate)
+- **10 sample cities** with real-world 2026 profiles
+- **9 ISP providers** including Starlink Gen2 and High Performance dishes
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
 

@@ -8,7 +8,7 @@ from pathlib import Path
 from src.models import ConnectivityPoint, SpeedTest
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
-    generate_map, analyze_temporal_evolution
+    generate_map, analyze_temporal_evolution, compare_providers
 )
 
 
@@ -117,6 +117,46 @@ def main():
         print(f"Average Latency: {analysis['trends']['avg_latency']} ms")
         print("\nKey Insights:")
         for insight in analysis['insights']:
+            print(f"  • {insight}")
+        print("-" * 80 + "\n")
+        
+        # Step 6.5: Compare providers
+        logger.info("Step 4.5: Comparing provider performance...")
+        provider_comparison = compare_providers(improved_data)
+        
+        print("\n" + "-" * 80)
+        print("PROVIDER COMPARISON (2026 Data)")
+        print("-" * 80)
+        print(f"Total Providers: {provider_comparison['total_providers']}")
+        print(f"Satellite Providers: {', '.join(provider_comparison['satellite_providers'])}")
+        print("\nProvider Performance Summary:")
+        
+        # Sort providers by average quality score
+        sorted_providers = sorted(
+            provider_comparison['providers'].items(),
+            key=lambda x: x[1]['quality_score']['avg'],
+            reverse=True
+        )
+        
+        for provider, metrics in sorted_providers:
+            is_satellite = provider in provider_comparison['satellite_providers']
+            sat_marker = "🛰️ " if is_satellite else "🌐 "
+            
+            print(f"\n{sat_marker}{provider}:")
+            print(f"  Quality Score: {metrics['quality_score']['avg']}/100 "
+                  f"(min: {metrics['quality_score']['min']}, max: {metrics['quality_score']['max']})")
+            print(f"  Download: {metrics['download']['avg']} Mbps "
+                  f"(min: {metrics['download']['min']}, max: {metrics['download']['max']})")
+            print(f"  Upload: {metrics['upload']['avg']} Mbps")
+            print(f"  Latency: {metrics['latency']['avg']} ms")
+            print(f"  Jitter: {metrics['jitter']['avg']} ms")
+            print(f"  Packet Loss: {metrics['packet_loss']['avg']}%")
+            if is_satellite and metrics['obstruction']['avg'] > 0:
+                print(f"  Obstruction: {metrics['obstruction']['avg']}%")
+            print(f"  Stability: {metrics['stability']['avg']}/100")
+        
+        print("\nKey Provider Insights:")
+        for insight in provider_comparison['insights']:
             print(f"  • {insight}")
         print("-" * 80 + "\n")
         
