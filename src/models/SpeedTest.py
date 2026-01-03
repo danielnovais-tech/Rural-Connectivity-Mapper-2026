@@ -12,6 +12,7 @@ class SpeedTest:
         latency (float): Latency in milliseconds
         jitter (float): Jitter in milliseconds
         packet_loss (float): Packet loss percentage
+        obstruction (float): Obstruction percentage (0-100, satellite-specific)
         stability (float): Connection stability score (0-100)
     """
     
@@ -22,6 +23,7 @@ class SpeedTest:
         latency: float,
         jitter: float = 0.0,
         packet_loss: float = 0.0,
+        obstruction: float = 0.0,
         stability: Optional[float] = None
     ):
         """Initialize SpeedTest instance.
@@ -32,6 +34,7 @@ class SpeedTest:
             latency: Latency in milliseconds
             jitter: Jitter in milliseconds (default: 0.0)
             packet_loss: Packet loss percentage (default: 0.0)
+            obstruction: Obstruction percentage for satellite connections (default: 0.0)
             stability: Connection stability score, auto-calculated if None
         """
         self.download = download
@@ -39,10 +42,11 @@ class SpeedTest:
         self.latency = latency
         self.jitter = jitter
         self.packet_loss = packet_loss
+        self.obstruction = obstruction
         self.stability = stability if stability is not None else self.calculate_stability()
     
     def calculate_stability(self) -> float:
-        """Calculate connection stability score based on jitter and packet loss.
+        """Calculate connection stability score based on jitter, packet loss, and obstruction.
         
         Returns:
             float: Stability score from 0 to 100 (higher is better)
@@ -60,6 +64,11 @@ class SpeedTest:
         packet_loss_penalty = min(self.packet_loss * 10, 50)
         score -= packet_loss_penalty
         
+        # Reduce score based on obstruction (satellite-specific)
+        # Obstruction penalty: -5 points per 1% obstruction
+        obstruction_penalty = min(self.obstruction * 5, 50)
+        score -= obstruction_penalty
+        
         # Ensure score is between 0 and 100
         return max(0.0, min(100.0, score))
     
@@ -75,6 +84,7 @@ class SpeedTest:
             'latency': self.latency,
             'jitter': self.jitter,
             'packet_loss': self.packet_loss,
+            'obstruction': self.obstruction,
             'stability': self.stability
         }
     
@@ -94,6 +104,7 @@ class SpeedTest:
             latency=data.get('latency', 0.0),
             jitter=data.get('jitter', 0.0),
             packet_loss=data.get('packet_loss', 0.0),
+            obstruction=data.get('obstruction', 0.0),
             stability=data.get('stability')
         )
     
