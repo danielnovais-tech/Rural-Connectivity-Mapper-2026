@@ -56,8 +56,9 @@ body:
         - S (Small - < 2 hours)
         - M (Medium - 2-8 hours)
         - L (Large - > 8 hours)
+        - XL (Extra Large - > 1 week)
         - Unknown
-      default: 3
+      default: 4
     validations:
       required: true
   

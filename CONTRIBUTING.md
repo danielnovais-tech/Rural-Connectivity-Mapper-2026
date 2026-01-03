@@ -58,7 +58,7 @@ To help with planning and task assignment, we use an effort estimation system. W
 |-------|-----------|-------------|----------|
 | **S (Small)** | < 2 hours | Minor fixes, simple updates | Fix typo, update dependency version, add docstring |
 | **M (Medium)** | 2-8 hours | Moderate features or fixes | Add new utility function, fix complex bug, improve validation |
-| **L (Large)** | 1-3 days | Significant features or refactoring | New CLI command, major algorithm improvement, comprehensive docs |
+| **L (Large)** | > 8 hours (1-3 days) | Significant features or refactoring | New CLI command, major algorithm improvement, comprehensive docs |
 | **XL (Extra Large)** | > 1 week | Major features or architecture changes | New data model, web dashboard, ML integration, API development |
 
 ### How to Estimate
