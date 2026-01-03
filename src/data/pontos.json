@@ -10,13 +10,14 @@
       "latency": 45.3,
       "jitter": 8.2,
       "packet_loss": 1.2,
+      "obstruction": 0.0,
       "stability": 71.6
     },
     "quality_score": {
-      "overall_score": 78.18,
-      "speed_score": 65.2,
-      "latency_score": 84.84,
-      "stability_score": 88.84,
+      "overall_score": 76.6,
+      "speed_score": 63.88,
+      "latency_score": 83.13,
+      "stability_score": 87.04,
       "rating": "Good"
     },
     "timestamp": "2026-01-15T10:30:00"
@@ -32,13 +33,14 @@
       "latency": 38.7,
       "jitter": 6.5,
       "packet_loss": 0.8,
+      "obstruction": 0.0,
       "stability": 79.0
     },
     "quality_score": {
-      "overall_score": 82.23,
-      "speed_score": 70.76,
-      "latency_score": 88.49,
-      "stability_score": 91.23,
+      "overall_score": 86.73,
+      "speed_score": 74.63,
+      "latency_score": 93.33,
+      "stability_score": 96.23,
       "rating": "Excellent"
     },
     "timestamp": "2026-01-15T11:00:00"
@@ -47,14 +49,15 @@
     "id": "3",
     "latitude": -15.7801,
     "longitude": -47.9292,
-    "provider": "Starlink",
+    "provider": "Starlink Gen2",
     "speed_test": {
       "download": 165.4,
       "upload": 22.8,
       "latency": 28.5,
       "jitter": 3.2,
       "packet_loss": 0.1,
-      "stability": 92.6
+      "obstruction": 2.5,
+      "stability": 92.1
     },
     "quality_score": {
       "overall_score": 100,
@@ -76,13 +79,14 @@
       "latency": 68.2,
       "jitter": 15.7,
       "packet_loss": 2.5,
+      "obstruction": 0.0,
       "stability": 43.599999999999994
     },
     "quality_score": {
-      "overall_score": 50.62,
-      "speed_score": 51.81,
-      "latency_score": 47.53,
-      "stability_score": 52.13,
+      "overall_score": 51.31,
+      "speed_score": 52.51,
+      "latency_score": 48.17,
+      "stability_score": 52.83,
       "rating": "Fair"
     },
     "timestamp": "2026-01-15T12:00:00"
@@ -98,15 +102,131 @@
       "latency": 95.4,
       "jitter": 22.3,
       "packet_loss": 3.8,
-      "stability": 17.4
+      "obstruction": 0.0,
+      "stability": 22.0
     },
     "quality_score": {
-      "overall_score": 25.06,
-      "speed_score": 41.34,
-      "latency_score": 7.05,
-      "stability_score": 21.34,
+      "overall_score": 27.06,
+      "speed_score": 41.84,
+      "latency_score": 7.14,
+      "stability_score": 27.31,
       "rating": "Poor"
     },
     "timestamp": "2026-01-15T12:30:00"
+  },
+  {
+    "id": "6",
+    "latitude": -25.4284,
+    "longitude": -49.2733,
+    "provider": "Starlink High Performance",
+    "speed_test": {
+      "download": 220.5,
+      "upload": 28.4,
+      "latency": 24.8,
+      "jitter": 2.1,
+      "packet_loss": 0.05,
+      "obstruction": 1.2,
+      "stability": 95.06
+    },
+    "quality_score": {
+      "overall_score": 100,
+      "speed_score": 100,
+      "latency_score": 100,
+      "stability_score": 100,
+      "rating": "Excellent"
+    },
+    "timestamp": "2026-01-15T13:00:00"
+  },
+  {
+    "id": "7",
+    "latitude": -3.119,
+    "longitude": -60.0217,
+    "provider": "Vivo",
+    "speed_test": {
+      "download": 68.4,
+      "upload": 10.2,
+      "latency": 52.3,
+      "jitter": 12.4,
+      "packet_loss": 1.8,
+      "obstruction": 0.0,
+      "stability": 57.2
+    },
+    "quality_score": {
+      "overall_score": 64.54,
+      "speed_score": 52.78,
+      "latency_score": 73.87,
+      "stability_score": 70.87,
+      "rating": "Good"
+    },
+    "timestamp": "2026-01-15T13:30:00"
+  },
+  {
+    "id": "8",
+    "latitude": -8.0476,
+    "longitude": -34.877,
+    "provider": "TIM",
+    "speed_test": {
+      "download": 78.9,
+      "upload": 11.6,
+      "latency": 41.5,
+      "jitter": 9.3,
+      "packet_loss": 1.4,
+      "obstruction": 0.0,
+      "stability": 67.4
+    },
+    "quality_score": {
+      "overall_score": 75.47,
+      "speed_score": 59.64,
+      "latency_score": 89.51,
+      "stability_score": 82.51,
+      "rating": "Good"
+    },
+    "timestamp": "2026-01-15T14:00:00"
+  },
+  {
+    "id": "9",
+    "latitude": -30.0346,
+    "longitude": -51.2177,
+    "provider": "Oi",
+    "speed_test": {
+      "download": 81.2,
+      "upload": 13.8,
+      "latency": 39.2,
+      "jitter": 7.8,
+      "packet_loss": 1.1,
+      "obstruction": 0.0,
+      "stability": 73.4
+    },
+    "quality_score": {
+      "overall_score": 79.11,
+      "speed_score": 64.95,
+      "latency_score": 90.08,
+      "stability_score": 87.0,
+      "rating": "Good"
+    },
+    "timestamp": "2026-01-15T14:30:00"
+  },
+  {
+    "id": "10",
+    "latitude": -19.9167,
+    "longitude": -43.9345,
+    "provider": "Starlink Gen2",
+    "speed_test": {
+      "download": 172.8,
+      "upload": 24.2,
+      "latency": 26.9,
+      "jitter": 2.8,
+      "packet_loss": 0.08,
+      "obstruction": 3.8,
+      "stability": 92.84
+    },
+    "quality_score": {
+      "overall_score": 100,
+      "speed_score": 100,
+      "latency_score": 100,
+      "stability_score": 100,
+      "rating": "Excellent"
+    },
+    "timestamp": "2026-01-15T15:00:00"
   }
 ]

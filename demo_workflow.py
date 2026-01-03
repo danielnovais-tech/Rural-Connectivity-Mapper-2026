@@ -49,7 +49,8 @@ def main():
                     upload=float(row['upload']),
                     latency=float(row['latency']),
                     jitter=float(row.get('jitter', 0)),
-                    packet_loss=float(row.get('packet_loss', 0))
+                    packet_loss=float(row.get('packet_loss', 0)),
+                    obstruction=float(row.get('obstruction', 0))
                 )
                 
                 point = ConnectivityPoint(
