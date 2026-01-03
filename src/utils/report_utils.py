@@ -99,6 +99,7 @@ def _generate_csv_report(data: List[Dict], output_path: str = None) -> str:
                     'latency': st.get('latency', ''),
                     'jitter': st.get('jitter', ''),
                     'packet_loss': st.get('packet_loss', ''),
+                    'obstruction': st.get('obstruction', ''),
                     'stability': st.get('stability', ''),
                 })
             
@@ -158,6 +159,11 @@ def _generate_txt_report(data: List[Dict], output_path: str = None) -> str:
                 lines.append(f"  Download: {st.get('download', 'N/A')} Mbps")
                 lines.append(f"  Upload: {st.get('upload', 'N/A')} Mbps")
                 lines.append(f"  Latency: {st.get('latency', 'N/A')} ms")
+                lines.append(f"  Jitter: {st.get('jitter', 'N/A')} ms")
+                lines.append(f"  Packet Loss: {st.get('packet_loss', 'N/A')}%")
+                obstruction = st.get('obstruction', 0.0)
+                if obstruction > 0:
+                    lines.append(f"  Obstruction: {obstruction}% (satellite)")
                 lines.append(f"  Stability: {st.get('stability', 'N/A')}/100")
             
             if 'quality_score' in point:
