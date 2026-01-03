@@ -1,0 +1,128 @@
+name: Crowdsourced Data Import
+description: Feature request for implementing crowdsourced connectivity data import functionality
+title: "[FEATURE] Crowdsourced Data Import"
+labels: ["enhancement", "good first issue", "help wanted"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🌍 Crowdsourced Data Import Feature
+        
+        This issue tracks the implementation of crowdsourced connectivity data import functionality to allow community members to contribute rural connectivity measurements.
+        
+        **Aligned with Starlink 2026 Roadmap:** Enable broader data collection from 10M+ rural connections across Brazil.
+        
+  - type: markdown
+    attributes:
+      value: |
+        ## 📋 Acceptance Criteria
+        
+        The following requirements must be met for this feature to be considered complete:
+        
+        ### 1. CSV Validation ✅
+        - [ ] Implement robust CSV file validation
+        - [ ] Validate required columns: location, provider, download_speed, upload_speed, latency
+        - [ ] Support optional columns: jitter, packet_loss, timestamp, tags
+        - [ ] Validate data types (numeric values, proper date formats)
+        - [ ] Validate data ranges (e.g., speeds > 0, latency > 0, quality score 0-100)
+        - [ ] Provide clear error messages for invalid data
+        - [ ] Handle missing values gracefully with defaults or warnings
+        - [ ] Support UTF-8 encoding for Brazilian location names
+        
+        ### 2. Documentation 📚
+        - [ ] Create comprehensive user guide in `docs/CROWDSOURCED_IMPORT.md`
+        - [ ] Document CSV file format and required columns
+        - [ ] Provide example CSV templates with sample data
+        - [ ] Add usage examples to main README.md
+        - [ ] Document validation rules and error handling
+        - [ ] Include troubleshooting section for common issues
+        - [ ] Add inline code comments and docstrings (Google-style)
+        
+        ### 3. Optional API (Future Enhancement) 🔮
+        - [ ] Design REST API endpoint structure (POST /api/v1/import)
+        - [ ] Document API specification in `docs/API.md`
+        - [ ] Plan authentication/rate limiting strategy
+        - [ ] Consider batch import capabilities
+        - [ ] Note: Implementation can be deferred to v1.2.0
+        
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 Implementation Guidance
+        
+        ### Suggested Approach
+        
+        1. **Create Validation Module** (`src/utils/csv_validation_utils.py`)
+           - Use pandas for CSV parsing
+           - Implement schema validation
+           - Add comprehensive error reporting
+        
+        2. **Extend CLI** (`main.py`)
+           - Add `--import-csv` flag
+           - Integrate with existing `--importar` functionality
+           - Provide verbose output for validation results
+        
+        3. **Add Tests** (`tests/test_csv_validation_utils.py`)
+           - Unit tests for validation logic
+           - Test edge cases (empty files, malformed data)
+           - Test international characters in location names
+           - Achieve 80%+ code coverage
+        
+        4. **Documentation**
+           - Create `docs/CROWDSOURCED_IMPORT.md`
+           - Update `README.md` with new feature
+           - Provide CSV template in `src/data/template.csv`
+        
+        ### CSV Format Example
+        
+        ```csv
+        location,provider,download_speed,upload_speed,latency,jitter,packet_loss,timestamp,tags
+        "São Paulo, SP",Starlink,165.4,22.8,28.5,2.1,0.1,2026-01-03T10:30:00,rural;satellite
+        "Curitiba, PR",Claro,92.1,15.3,38.7,3.2,0.2,2026-01-03T11:45:00,urban;fiber
+        ```
+        
+        ### Technical Requirements
+        
+        - **Python 3.8+** compatibility
+        - Follow **PEP 8** style guide
+        - Add **Google-style docstrings**
+        - Include **pytest** unit tests
+        - Maintain **80%+ code coverage**
+        - Use existing dependencies (pandas, pytest)
+        
+  - type: markdown
+    attributes:
+      value: |
+        ## 🤝 Contributing
+        
+        This is a **good first issue** - perfect for new contributors!
+        
+        **How to Get Started:**
+        
+        1. **Fork** the repository
+        2. **Create** a feature branch: `git checkout -b feature/crowdsourced-import`
+        3. **Read** the [CONTRIBUTING.md](../../CONTRIBUTING.md) guidelines
+        4. **Run** existing tests: `pytest tests/ -v`
+        5. **Implement** the feature following the guidance above
+        6. **Add** tests for your changes
+        7. **Update** documentation
+        8. **Submit** a Pull Request
+        
+        **Questions?** Feel free to comment on this issue or ask in [GitHub Discussions](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/discussions).
+        
+  - type: markdown
+    attributes:
+      value: |
+        ## 📚 Related Resources
+        
+        - [Project README](../../README.md) - Full project documentation
+        - [API Documentation](../../docs/API.md) - Existing API reference
+        - [Sample Data](../../src/data/sample_data.csv) - Current data format
+        - [Starlink 2026 Roadmap](https://www.starlink.com) - Context for this feature
+        
+        ---
+        
+        **Priority:** Medium | **Difficulty:** Easy to Medium | **Impact:** High
+        
+        *Supporting community-driven data collection for Brazil's rural connectivity mapping initiative.*
