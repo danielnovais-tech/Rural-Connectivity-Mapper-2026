@@ -8,7 +8,9 @@ services:
     container_name: rural-connectivity-mapper
     volumes:
       # Mount current directory to preserve generated reports and maps in the host
-      # Reports will be available in the same directory where you run docker-compose
+      # Reports will be available in the same directory where you run docker compose
+      # WARNING: This mounts the entire project directory. For production use,
+      # consider mounting only specific subdirectories or using named volumes.
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1

@@ -141,6 +141,21 @@ docker compose run --rm rural-mapper python main.py --help
 docker compose run --rm rural-mapper python main.py --importar src/data/sample_data.csv --map
 ```
 
+#### Production Deployment Notes
+
+For production environments, consider these security best practices:
+
+```bash
+# Use specific volume mounts instead of mounting entire directory
+docker run --rm \
+  -v $(pwd)/src/data:/app/src/data:ro \
+  -v $(pwd)/output:/app/output \
+  rural-connectivity-mapper
+
+# Or run without volume mounts for isolated operation
+docker run --rm rural-connectivity-mapper python main.py --help
+```
+
 #### Benefits for Rural Deployments
 - ✅ **No dependency conflicts** - All dependencies pre-installed
 - ✅ **Works on Raspberry Pi** - ARM-compatible base image
