@@ -131,6 +131,11 @@ def main():
         map_path = generate_map(improved_data, 'demo_connectivity_map.html')
         print(f"✓ Generated interactive map: {map_path}")
         
+        # Step 9: Generate map with Starlink coverage overlay
+        logger.info("Step 7: Generating map with Starlink coverage overlay...")
+        coverage_map_path = generate_map(improved_data, 'demo_connectivity_map_with_coverage.html', show_starlink_coverage=True)
+        print(f"✓ Generated map with Starlink coverage: {coverage_map_path}")
+        
         # Final summary
         print("\n" + "=" * 80)
         print("DEMO WORKFLOW COMPLETED SUCCESSFULLY")
@@ -141,11 +146,13 @@ def main():
         print("  • demo_report.txt - Text format report")
         print("  • demo_report.html - HTML format report")
         print("  • demo_connectivity_map.html - Interactive Folium map")
+        print("  • demo_connectivity_map_with_coverage.html - Map with Starlink coverage overlay")
         print("\nNext Steps:")
-        print("  1. Open demo_connectivity_map.html in your browser to view the interactive map")
-        print("  2. Review the generated reports for detailed connectivity analysis")
-        print("  3. Use main.py with different flags for custom analysis")
-        print("\nExample: python main.py --debug --importar src/data/sample_data.csv --relatorio json")
+        print("  1. Open demo_connectivity_map_with_coverage.html to view the Starlink coverage zones")
+        print("  2. Toggle the coverage layer on/off using the layer control in the map")
+        print("  3. Review the generated reports for detailed connectivity analysis")
+        print("  4. Use main.py with different flags for custom analysis")
+        print("\nExample: python main.py --debug --importar src/data/sample_data.csv --map --starlink-coverage")
         print("=" * 80 + "\n")
         
     except FileNotFoundError as e:

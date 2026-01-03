@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_dc66e72cb35bec0dc7f88d7ed88729e5 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div style="position: fixed; 
+                        bottom: 50px; right: 50px; width: 200px; height: auto; 
+                        background-color: white; border:2px solid grey; z-index:9999; 
+                        font-size:14px; padding: 10px">
+            <p style="margin: 0; font-weight: bold;">Quality Rating</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:green"></i> Excellent (80+)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:blue"></i> Good (60-79)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:orange"></i> Fair (40-59)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:red"></i> Poor (&lt;40)</p>
+            <hr style="margin: 10px 0;">
+            <p style="margin: 0; font-weight: bold;">Starlink Coverage</p>
+            <p style="margin: 5px 0;"><i class="fa fa-square" style="color:rgba(0,255,0,0.4)"></i> Active</p>
+            <p style="margin: 5px 0;"><i class="fa fa-square" style="color:rgba(255,255,0,0.4)"></i> Planned</p>
+            <p style="margin: 5px 0;"><i class="fa fa-square" style="color:rgba(255,165,0,0.4)"></i> Limited</p>
+            </div>
+            
+    
+            <div class="folium-map" id="map_dc66e72cb35bec0dc7f88d7ed88729e5" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_dc66e72cb35bec0dc7f88d7ed88729e5 = L.map(
+                "map_dc66e72cb35bec0dc7f88d7ed88729e5",
+                {
+                    center: [-15.7852, -42.95602],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 5,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_99371089c9a8387e0b027b82aa9078d8 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_99371089c9a8387e0b027b82aa9078d8.addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var marker_24389d1bfda349863af3940c251f2f32 = L.marker(
+                [-23.5505, -46.6333],
+                {
+}
+            ).addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var icon_d1b81223c5a26223717b76e4b5bd4d49 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1a8aaf856dea53a4b56c74be77f3d6a3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8abc20e5656ff264bdf5ab9f5ea83b02 = $(`<div id="html_8abc20e5656ff264bdf5ab9f5ea83b02" style="width: 100.0%; height: 100.0%;">             <div style="font-family: Arial; min-width: 200px;">                 <h4 style="margin: 0 0 10px 0; color: blue;">Various</h4>                 <table style="width: 100%; border-collapse: collapse;">                     <tr>                         <td><b>Location:</b></td>                         <td>-23.5505, -46.6333</td>                     </tr>                     <tr>                         <td><b>Download:</b></td>                         <td>85.2 Mbps</td>                     </tr>                     <tr>                         <td><b>Upload:</b></td>                         <td>12.5 Mbps</td>                     </tr>                     <tr>                         <td><b>Latency:</b></td>                         <td>45.3 ms</td>                     </tr>                     <tr>                         <td><b>Quality:</b></td>                         <td>73.9/100 (Good)</td>                     </tr>                 </table>             </div>             </div>`)[0];
+                popup_1a8aaf856dea53a4b56c74be77f3d6a3.setContent(html_8abc20e5656ff264bdf5ab9f5ea83b02);
+            
+        
+
+        marker_24389d1bfda349863af3940c251f2f32.bindPopup(popup_1a8aaf856dea53a4b56c74be77f3d6a3)
+        ;
+
+        
+    
+    
+            marker_24389d1bfda349863af3940c251f2f32.bindTooltip(
+                `<div>
+                     Various - Good
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_24389d1bfda349863af3940c251f2f32.setIcon(icon_d1b81223c5a26223717b76e4b5bd4d49);
+            
+    
+            var marker_fc4ea65064708b999c45bc27f6546d8c = L.marker(
+                [-22.9068, -43.1729],
+                {
+}
+            ).addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var icon_a093fd897e19faba906830a24416ab13 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ba1f5587c830dc43db4637083f94cda0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_af0a77d63c86a104fdc4d299c6b684b1 = $(`<div id="html_af0a77d63c86a104fdc4d299c6b684b1" style="width: 100.0%; height: 100.0%;">             <div style="font-family: Arial; min-width: 200px;">                 <h4 style="margin: 0 0 10px 0; color: green;">Claro</h4>                 <table style="width: 100%; border-collapse: collapse;">                     <tr>                         <td><b>Location:</b></td>                         <td>-22.9068, -43.1729</td>                     </tr>                     <tr>                         <td><b>Download:</b></td>                         <td>92.1 Mbps</td>                     </tr>                     <tr>                         <td><b>Upload:</b></td>                         <td>15.3 Mbps</td>                     </tr>                     <tr>                         <td><b>Latency:</b></td>                         <td>38.7 ms</td>                     </tr>                     <tr>                         <td><b>Quality:</b></td>                         <td>88.5/100 (Excellent)</td>                     </tr>                 </table>             </div>             </div>`)[0];
+                popup_ba1f5587c830dc43db4637083f94cda0.setContent(html_af0a77d63c86a104fdc4d299c6b684b1);
+            
+        
+
+        marker_fc4ea65064708b999c45bc27f6546d8c.bindPopup(popup_ba1f5587c830dc43db4637083f94cda0)
+        ;
+
+        
+    
+    
+            marker_fc4ea65064708b999c45bc27f6546d8c.bindTooltip(
+                `<div>
+                     Claro - Excellent
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_fc4ea65064708b999c45bc27f6546d8c.setIcon(icon_a093fd897e19faba906830a24416ab13);
+            
+    
+            var marker_3421bdeed32799009301f6449d5e4bc9 = L.marker(
+                [-15.7801, -47.9292],
+                {
+}
+            ).addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var icon_f5d0fe5b226ab416f47ca3cff0df4be7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bfd2c36c115c6efb4844f8a72cfb6b2c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_73ad5bf13d897515bf2bf1ad10c06064 = $(`<div id="html_73ad5bf13d897515bf2bf1ad10c06064" style="width: 100.0%; height: 100.0%;">             <div style="font-family: Arial; min-width: 200px;">                 <h4 style="margin: 0 0 10px 0; color: green;">Starlink</h4>                 <table style="width: 100%; border-collapse: collapse;">                     <tr>                         <td><b>Location:</b></td>                         <td>-15.7801, -47.9292</td>                     </tr>                     <tr>                         <td><b>Download:</b></td>                         <td>165.4 Mbps</td>                     </tr>                     <tr>                         <td><b>Upload:</b></td>                         <td>22.8 Mbps</td>                     </tr>                     <tr>                         <td><b>Latency:</b></td>                         <td>28.5 ms</td>                     </tr>                     <tr>                         <td><b>Quality:</b></td>                         <td>100.0/100 (Excellent)</td>                     </tr>                 </table>             </div>             </div>`)[0];
+                popup_bfd2c36c115c6efb4844f8a72cfb6b2c.setContent(html_73ad5bf13d897515bf2bf1ad10c06064);
+            
+        
+
+        marker_3421bdeed32799009301f6449d5e4bc9.bindPopup(popup_bfd2c36c115c6efb4844f8a72cfb6b2c)
+        ;
+
+        
+    
+    
+            marker_3421bdeed32799009301f6449d5e4bc9.bindTooltip(
+                `<div>
+                     Starlink - Excellent
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3421bdeed32799009301f6449d5e4bc9.setIcon(icon_f5d0fe5b226ab416f47ca3cff0df4be7);
+            
+    
+            var marker_5df0db5952cea01652135fdb4d098827 = L.marker(
+                [-12.9714, -38.5014],
+                {
+}
+            ).addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var icon_4230cd1a07d5811a2de28364d6b8e47c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ea27da5c97152647baa79bea2151fe32 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4761cca14acb70a40c18231876d881bc = $(`<div id="html_4761cca14acb70a40c18231876d881bc" style="width: 100.0%; height: 100.0%;">             <div style="font-family: Arial; min-width: 200px;">                 <h4 style="margin: 0 0 10px 0; color: orange;">Viasat</h4>                 <table style="width: 100%; border-collapse: collapse;">                     <tr>                         <td><b>Location:</b></td>                         <td>-12.9714, -38.5014</td>                     </tr>                     <tr>                         <td><b>Download:</b></td>                         <td>75.3 Mbps</td>                     </tr>                     <tr>                         <td><b>Upload:</b></td>                         <td>9.8 Mbps</td>                     </tr>                     <tr>                         <td><b>Latency:</b></td>                         <td>68.2 ms</td>                     </tr>                     <tr>                         <td><b>Quality:</b></td>                         <td>48.8/100 (Fair)</td>                     </tr>                 </table>             </div>             </div>`)[0];
+                popup_ea27da5c97152647baa79bea2151fe32.setContent(html_4761cca14acb70a40c18231876d881bc);
+            
+        
+
+        marker_5df0db5952cea01652135fdb4d098827.bindPopup(popup_ea27da5c97152647baa79bea2151fe32)
+        ;
+
+        
+    
+    
+            marker_5df0db5952cea01652135fdb4d098827.bindTooltip(
+                `<div>
+                     Viasat - Fair
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5df0db5952cea01652135fdb4d098827.setIcon(icon_4230cd1a07d5811a2de28364d6b8e47c);
+            
+    
+            var marker_08f0bab9a5b860b5e292e1492e8a4349 = L.marker(
+                [-3.7172, -38.5433],
+                {
+}
+            ).addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var icon_ef91a4564ccddb2a08e89b1a27aa776d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "info-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e8e8625a27eff64ce765587d6ca005c3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b712a621dc27a17d277efaadb4c3ca72 = $(`<div id="html_b712a621dc27a17d277efaadb4c3ca72" style="width: 100.0%; height: 100.0%;">             <div style="font-family: Arial; min-width: 200px;">                 <h4 style="margin: 0 0 10px 0; color: red;">HughesNet</h4>                 <table style="width: 100%; border-collapse: collapse;">                     <tr>                         <td><b>Location:</b></td>                         <td>-3.7172, -38.5433</td>                     </tr>                     <tr>                         <td><b>Download:</b></td>                         <td>62.8 Mbps</td>                     </tr>                     <tr>                         <td><b>Upload:</b></td>                         <td>7.2 Mbps</td>                     </tr>                     <tr>                         <td><b>Latency:</b></td>                         <td>95.4 ms</td>                     </tr>                     <tr>                         <td><b>Quality:</b></td>                         <td>24.7/100 (Poor)</td>                     </tr>                 </table>             </div>             </div>`)[0];
+                popup_e8e8625a27eff64ce765587d6ca005c3.setContent(html_b712a621dc27a17d277efaadb4c3ca72);
+            
+        
+
+        marker_08f0bab9a5b860b5e292e1492e8a4349.bindPopup(popup_e8e8625a27eff64ce765587d6ca005c3)
+        ;
+
+        
+    
+    
+            marker_08f0bab9a5b860b5e292e1492e8a4349.bindTooltip(
+                `<div>
+                     HughesNet - Poor
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_08f0bab9a5b860b5e292e1492e8a4349.setIcon(icon_ef91a4564ccddb2a08e89b1a27aa776d);
+            
+    
+            var feature_group_be3eb8d2261105acce9073f023b2806d = L.featureGroup(
+                {
+}
+            );
+        
+    
+        function geo_json_35d8cdb205a2bae295b7fb63d818e8d1_styler(feature) {
+            switch(feature.properties.name) {
+                default:
+                    return {"color": "#00ff00", "fillColor": "#00ff00", "fillOpacity": 0.2, "opacity": 0.6, "weight": 2};
+            }
+        }
+
+        function geo_json_35d8cdb205a2bae295b7fb63d818e8d1_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_35d8cdb205a2bae295b7fb63d818e8d1 = L.geoJson(null, {
+                onEachFeature: geo_json_35d8cdb205a2bae295b7fb63d818e8d1_onEachFeature,
+            
+                style: geo_json_35d8cdb205a2bae295b7fb63d818e8d1_styler,
+            ...{
+}
+        });
+
+        function geo_json_35d8cdb205a2bae295b7fb63d818e8d1_add (data) {
+            geo_json_35d8cdb205a2bae295b7fb63d818e8d1
+                .addData(data);
+        }
+            geo_json_35d8cdb205a2bae295b7fb63d818e8d1_add({"features": [{"geometry": {"coordinates": [[[-47.5, -24.0], [-46.0, -24.0], [-46.0, -23.0], [-47.5, -23.0], [-47.5, -24.0]]], "type": "Polygon"}, "properties": {"color": "#00ff00", "coverage_type": "Active", "name": "S\u00e3o Paulo Region", "quality": "Excellent"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_35d8cdb205a2bae295b7fb63d818e8d1.bindTooltip(
+                `<div>
+                     
+                        <div style="font-family: Arial;">
+                            <b>São Paulo Region</b><br>
+                            Coverage: Active<br>
+                            Quality: Excellent
+                        </div>
+                        
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            geo_json_35d8cdb205a2bae295b7fb63d818e8d1.addTo(feature_group_be3eb8d2261105acce9073f023b2806d);
+        
+    
+        function geo_json_66b3d50636aa1827b56e6900674636ed_styler(feature) {
+            switch(feature.properties.name) {
+                default:
+                    return {"color": "#00ff00", "fillColor": "#00ff00", "fillOpacity": 0.2, "opacity": 0.6, "weight": 2};
+            }
+        }
+
+        function geo_json_66b3d50636aa1827b56e6900674636ed_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_66b3d50636aa1827b56e6900674636ed = L.geoJson(null, {
+                onEachFeature: geo_json_66b3d50636aa1827b56e6900674636ed_onEachFeature,
+            
+                style: geo_json_66b3d50636aa1827b56e6900674636ed_styler,
+            ...{
+}
+        });
+
+        function geo_json_66b3d50636aa1827b56e6900674636ed_add (data) {
+            geo_json_66b3d50636aa1827b56e6900674636ed
+                .addData(data);
+        }
+            geo_json_66b3d50636aa1827b56e6900674636ed_add({"features": [{"geometry": {"coordinates": [[[-44.0, -23.5], [-42.5, -23.5], [-42.5, -22.5], [-44.0, -22.5], [-44.0, -23.5]]], "type": "Polygon"}, "properties": {"color": "#00ff00", "coverage_type": "Active", "name": "Rio de Janeiro Region", "quality": "Excellent"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_66b3d50636aa1827b56e6900674636ed.bindTooltip(
+                `<div>
+                     
+                        <div style="font-family: Arial;">
+                            <b>Rio de Janeiro Region</b><br>
+                            Coverage: Active<br>
+                            Quality: Excellent
+                        </div>
+                        
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            geo_json_66b3d50636aa1827b56e6900674636ed.addTo(feature_group_be3eb8d2261105acce9073f023b2806d);
+        
+    
+        function geo_json_9a00486eccf18fc28e228ced39fe846b_styler(feature) {
+            switch(feature.properties.name) {
+                default:
+                    return {"color": "#00ff00", "fillColor": "#00ff00", "fillOpacity": 0.2, "opacity": 0.6, "weight": 2};
+            }
+        }
+
+        function geo_json_9a00486eccf18fc28e228ced39fe846b_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_9a00486eccf18fc28e228ced39fe846b = L.geoJson(null, {
+                onEachFeature: geo_json_9a00486eccf18fc28e228ced39fe846b_onEachFeature,
+            
+                style: geo_json_9a00486eccf18fc28e228ced39fe846b_styler,
+            ...{
+}
+        });
+
+        function geo_json_9a00486eccf18fc28e228ced39fe846b_add (data) {
+            geo_json_9a00486eccf18fc28e228ced39fe846b
+                .addData(data);
+        }
+            geo_json_9a00486eccf18fc28e228ced39fe846b_add({"features": [{"geometry": {"coordinates": [[[-48.5, -16.5], [-47.0, -16.5], [-47.0, -15.0], [-48.5, -15.0], [-48.5, -16.5]]], "type": "Polygon"}, "properties": {"color": "#00ff00", "coverage_type": "Active", "name": "Bras\u00edlia Region", "quality": "Excellent"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_9a00486eccf18fc28e228ced39fe846b.bindTooltip(
+                `<div>
+                     
+                        <div style="font-family: Arial;">
+                            <b>Brasília Region</b><br>
+                            Coverage: Active<br>
+                            Quality: Excellent
+                        </div>
+                        
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            geo_json_9a00486eccf18fc28e228ced39fe846b.addTo(feature_group_be3eb8d2261105acce9073f023b2806d);
+        
+    
+        function geo_json_8c35d49f6347ad5572186087d97877a0_styler(feature) {
+            switch(feature.properties.name) {
+                default:
+                    return {"color": "#ffff00", "fillColor": "#ffff00", "fillOpacity": 0.15, "opacity": 0.6, "weight": 2};
+            }
+        }
+
+        function geo_json_8c35d49f6347ad5572186087d97877a0_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_8c35d49f6347ad5572186087d97877a0 = L.geoJson(null, {
+                onEachFeature: geo_json_8c35d49f6347ad5572186087d97877a0_onEachFeature,
+            
+                style: geo_json_8c35d49f6347ad5572186087d97877a0_styler,
+            ...{
+}
+        });
+
+        function geo_json_8c35d49f6347ad5572186087d97877a0_add (data) {
+            geo_json_8c35d49f6347ad5572186087d97877a0
+                .addData(data);
+        }
+            geo_json_8c35d49f6347ad5572186087d97877a0_add({"features": [{"geometry": {"coordinates": [[[-39.0, -13.5], [-38.0, -13.5], [-38.0, -12.5], [-39.0, -12.5], [-39.0, -13.5]]], "type": "Polygon"}, "properties": {"color": "#ffff00", "coverage_type": "Planned", "name": "Salvador Region", "quality": "Good"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_8c35d49f6347ad5572186087d97877a0.bindTooltip(
+                `<div>
+                     
+                        <div style="font-family: Arial;">
+                            <b>Salvador Region</b><br>
+                            Coverage: Planned<br>
+                            Quality: Good
+                        </div>
+                        
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            geo_json_8c35d49f6347ad5572186087d97877a0.addTo(feature_group_be3eb8d2261105acce9073f023b2806d);
+        
+    
+        function geo_json_d09d4d68c018acd0c363a32263b20030_styler(feature) {
+            switch(feature.properties.name) {
+                default:
+                    return {"color": "#ffff00", "fillColor": "#ffff00", "fillOpacity": 0.15, "opacity": 0.6, "weight": 2};
+            }
+        }
+
+        function geo_json_d09d4d68c018acd0c363a32263b20030_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_d09d4d68c018acd0c363a32263b20030 = L.geoJson(null, {
+                onEachFeature: geo_json_d09d4d68c018acd0c363a32263b20030_onEachFeature,
+            
+                style: geo_json_d09d4d68c018acd0c363a32263b20030_styler,
+            ...{
+}
+        });
+
+        function geo_json_d09d4d68c018acd0c363a32263b20030_add (data) {
+            geo_json_d09d4d68c018acd0c363a32263b20030
+                .addData(data);
+        }
+            geo_json_d09d4d68c018acd0c363a32263b20030_add({"features": [{"geometry": {"coordinates": [[[-39.0, -4.2], [-38.0, -4.2], [-38.0, -3.2], [-39.0, -3.2], [-39.0, -4.2]]], "type": "Polygon"}, "properties": {"color": "#ffff00", "coverage_type": "Planned", "name": "Fortaleza Region", "quality": "Good"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_d09d4d68c018acd0c363a32263b20030.bindTooltip(
+                `<div>
+                     
+                        <div style="font-family: Arial;">
+                            <b>Fortaleza Region</b><br>
+                            Coverage: Planned<br>
+                            Quality: Good
+                        </div>
+                        
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            geo_json_d09d4d68c018acd0c363a32263b20030.addTo(feature_group_be3eb8d2261105acce9073f023b2806d);
+        
+    
+        function geo_json_431f9108684aff6e1cddaeeeb4a9291d_styler(feature) {
+            switch(feature.properties.name) {
+                default:
+                    return {"color": "#ffa500", "fillColor": "#ffa500", "fillOpacity": 0.1, "opacity": 0.6, "weight": 2};
+            }
+        }
+
+        function geo_json_431f9108684aff6e1cddaeeeb4a9291d_onEachFeature(feature, layer) {
+
+            layer.on({
+            });
+        };
+        var geo_json_431f9108684aff6e1cddaeeeb4a9291d = L.geoJson(null, {
+                onEachFeature: geo_json_431f9108684aff6e1cddaeeeb4a9291d_onEachFeature,
+            
+                style: geo_json_431f9108684aff6e1cddaeeeb4a9291d_styler,
+            ...{
+}
+        });
+
+        function geo_json_431f9108684aff6e1cddaeeeb4a9291d_add (data) {
+            geo_json_431f9108684aff6e1cddaeeeb4a9291d
+                .addData(data);
+        }
+            geo_json_431f9108684aff6e1cddaeeeb4a9291d_add({"features": [{"geometry": {"coordinates": [[[-62.0, -5.0], [-58.0, -5.0], [-58.0, -2.0], [-62.0, -2.0], [-62.0, -5.0]]], "type": "Polygon"}, "properties": {"color": "#ffa500", "coverage_type": "Limited", "name": "Amazon Region", "quality": "Fair"}, "type": "Feature"}], "type": "FeatureCollection"});
+
+        
+    
+            geo_json_431f9108684aff6e1cddaeeeb4a9291d.bindTooltip(
+                `<div>
+                     
+                        <div style="font-family: Arial;">
+                            <b>Amazon Region</b><br>
+                            Coverage: Limited<br>
+                            Quality: Fair
+                        </div>
+                        
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            geo_json_431f9108684aff6e1cddaeeeb4a9291d.addTo(feature_group_be3eb8d2261105acce9073f023b2806d);
+        
+    
+            feature_group_be3eb8d2261105acce9073f023b2806d.addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+        
+    
+            var layer_control_332e5d3641cb4b9ac0f4e902a1f8aa65_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_99371089c9a8387e0b027b82aa9078d8,
+                },
+                overlays :  {
+                    "Starlink Coverage" : feature_group_be3eb8d2261105acce9073f023b2806d,
+                },
+            };
+            let layer_control_332e5d3641cb4b9ac0f4e902a1f8aa65 = L.control.layers(
+                layer_control_332e5d3641cb4b9ac0f4e902a1f8aa65_layers.base_layers,
+                layer_control_332e5d3641cb4b9ac0f4e902a1f8aa65_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_dc66e72cb35bec0dc7f88d7ed88729e5);
+
+        
+</script>
+</html>
