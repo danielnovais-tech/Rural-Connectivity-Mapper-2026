@@ -104,7 +104,7 @@ body:
         
         1. **Fork** the repository
         2. **Create** a feature branch: `git checkout -b feature/crowdsourced-import`
-        3. **Read** the README.md contributing guidelines
+        3. **Read** the contributing guidelines in the README.md (see "Contributing" section)
         4. **Run** existing tests: `pytest tests/ -v`
         5. **Implement** the feature following the guidance above
         6. **Add** tests for your changes
@@ -118,10 +118,10 @@ body:
       value: |
         ## 📚 Related Resources
         
-        - [Project README](../../README.md) - Full project documentation
-        - [API Documentation](../../docs/API.md) - Existing API reference
-        - [Sample Data](../../src/data/sample_data.csv) - Current data format
-        - [Starlink 2026 Roadmap](https://www.starlink.com) - Context for this feature
+        - [Project README](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026#readme) - Full project documentation
+        - [API Documentation](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/blob/main/docs/API.md) - Existing API reference
+        - [Sample Data](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/blob/main/src/data/sample_data.csv) - Current data format
+        - [Contributing Guidelines](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026#-contributing) - How to contribute
         
         ---
         
