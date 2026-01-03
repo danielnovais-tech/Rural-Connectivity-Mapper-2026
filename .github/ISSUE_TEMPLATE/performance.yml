@@ -113,7 +113,7 @@ body:
         - Starlink Only
         - Satellite Providers (Starlink, Viasat, HughesNet)
         - Traditional ISPs (Claro, Vivo, TIM, Oi)
-        - Specific Provider (please describe in details)
+        - Specific Provider (please describe in detail)
     validations:
       required: false
 
