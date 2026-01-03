@@ -178,7 +178,6 @@ def compare_providers(data: List[Dict]) -> Dict:
             return {'providers': {}}
         
         # Collect metrics by provider
-        from collections import defaultdict
         provider_metrics = defaultdict(lambda: {
             'quality_scores': [],
             'download_speeds': [],
@@ -223,57 +222,60 @@ def compare_providers(data: List[Dict]) -> Dict:
         # Calculate statistics for each provider
         providers_summary = {}
         
+        def calculate_avg(lst):
+            """Helper to calculate average of a list."""
+            return round(sum(lst) / len(lst), 2) if lst else 0
+        
+        def calculate_max(lst):
+            """Helper to calculate max of a list."""
+            return round(max(lst), 2) if lst else 0
+        
+        def calculate_min(lst):
+            """Helper to calculate min of a list."""
+            return round(min(lst), 2) if lst else 0
+        
         for provider, metrics in provider_metrics.items():
-            def avg(lst):
-                return round(sum(lst) / len(lst), 2) if lst else 0
-            
-            def max_val(lst):
-                return round(max(lst), 2) if lst else 0
-            
-            def min_val(lst):
-                return round(min(lst), 2) if lst else 0
-            
             providers_summary[provider] = {
                 'count': len(metrics['quality_scores']),
                 'quality_score': {
-                    'avg': avg(metrics['quality_scores']),
-                    'min': min_val(metrics['quality_scores']),
-                    'max': max_val(metrics['quality_scores'])
+                    'avg': calculate_avg(metrics['quality_scores']),
+                    'min': calculate_min(metrics['quality_scores']),
+                    'max': calculate_max(metrics['quality_scores'])
                 },
                 'download': {
-                    'avg': avg(metrics['download_speeds']),
-                    'min': min_val(metrics['download_speeds']),
-                    'max': max_val(metrics['download_speeds'])
+                    'avg': calculate_avg(metrics['download_speeds']),
+                    'min': calculate_min(metrics['download_speeds']),
+                    'max': calculate_max(metrics['download_speeds'])
                 },
                 'upload': {
-                    'avg': avg(metrics['upload_speeds']),
-                    'min': min_val(metrics['upload_speeds']),
-                    'max': max_val(metrics['upload_speeds'])
+                    'avg': calculate_avg(metrics['upload_speeds']),
+                    'min': calculate_min(metrics['upload_speeds']),
+                    'max': calculate_max(metrics['upload_speeds'])
                 },
                 'latency': {
-                    'avg': avg(metrics['latencies']),
-                    'min': min_val(metrics['latencies']),
-                    'max': max_val(metrics['latencies'])
+                    'avg': calculate_avg(metrics['latencies']),
+                    'min': calculate_min(metrics['latencies']),
+                    'max': calculate_max(metrics['latencies'])
                 },
                 'jitter': {
-                    'avg': avg(metrics['jitters']),
-                    'min': min_val(metrics['jitters']),
-                    'max': max_val(metrics['jitters'])
+                    'avg': calculate_avg(metrics['jitters']),
+                    'min': calculate_min(metrics['jitters']),
+                    'max': calculate_max(metrics['jitters'])
                 },
                 'packet_loss': {
-                    'avg': avg(metrics['packet_losses']),
-                    'min': min_val(metrics['packet_losses']),
-                    'max': max_val(metrics['packet_losses'])
+                    'avg': calculate_avg(metrics['packet_losses']),
+                    'min': calculate_min(metrics['packet_losses']),
+                    'max': calculate_max(metrics['packet_losses'])
                 },
                 'obstruction': {
-                    'avg': avg(metrics['obstructions']),
-                    'min': min_val(metrics['obstructions']),
-                    'max': max_val(metrics['obstructions'])
+                    'avg': calculate_avg(metrics['obstructions']),
+                    'min': calculate_min(metrics['obstructions']),
+                    'max': calculate_max(metrics['obstructions'])
                 },
                 'stability': {
-                    'avg': avg(metrics['stabilities']),
-                    'min': min_val(metrics['stabilities']),
-                    'max': max_val(metrics['stabilities'])
+                    'avg': calculate_avg(metrics['stabilities']),
+                    'min': calculate_min(metrics['stabilities']),
+                    'max': calculate_max(metrics['stabilities'])
                 }
             }
         
@@ -319,11 +321,11 @@ def compare_providers(data: List[Dict]) -> Dict:
             ]
             
             if terrestrial_providers:
-                sat_avg_latency = avg([
+                sat_avg_latency = calculate_avg([
                     providers_summary[p]['latency']['avg'] 
                     for p in satellite_providers
                 ])
-                terr_avg_latency = avg([
+                terr_avg_latency = calculate_avg([
                     providers_summary[p]['latency']['avg'] 
                     for p in terrestrial_providers
                 ])

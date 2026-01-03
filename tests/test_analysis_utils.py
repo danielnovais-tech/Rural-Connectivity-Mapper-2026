@@ -52,6 +52,33 @@ def sample_data():
     ]
 
 
+@pytest.fixture
+def satellite_test_data():
+    """Test data with multiple satellite providers."""
+    return [
+        {
+            'provider': 'Starlink Gen2',
+            'speed_test': {'download': 150, 'upload': 20, 'latency': 30, 'jitter': 3, 'packet_loss': 0.1, 'obstruction': 2.5, 'stability': 90},
+            'quality_score': {'overall_score': 85}
+        },
+        {
+            'provider': 'Starlink High Performance',
+            'speed_test': {'download': 200, 'upload': 25, 'latency': 25, 'jitter': 2, 'packet_loss': 0.05, 'obstruction': 1.2, 'stability': 95},
+            'quality_score': {'overall_score': 95}
+        },
+        {
+            'provider': 'Viasat',
+            'speed_test': {'download': 75, 'upload': 10, 'latency': 70, 'jitter': 15, 'packet_loss': 2.5, 'obstruction': 0, 'stability': 50},
+            'quality_score': {'overall_score': 55}
+        },
+        {
+            'provider': 'Claro',
+            'speed_test': {'download': 90, 'upload': 15, 'latency': 40, 'jitter': 6, 'packet_loss': 0.8, 'obstruction': 0, 'stability': 80},
+            'quality_score': {'overall_score': 75}
+        }
+    ]
+
+
 def test_analyze_temporal_evolution(sample_data):
     """Test temporal analysis calculation."""
     analysis = analyze_temporal_evolution(sample_data)
@@ -165,32 +192,9 @@ def test_compare_providers(sample_data):
             assert 'max' in metric_data
 
 
-def test_compare_providers_satellite_identification():
+def test_compare_providers_satellite_identification(satellite_test_data):
     """Test that satellite providers are correctly identified."""
-    test_data = [
-        {
-            'provider': 'Starlink Gen2',
-            'speed_test': {'download': 150, 'upload': 20, 'latency': 30, 'jitter': 3, 'packet_loss': 0.1, 'obstruction': 2.5, 'stability': 90},
-            'quality_score': {'overall_score': 85}
-        },
-        {
-            'provider': 'Starlink High Performance',
-            'speed_test': {'download': 200, 'upload': 25, 'latency': 25, 'jitter': 2, 'packet_loss': 0.05, 'obstruction': 1.2, 'stability': 95},
-            'quality_score': {'overall_score': 95}
-        },
-        {
-            'provider': 'Viasat',
-            'speed_test': {'download': 75, 'upload': 10, 'latency': 70, 'jitter': 15, 'packet_loss': 2.5, 'obstruction': 0, 'stability': 50},
-            'quality_score': {'overall_score': 55}
-        },
-        {
-            'provider': 'Claro',
-            'speed_test': {'download': 90, 'upload': 15, 'latency': 40, 'jitter': 6, 'packet_loss': 0.8, 'obstruction': 0, 'stability': 80},
-            'quality_score': {'overall_score': 75}
-        }
-    ]
-    
-    comparison = compare_providers(test_data)
+    comparison = compare_providers(satellite_test_data)
     
     # Check satellite providers are identified
     assert 'satellite_providers' in comparison
