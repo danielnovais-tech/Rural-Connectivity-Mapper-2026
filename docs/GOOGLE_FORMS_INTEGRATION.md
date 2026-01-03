@@ -426,6 +426,22 @@ For advanced users, consider:
 
 ---
 
+## Quick Reference: Sample Data
+
+For testing purposes, we've included a sample Google Forms export CSV file:
+
+**Location:** `docs/sample_google_forms_export.csv`
+
+This file contains 6 sample connectivity points from different Brazilian cities demonstrating the proper format for Google Forms exports. You can use this as a reference for formatting your own exports.
+
+**Test the import:**
+```bash
+python main.py --importar docs/sample_google_forms_export.csv
+python main.py --map --relatorio html
+```
+
+---
+
 ## Support Resources
 
 - **Google Forms Help:** [support.google.com/forms](https://support.google.com/forms)
