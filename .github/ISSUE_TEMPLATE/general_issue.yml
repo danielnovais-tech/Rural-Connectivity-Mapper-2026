@@ -1,0 +1,76 @@
+name: General Issue
+description: Report any other type of issue
+title: "[Issue]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for creating an issue! Please provide as much detail as possible.
+  
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of issue is this?
+      options:
+        - Documentation
+        - Question
+        - Performance
+        - Refactoring
+        - Testing
+        - Dependencies
+        - CI/CD
+        - Other
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the issue
+      placeholder: Describe the issue...
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: estimated-effort
+    attributes:
+      label: Estimated Effort
+      description: Your rough estimate of the effort required to address this issue
+      options:
+        - S (Small - < 2 hours)
+        - M (Medium - 2-8 hours)
+        - L (Large - > 8 hours)
+        - XL (Extra Large - > 1 week)
+        - Unknown
+      default: 4
+    validations:
+      required: true
+  
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: If you have a proposed solution, describe it here
+      placeholder: How should this be addressed?
+    validations:
+      required: false
+  
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the issue here
+      placeholder: Screenshots, code examples, links, etc.
+    validations:
+      required: false
+  
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to work on this issue?
+      options:
+        - label: I am willing to submit a PR for this issue

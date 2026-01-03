@@ -300,8 +300,9 @@ Contributions welcome! Please:
 - Add docstrings (Google-style)
 - Include tests for new features
 - Update documentation
+- **Estimate effort** when creating issues (S/M/L/XL or hours)
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for full details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full details including effort estimation guidelines.
 
 ---
 
