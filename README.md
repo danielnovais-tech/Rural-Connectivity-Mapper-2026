@@ -68,6 +68,87 @@ folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
 ```
 
+### 🐳 Docker Installation (Recommended for Rural Deployments)
+
+Docker containerization simplifies deployment on rural servers, Raspberry Pi, or farm test environments by avoiding dependency conflicts (including speedtest-cli issues).
+
+#### Prerequisites
+- Docker installed ([Get Docker](https://docs.docker.com/get-docker/))
+- Docker Compose (optional, included with Docker Desktop)
+
+#### Quick Start with Docker
+
+**Option 1: Using Docker Compose (Easiest)**
+
+```bash
+# Clone the repository
+git clone https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026.git
+cd Rural-Connectivity-Mapper-2026
+
+# Run demo workflow in container
+docker compose up
+
+# Generated reports will be in the current directory:
+# - demo_report.json, .csv, .txt, .html
+# - demo_connectivity_map.html
+```
+
+**Option 2: Using Docker directly**
+
+```bash
+# Build the Docker image
+docker build -t rural-connectivity-mapper .
+
+# Run demo workflow (files generated inside container)
+docker run --rm rural-connectivity-mapper
+
+# Run demo workflow with volume mount to persist files in current directory
+docker run --rm -v $(pwd):/app rural-connectivity-mapper
+
+# Run CLI commands with volume mount
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --relatorio html
+
+# Run with debug mode
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --debug --simulate --map --analyze
+```
+
+#### Docker CLI Examples
+
+```bash
+# Generate all report formats
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --relatorio json
+
+# Create interactive map
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --map
+
+# Simulate router improvements and analyze
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --simulate --analyze --relatorio html
+
+# Use custom CSV data
+docker run --rm \
+  -v $(pwd):/app \
+  -v $(pwd)/my_data.csv:/app/data.csv \
+  rural-connectivity-mapper \
+  python main.py --importar /app/data.csv --map --relatorio json
+
+# Run with Docker Compose for one-off commands
+docker compose run --rm rural-mapper python main.py --help
+docker compose run --rm rural-mapper python main.py --importar src/data/sample_data.csv --map
+```
+
+#### Benefits for Rural Deployments
+- ✅ **No dependency conflicts** - All dependencies pre-installed
+- ✅ **Works on Raspberry Pi** - ARM-compatible base image
+- ✅ **Consistent environment** - Same behavior across all systems
+- ✅ **Easy updates** - Just pull new image
+- ✅ **Isolated from host** - Won't affect local Python environment
+- ✅ **Speedtest-cli included** - No manual installation needed
+
 ---
 
 ## 📖 Usage
@@ -266,11 +347,13 @@ pytest tests/ --cov=src --cov-report=html
 
 ## 🗺️ Roadmap
 
+### v1.0.1 (Current Release)
+- [x] Docker containerization ✅ (Moved from v1.1.0)
+
 ### v1.1.0 (Q1 2026)
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
-- [ ] Docker containerization
 
 ### v1.2.0 (Q2 2026)
 - [ ] Web dashboard (Flask/Streamlit)
