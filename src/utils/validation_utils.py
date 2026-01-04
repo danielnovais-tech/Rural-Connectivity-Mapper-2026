@@ -174,6 +174,6 @@ def validate_csv_row(row: Dict[str, str], row_num: int) -> Tuple[bool, str]:
     
     # Validate provider
     if row['provider'] not in KNOWN_PROVIDERS:
-        logger.info(f"Row {row_num}: Unknown provider '{row['provider']}' will be accepted but logged")
+        logger.warning(f"Row {row_num}: Unknown provider '{row['provider']}' will be accepted but logged")
     
     return True, ""
