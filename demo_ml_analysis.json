@@ -1,0 +1,251 @@
+{
+  "summary": {
+    "total_points_analyzed": 5,
+    "ml_model_version": "1.0.0",
+    "analysis_date": "Real-time"
+  },
+  "roi_analysis": {
+    "total_points": 5,
+    "rural_points": 0,
+    "rural_percentage": 0.0,
+    "high_priority_points": 1,
+    "avg_current_quality": 67.12,
+    "total_improvement_potential": 164.39,
+    "avg_improvement_potential": 32.88,
+    "recommendations": [
+      "MONITOR: Current connectivity is adequate - focus on maintenance and monitoring"
+    ],
+    "starlink_suitability_score": 16.44
+  },
+  "expansion_zones": {
+    "total_zones": 3,
+    "zones": {
+      "zone_2": {
+        "center": {
+          "latitude": -8.3443,
+          "longitude": -38.5224
+        },
+        "point_count": 2,
+        "avg_quality_score": 37.7,
+        "avg_distance_from_city_km": 0.01,
+        "is_primarily_rural": false,
+        "priority_score": 62.3,
+        "recommendation": "MEDIUM PRIORITY: Urban area with poor connectivity - consider infrastructure upgrade"
+      },
+      "zone_1": {
+        "center": {
+          "latitude": -23.2287,
+          "longitude": -44.9031
+        },
+        "point_count": 2,
+        "avg_quality_score": 80.11,
+        "avg_distance_from_city_km": 0.0,
+        "is_primarily_rural": false,
+        "priority_score": 19.89,
+        "recommendation": "LOW PRIORITY: Urban area with good connectivity - maintain current service"
+      },
+      "zone_3": {
+        "center": {
+          "latitude": -15.7801,
+          "longitude": -47.9292
+        },
+        "point_count": 1,
+        "avg_quality_score": 100.0,
+        "avg_distance_from_city_km": 5.2,
+        "is_primarily_rural": false,
+        "priority_score": 0.0,
+        "recommendation": "LOW PRIORITY: Urban area with good connectivity - maintain current service"
+      }
+    },
+    "top_priority_zone": "zone_2"
+  },
+  "top_priority_areas": [
+    {
+      "provider": "HughesNet",
+      "latitude": -3.7172,
+      "longitude": -38.5433,
+      "current_quality": 24.48,
+      "priority_score": 100.0,
+      "distance_from_city_km": 0.01,
+      "is_rural": false
+    },
+    {
+      "provider": "Viasat",
+      "latitude": -12.9714,
+      "longitude": -38.5014,
+      "current_quality": 50.92,
+      "priority_score": 64.99,
+      "distance_from_city_km": 0.0,
+      "is_rural": false
+    },
+    {
+      "provider": "Various",
+      "latitude": -23.5505,
+      "longitude": -46.6333,
+      "current_quality": 75.42,
+      "priority_score": 32.55,
+      "distance_from_city_km": 0.0,
+      "is_rural": false
+    },
+    {
+      "provider": "Claro",
+      "latitude": -22.9068,
+      "longitude": -43.1729,
+      "current_quality": 84.79,
+      "priority_score": 20.14,
+      "distance_from_city_km": 0.0,
+      "is_rural": false
+    },
+    {
+      "provider": "Starlink",
+      "latitude": -15.7801,
+      "longitude": -47.9292,
+      "current_quality": 100,
+      "priority_score": 0.0,
+      "distance_from_city_km": 5.2,
+      "is_rural": false
+    }
+  ],
+  "enriched_data": [
+    {
+      "id": "1",
+      "latitude": -23.5505,
+      "longitude": -46.6333,
+      "provider": "Various",
+      "speed_test": {
+        "download": 85.2,
+        "upload": 12.5,
+        "latency": 45.3,
+        "jitter": 8.2,
+        "packet_loss": 1.2,
+        "stability": 71.6
+      },
+      "quality_score": {
+        "overall_score": 75.42,
+        "speed_score": 62.9,
+        "latency_score": 81.85,
+        "stability_score": 85.7,
+        "rating": "Good"
+      },
+      "timestamp": "2026-01-15T10:30:00",
+      "ml_analysis": {
+        "improvement_potential": 24.58,
+        "distance_from_city_km": 0.0,
+        "is_rural": false,
+        "priority_score": 32.55
+      }
+    },
+    {
+      "id": "2",
+      "latitude": -22.9068,
+      "longitude": -43.1729,
+      "provider": "Claro",
+      "speed_test": {
+        "download": 92.1,
+        "upload": 15.3,
+        "latency": 38.7,
+        "jitter": 6.5,
+        "packet_loss": 0.8,
+        "stability": 79.0
+      },
+      "quality_score": {
+        "overall_score": 84.79,
+        "speed_score": 72.97,
+        "latency_score": 91.25,
+        "stability_score": 94.08,
+        "rating": "Excellent"
+      },
+      "timestamp": "2026-01-15T11:00:00",
+      "ml_analysis": {
+        "improvement_potential": 15.21,
+        "distance_from_city_km": 0.0,
+        "is_rural": false,
+        "priority_score": 20.14
+      }
+    },
+    {
+      "id": "3",
+      "latitude": -15.7801,
+      "longitude": -47.9292,
+      "provider": "Starlink",
+      "speed_test": {
+        "download": 165.4,
+        "upload": 22.8,
+        "latency": 28.5,
+        "jitter": 3.2,
+        "packet_loss": 0.1,
+        "stability": 92.6
+      },
+      "quality_score": {
+        "overall_score": 100,
+        "speed_score": 100,
+        "latency_score": 100,
+        "stability_score": 100,
+        "rating": "Excellent"
+      },
+      "timestamp": "2026-01-15T11:30:00",
+      "ml_analysis": {
+        "improvement_potential": 0.0,
+        "distance_from_city_km": 5.2,
+        "is_rural": false,
+        "priority_score": 0.0
+      }
+    },
+    {
+      "id": "4",
+      "latitude": -12.9714,
+      "longitude": -38.5014,
+      "provider": "Viasat",
+      "speed_test": {
+        "download": 75.3,
+        "upload": 9.8,
+        "latency": 68.2,
+        "jitter": 15.7,
+        "packet_loss": 2.5,
+        "stability": 43.599999999999994
+      },
+      "quality_score": {
+        "overall_score": 50.92,
+        "speed_score": 52.11,
+        "latency_score": 47.8,
+        "stability_score": 52.44,
+        "rating": "Fair"
+      },
+      "timestamp": "2026-01-15T12:00:00",
+      "ml_analysis": {
+        "improvement_potential": 49.08,
+        "distance_from_city_km": 0.0,
+        "is_rural": false,
+        "priority_score": 64.99
+      }
+    },
+    {
+      "id": "5",
+      "latitude": -3.7172,
+      "longitude": -38.5433,
+      "provider": "HughesNet",
+      "speed_test": {
+        "download": 62.8,
+        "upload": 7.2,
+        "latency": 95.4,
+        "jitter": 22.3,
+        "packet_loss": 3.8,
+        "stability": 17.4
+      },
+      "quality_score": {
+        "overall_score": 24.48,
+        "speed_score": 40.38,
+        "latency_score": 6.89,
+        "stability_score": 20.85,
+        "rating": "Poor"
+      },
+      "timestamp": "2026-01-15T12:30:00",
+      "ml_analysis": {
+        "improvement_potential": 75.52,
+        "distance_from_city_km": 0.01,
+        "is_rural": false,
+        "priority_score": 100.0
+      }
+    }
+  ]
+}
