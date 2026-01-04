@@ -30,7 +30,10 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- **🌍 NEW: Crowdsourced Data Collection** - Mobile-friendly web form, API, and CLI for easy data submission
 - 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
+
 
 ---
 
@@ -87,6 +90,31 @@ python demo_workflow.py
 - Console output with statistics
 
 ### CLI Commands
+
+#### 🌍 Crowdsourced Data Collection (NEW!)
+
+**Start the web server for data collection:**
+```bash
+python crowdsource_server.py
+```
+*Opens a mobile-friendly web form at http://localhost:5000*
+
+**Submit data via command line:**
+```bash
+# Interactive mode - guided prompts
+python submit_speedtest.py
+
+# Direct submission with arguments
+python submit_speedtest.py -lat -23.5505 -lon -46.6333 \
+  -p Starlink -d 150.0 -u 20.0 -l 30.0
+
+# Auto-run speedtest and submit
+python submit_speedtest.py --auto-speedtest -p Starlink
+```
+
+**See full crowdsourcing guide:** [docs/CROWDSOURCING.md](docs/CROWDSOURCING.md)
+
+---
 
 #### Import Data
 ```bash
