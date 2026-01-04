@@ -66,14 +66,8 @@ def validate_speed_test(speed_test: Any, check_bounds: bool = True) -> bool:
         else:
             data = speed_test
         
-        # Check required fields exist and are positive
-        required_fields = ['download', 'upload', 'latency']
-        for field in required_fields:
-            if field not in data:
-                logger.warning(f"Missing required field: {field}")
-                return False
-            
-            value = data[field]
+        # Helper function to validate a single field
+        def validate_field(field: str, value: Any, required: bool = True) -> bool:
             if not isinstance(value, (int, float)):
                 logger.warning(f"Field {field} must be numeric, got {type(value)}")
                 return False
@@ -91,28 +85,25 @@ def validate_speed_test(speed_test: Any, check_bounds: bool = True) -> bool:
                         f"[{min_val}, {max_val}]"
                     )
                     return False
+            
+            return True
+        
+        # Check required fields exist and are valid
+        required_fields = ['download', 'upload', 'latency']
+        for field in required_fields:
+            if field not in data:
+                logger.warning(f"Missing required field: {field}")
+                return False
+            
+            if not validate_field(field, data[field], required=True):
+                return False
         
         # Validate optional fields if present
         optional_fields = ['jitter', 'packet_loss', 'stability']
         for field in optional_fields:
             if field in data:
-                value = data[field]
-                if not isinstance(value, (int, float)):
-                    logger.warning(f"Field {field} must be numeric, got {type(value)}")
+                if not validate_field(field, data[field], required=False):
                     return False
-                if value < 0:
-                    logger.warning(f"Field {field} must be positive, got {value}")
-                    return False
-                
-                # Check realistic bounds if enabled
-                if check_bounds and field in SPEED_TEST_BOUNDS:
-                    min_val, max_val = SPEED_TEST_BOUNDS[field]
-                    if value < min_val or value > max_val:
-                        logger.warning(
-                            f"Field {field} value {value} is outside realistic bounds "
-                            f"[{min_val}, {max_val}]"
-                        )
-                        return False
         
         return True
     except Exception as e:
