@@ -19,6 +19,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 ## ✨ Features
 
+- 🌐 **Web Dashboard** - Modern Flask-based GUI with real-time statistics and interactive visualizations
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
@@ -29,7 +30,8 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **47 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🔌 **REST API** - Full API for data management and integration
 
 ---
 
@@ -66,11 +68,47 @@ pandas>=2.0.0          # Data manipulation
 requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
+Flask>=3.0.0           # Web framework
+Flask-CORS>=4.0.0      # CORS support
 ```
 
 ---
 
 ## 📖 Usage
+
+### Web Dashboard (NEW! 🎉)
+
+Start the web-based dashboard for a modern GUI experience:
+
+```bash
+python app.py
+```
+
+Then open your browser to `http://localhost:5000`
+
+**Dashboard Features:**
+- 📊 Real-time connectivity statistics and KPIs
+- 📈 Interactive data tables with provider/rating distributions
+- 🗺️ Embedded interactive Folium maps
+- 💡 AI-powered insights and recommendations
+- ⚡ One-click router impact simulation
+- 📥 Download reports in multiple formats (JSON, CSV, HTML)
+- 🔄 Live data refresh capabilities
+
+**REST API Endpoints:**
+- `GET /api/data` - Retrieve all connectivity points
+- `GET /api/data/<id>` - Get specific point by ID
+- `POST /api/data` - Add new connectivity point
+- `GET /api/statistics` - Get summary statistics
+- `GET /api/analysis` - Get temporal analysis
+- `POST /api/simulate` - Simulate router improvements
+- `GET /api/report/<format>` - Generate and download reports
+- `GET /api/map` - Generate interactive map
+- `GET /api/health` - Health check endpoint
+
+---
+
+## 📖 CLI Usage
 
 ### Quick Start - Demo Workflow
 
@@ -151,11 +189,15 @@ python main.py --debug \
 ```
 Rural-Connectivity-Mapper-2026/
 ├── main.py                      # CLI application
+├── app.py                       # Flask web application (NEW!)
 ├── demo_workflow.py             # Complete demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
 ├── LICENSE                      # MIT License
 ├── .gitignore                   # Git ignore
+│
+├── templates/                   # Web dashboard templates (NEW!)
+│   └── index.html              # Main dashboard page
 │
 ├── src/
 │   ├── models/                  # Data models
@@ -177,7 +219,7 @@ Rural-Connectivity-Mapper-2026/
 │       ├── sample_data.csv      # Sample points
 │       └── pontos.json          # Data storage
 │
-├── tests/                       # Test suite (36 tests)
+├── tests/                       # Test suite (47 tests)
 │   ├── test_models.py
 │   ├── test_validation_utils.py
 │   ├── test_data_utils.py
@@ -186,7 +228,8 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_report_utils.py
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
-│   └── test_analysis_utils.py
+│   ├── test_analysis_utils.py
+│   └── test_app.py             # Web app tests (NEW!)
 │
 └── docs/
     └── API.md                   # API reference
@@ -241,15 +284,21 @@ Stability Score = 100 - (jitter × 2 + packet_loss × 10)
 pytest tests/ -v
 ```
 
+### Run Web App Tests Only
+```bash
+pytest tests/test_app.py -v
+```
+
 ### Run with Coverage
 ```bash
-pytest tests/ --cov=src --cov-report=html
+pytest tests/ --cov=src --cov=app --cov-report=html
 ```
 
 **Test Coverage:**
-- 36 total tests (180% of requirement)
+- 47 total tests
 - 5 model tests
 - 31 utility tests
+- 11 web application tests
 - 80%+ code coverage
 
 ---
@@ -272,9 +321,9 @@ pytest tests/ --cov=src --cov-report=html
 - [ ] GitHub Actions CI/CD
 - [ ] Docker containerization
 
-### v1.2.0 (Q2 2026)
-- [ ] Web dashboard (Flask/Streamlit)
-- [ ] REST API endpoints
+### v1.2.0 (Q2 2026) - COMPLETED! ✅
+- [x] Web dashboard (Flask)
+- [x] REST API endpoints
 - [ ] Machine learning predictions
 - [ ] GeoJSON/KML export
 
@@ -332,12 +381,13 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
-- **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
+- **35 files** across models, utilities, tests, documentation, web app
+- **4,800+ lines of code** (Python, HTML, CSS, JavaScript)
+- **47 passing tests** (100% success rate)
 - **5 sample cities** with real-world profiles
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
+- **14 REST API endpoints** for data integration
 
 ---
 

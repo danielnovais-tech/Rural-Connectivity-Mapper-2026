@@ -14,6 +14,11 @@ report_*.csv
 report_*.txt
 report_*.html
 connectivity_map_*.html
+connectivity_map.html
+report.json
+report.csv
+report.txt
+report.html
 
 # Distribution / packaging
 .Python
