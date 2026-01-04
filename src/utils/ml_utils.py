@@ -1,9 +1,8 @@
 """Machine Learning utilities for connectivity analysis and predictions."""
 
 import logging
-from typing import List, Dict, Tuple
+from typing import List, Dict
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 import math
@@ -159,13 +158,15 @@ def predict_improvement_potential(data: List[Dict]) -> List[Dict]:
         
         # Add predictions to data
         enriched_data = []
+        max_score = max(improvement_scores) if improvement_scores else 1
         for i, point in enumerate(data):
             enriched_point = point.copy()
+            priority = (improvement_scores[i] / max_score * 100) if max_score > 0 else 0
             enriched_point['ml_analysis'] = {
                 'improvement_potential': round(improvement_scores[i], 2),
                 'distance_from_city_km': round(X[i, 2], 2),
                 'is_rural': bool(X[i, 2] > 100),  # >100km = rural
-                'priority_score': round(improvement_scores[i] / max(improvement_scores) * 100, 2)
+                'priority_score': round(priority, 2)
             }
             enriched_data.append(enriched_point)
         
@@ -214,7 +215,7 @@ def identify_expansion_zones(data: List[Dict], n_zones: int = 3) -> Dict:
         X = np.array(features)
         
         # Apply K-means clustering
-        kmeans = KMeans(n_clusters=n_zones, random_state=42, n_init=10)
+        kmeans = KMeans(n_clusters=n_zones, random_state=42, n_init='auto')
         clusters = kmeans.fit_predict(X)
         
         # Analyze each zone
@@ -246,10 +247,10 @@ def identify_expansion_zones(data: List[Dict], n_zones: int = 3) -> Dict:
                     'longitude': round(center_lon, 4)
                 },
                 'point_count': int(len(zone_points)),
-                'avg_quality_score': round(float(avg_quality), 2),
-                'avg_distance_from_city_km': round(float(avg_distance), 2),
+                'avg_quality_score': round(avg_quality, 2),
+                'avg_distance_from_city_km': round(avg_distance, 2),
                 'is_primarily_rural': bool(avg_distance > 100),
-                'priority_score': round(float(priority), 2),
+                'priority_score': round(priority, 2),
                 'recommendation': _generate_zone_recommendation(avg_quality, avg_distance)
             }
         
