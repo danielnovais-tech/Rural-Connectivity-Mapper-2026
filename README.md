@@ -1,11 +1,14 @@
 # Rural Connectivity Mapper 2026
 
+[![CI](https://img.shields.io/github/actions/workflow/status/danielnovais-tech/Rural-Connectivity-Mapper-2026/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/actions/workflows/ci.yml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/danielnovais-tech/Rural-Connectivity-Mapper-2026/lint.yml?branch=main&style=flat-square&label=Lint)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/actions/workflows/lint.yml)
 [![GitHub License](https://img.shields.io/github/license/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/blob/main/LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/network)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue?style=flat-square)](https://www.python.org/downloads/)
 [![Last Commit](https://img.shields.io/github/last-commit/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/commits/main)
 [![Release](https://img.shields.io/github/v/release/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/releases/latest)
+[![codecov](https://img.shields.io/badge/coverage-83%25-green?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026)
 
 Python-based tool to map and analyze rural internet connectivity in Brazil, aligned with Starlink's 2026 expansion roadmap.
 
@@ -252,6 +255,64 @@ pytest tests/ --cov=src --cov-report=html
 - 31 utility tests
 - 80%+ code coverage
 
+### Linting
+```bash
+# Install dev dependencies
+pip install -r requirements-dev.txt
+
+# Run ruff
+ruff check .
+
+# Run flake8
+flake8 src/ tests/ main.py demo_workflow.py
+```
+
+---
+
+## 🔄 CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+### Workflows
+
+1. **CI Workflow** (`.github/workflows/ci.yml`)
+   - Runs on: Push to main/develop, Pull Requests
+   - Tests across Python 3.8, 3.9, 3.10, 3.11, 3.12
+   - Generates coverage reports
+   - Uploads coverage artifacts
+
+2. **Lint Workflow** (`.github/workflows/lint.yml`)
+   - Runs on: Push to main/develop, Pull Requests
+   - Checks code quality with ruff and flake8
+   - Ensures consistent code style
+
+3. **Release Workflow** (`.github/workflows/release.yml`)
+   - Runs on: Version tags (v*.*.*)
+   - Creates GitHub releases automatically
+   - Includes test results and coverage
+
+### Running CI Locally
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+# Run tests
+pytest tests/ -v --cov=src
+
+# Run linting
+ruff check .
+flake8 src/ tests/ main.py demo_workflow.py
+```
+
+### Configuration Files
+
+- `pytest.ini` - Pytest configuration
+- `.flake8` - Flake8 linting rules
+- `ruff.toml` - Ruff linting configuration
+- `requirements-dev.txt` - Development dependencies
+
 ---
 
 ## 🌍 Use Cases
@@ -269,7 +330,7 @@ pytest tests/ --cov=src --cov-report=html
 ### v1.1.0 (Q1 2026)
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
-- [ ] GitHub Actions CI/CD
+- [x] GitHub Actions CI/CD ✅
 - [ ] Docker containerization
 
 ### v1.2.0 (Q2 2026)
