@@ -9,6 +9,7 @@ __pycache__/
 # Generated reports and maps
 demo_report.*
 demo_connectivity_map.html
+dashboard_report.*
 report_*.json
 report_*.csv
 report_*.txt
