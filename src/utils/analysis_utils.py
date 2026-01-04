@@ -5,16 +5,19 @@ from typing import List, Dict
 from datetime import datetime
 from collections import defaultdict
 
+from .i18n_utils import get_translation
+
 logger = logging.getLogger(__name__)
 
 
-def analyze_temporal_evolution(data: List[Dict]) -> Dict:
+def analyze_temporal_evolution(data: List[Dict], language: str = 'en') -> Dict:
     """Analyze temporal evolution of connectivity quality.
     
     Groups data by date and calculates statistics to identify trends.
     
     Args:
         data: List of connectivity point dictionaries
+        language: Language code for insights (en, pt). Default: 'en'
         
     Returns:
         Dict: Analysis results with trends and insights
@@ -87,27 +90,27 @@ def analyze_temporal_evolution(data: List[Dict]) -> Dict:
             'max_quality_score': round(max(all_scores), 2) if all_scores else 0
         }
         
-        # Generate insights
+        # Generate insights with translations
         insights = []
         
         if trends['avg_quality_score'] >= 80:
-            insights.append("Overall connectivity quality is excellent across all points")
+            insights.append(get_translation('insight_excellent_quality', language))
         elif trends['avg_quality_score'] >= 60:
-            insights.append("Overall connectivity quality is good with room for improvement")
+            insights.append(get_translation('insight_good_quality', language))
         else:
-            insights.append("Overall connectivity quality needs significant improvement")
+            insights.append(get_translation('insight_poor_quality', language))
         
         if trends['avg_download'] >= 100:
-            insights.append("Download speeds meet Starlink 2026 target expectations")
+            insights.append(get_translation('insight_download_excellent', language))
         elif trends['avg_download'] >= 50:
-            insights.append("Download speeds are acceptable but below optimal targets")
+            insights.append(get_translation('insight_download_good', language))
         else:
-            insights.append("Download speeds are below target thresholds")
+            insights.append(get_translation('insight_download_poor', language))
         
         if trends['avg_latency'] <= 40:
-            insights.append("Latency is within Starlink 2026 target range")
+            insights.append(get_translation('insight_latency_good', language))
         else:
-            insights.append("Latency exceeds target thresholds and needs optimization")
+            insights.append(get_translation('insight_latency_poor', language))
         
         # Analyze by provider
         provider_stats = defaultdict(list)
@@ -125,7 +128,8 @@ def analyze_temporal_evolution(data: List[Dict]) -> Dict:
                 best_provider = provider
         
         if best_provider:
-            insights.append(f"{best_provider} shows the best average quality score ({best_avg:.1f}/100)")
+            insights.append(get_translation('insight_best_provider', language, 
+                                          provider=best_provider, score=f"{best_avg:.1f}"))
         
         # Prepare date range
         dates = sorted(daily_data.keys())

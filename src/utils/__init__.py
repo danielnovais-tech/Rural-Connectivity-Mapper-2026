@@ -8,6 +8,7 @@ from .report_utils import generate_report
 from .simulation_utils import simulate_router_impact
 from .mapping_utils import generate_map
 from .analysis_utils import analyze_temporal_evolution
+from .i18n_utils import get_translation, get_rating_translation, get_supported_languages
 
 __all__ = [
     'validate_coordinates',
@@ -22,5 +23,8 @@ __all__ = [
     'generate_report',
     'simulate_router_impact',
     'generate_map',
-    'analyze_temporal_evolution'
+    'analyze_temporal_evolution',
+    'get_translation',
+    'get_rating_translation',
+    'get_supported_languages'
 ]
