@@ -138,6 +138,14 @@ Examples:
         help='Analyze temporal evolution'
     )
     
+    parser.add_argument(
+        '--language',
+        '--lang',
+        choices=['en', 'pt'],
+        default='en',
+        help='Language for reports and analysis output (en=English, pt=Portuguese)'
+    )
+    
     args = parser.parse_args()
     
     # Setup logging
@@ -175,7 +183,7 @@ Examples:
     # Analyze temporal evolution
     if args.analyze:
         logger.info("Analyzing temporal evolution...")
-        analysis = analyze_temporal_evolution(data)
+        analysis = analyze_temporal_evolution(data, args.language)
         
         print("\n" + "=" * 80)
         print("TEMPORAL ANALYSIS RESULTS")
@@ -194,7 +202,7 @@ Examples:
     # Generate report
     if args.relatorio:
         logger.info(f"Generating {args.relatorio.upper()} report...")
-        report_path = generate_report(data, args.relatorio)
+        report_path = generate_report(data, args.relatorio, language=args.language)
         logger.info(f"Report generated: {report_path}")
     
     # Generate map
