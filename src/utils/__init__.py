@@ -8,6 +8,16 @@ from .report_utils import generate_report
 from .simulation_utils import simulate_router_impact
 from .mapping_utils import generate_map
 from .analysis_utils import analyze_temporal_evolution
+from .config_utils import (
+    load_country_config,
+    get_country_info,
+    get_default_country,
+    get_providers,
+    get_language,
+    get_map_center,
+    get_zoom_level,
+    list_available_countries
+)
 
 __all__ = [
     'validate_coordinates',
@@ -22,5 +32,13 @@ __all__ = [
     'generate_report',
     'simulate_router_impact',
     'generate_map',
-    'analyze_temporal_evolution'
+    'analyze_temporal_evolution',
+    'load_country_config',
+    'get_country_info',
+    'get_default_country',
+    'get_providers',
+    'get_language',
+    'get_map_center',
+    'get_zoom_level',
+    'list_available_countries'
 ]

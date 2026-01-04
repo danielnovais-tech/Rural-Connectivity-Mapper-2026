@@ -1,15 +1,10 @@
 """Validation utilities for data integrity checks."""
 
-from typing import Any
+from typing import Any, Optional
 import logging
+from .config_utils import get_providers, get_default_country
 
 logger = logging.getLogger(__name__)
-
-# Known providers in Brazil
-KNOWN_PROVIDERS = [
-    'Starlink', 'Viasat', 'HughesNet', 'Claro', 'Vivo', 
-    'TIM', 'Oi', 'Various', 'Unknown'
-]
 
 
 def validate_coordinates(latitude: float, longitude: float) -> bool:
@@ -90,11 +85,12 @@ def validate_speed_test(speed_test: Any) -> bool:
         return False
 
 
-def validate_provider(provider: str) -> bool:
+def validate_provider(provider: str, country_code: Optional[str] = None) -> bool:
     """Validate internet service provider name.
     
     Args:
         provider: Provider name to validate
+        country_code: ISO country code for provider list (default: uses default country)
         
     Returns:
         bool: True if provider is known, False otherwise
@@ -103,9 +99,15 @@ def validate_provider(provider: str) -> bool:
         logger.warning(f"Invalid provider: {provider}")
         return False
     
-    if provider not in KNOWN_PROVIDERS:
+    # Get providers for the specified country
+    if country_code is None:
+        country_code = get_default_country()
+    
+    known_providers = get_providers(country_code)
+    
+    if provider not in known_providers:
         logger.warning(
-            f"Unknown provider: {provider}. Known providers: {', '.join(KNOWN_PROVIDERS)}"
+            f"Unknown provider: {provider}. Known providers for {country_code}: {', '.join(known_providers)}"
         )
         return False
     

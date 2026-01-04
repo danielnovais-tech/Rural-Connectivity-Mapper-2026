@@ -1,9 +1,10 @@
 """Mapping utilities for interactive map generation."""
 
 import logging
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pathlib import Path
 from datetime import datetime
+from .config_utils import get_map_center, get_zoom_level, get_default_country
 
 try:
     import folium
@@ -14,12 +15,17 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def generate_map(data: List[Dict], output_path: str = None) -> str:
+def generate_map(
+    data: List[Dict], 
+    output_path: str = None,
+    country_code: Optional[str] = None
+) -> str:
     """Generate interactive Folium map from connectivity data.
     
     Args:
         data: List of connectivity point dictionaries
         output_path: Optional output file path for HTML map
+        country_code: ISO country code for map center (default: uses default country)
         
     Returns:
         str: Path to generated HTML map file
@@ -37,10 +43,16 @@ def generate_map(data: List[Dict], output_path: str = None) -> str:
         path = Path(output_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         
+        # Determine map center and zoom
+        if country_code is None:
+            country_code = get_default_country()
+        
         if not data:
             logger.warning("No data provided for map generation")
-            # Create empty map centered on Brazil
-            m = folium.Map(location=[-15.7801, -47.9292], zoom_start=4)
+            # Create empty map centered on specified country
+            center = get_map_center(country_code)
+            zoom = get_zoom_level(country_code)
+            m = folium.Map(location=center, zoom_start=zoom)
             m.save(str(path))
             return str(path)
         
