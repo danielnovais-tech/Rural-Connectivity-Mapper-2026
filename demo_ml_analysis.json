@@ -9,13 +9,13 @@
     "rural_points": 0,
     "rural_percentage": 0.0,
     "high_priority_points": 1,
-    "avg_current_quality": 67.12,
-    "total_improvement_potential": 164.39,
-    "avg_improvement_potential": 32.88,
+    "avg_current_quality": 67.19,
+    "total_improvement_potential": 164.03,
+    "avg_improvement_potential": 32.81,
     "recommendations": [
       "MONITOR: Current connectivity is adequate - focus on maintenance and monitoring"
     ],
-    "starlink_suitability_score": 16.44
+    "starlink_suitability_score": 16.4
   },
   "expansion_zones": {
     "total_zones": 3,
@@ -26,10 +26,10 @@
           "longitude": -38.5224
         },
         "point_count": 2,
-        "avg_quality_score": 37.7,
-        "avg_distance_from_city_km": 0.01,
+        "avg_quality_score": 37.37,
+        "avg_distance_from_city_km": 0.0,
         "is_primarily_rural": false,
-        "priority_score": 62.3,
+        "priority_score": 62.63,
         "recommendation": "MEDIUM PRIORITY: Urban area with poor connectivity - consider infrastructure upgrade"
       },
       "zone_1": {
@@ -38,10 +38,10 @@
           "longitude": -44.9031
         },
         "point_count": 2,
-        "avg_quality_score": 80.11,
+        "avg_quality_score": 80.62,
         "avg_distance_from_city_km": 0.0,
         "is_primarily_rural": false,
-        "priority_score": 19.89,
+        "priority_score": 19.38,
         "recommendation": "LOW PRIORITY: Urban area with good connectivity - maintain current service"
       },
       "zone_3": {
@@ -64,7 +64,7 @@
       "provider": "HughesNet",
       "latitude": -3.7172,
       "longitude": -38.5433,
-      "current_quality": 24.48,
+      "current_quality": 25.29,
       "priority_score": 100.0,
       "distance_from_city_km": 0.01,
       "is_rural": false
@@ -73,8 +73,8 @@
       "provider": "Viasat",
       "latitude": -12.9714,
       "longitude": -38.5014,
-      "current_quality": 50.92,
-      "priority_score": 64.99,
+      "current_quality": 49.45,
+      "priority_score": 67.66,
       "distance_from_city_km": 0.0,
       "is_rural": false
     },
@@ -82,8 +82,8 @@
       "provider": "Various",
       "latitude": -23.5505,
       "longitude": -46.6333,
-      "current_quality": 75.42,
-      "priority_score": 32.55,
+      "current_quality": 78.5,
+      "priority_score": 28.78,
       "distance_from_city_km": 0.0,
       "is_rural": false
     },
@@ -91,8 +91,8 @@
       "provider": "Claro",
       "latitude": -22.9068,
       "longitude": -43.1729,
-      "current_quality": 84.79,
-      "priority_score": 20.14,
+      "current_quality": 82.73,
+      "priority_score": 23.11,
       "distance_from_city_km": 0.0,
       "is_rural": false
     },
@@ -121,18 +121,18 @@
         "stability": 71.6
       },
       "quality_score": {
-        "overall_score": 75.42,
-        "speed_score": 62.9,
-        "latency_score": 81.85,
-        "stability_score": 85.7,
+        "overall_score": 78.5,
+        "speed_score": 65.47,
+        "latency_score": 85.19,
+        "stability_score": 89.2,
         "rating": "Good"
       },
       "timestamp": "2026-01-15T10:30:00",
       "ml_analysis": {
-        "improvement_potential": 24.58,
+        "improvement_potential": 21.5,
         "distance_from_city_km": 0.0,
         "is_rural": false,
-        "priority_score": 32.55
+        "priority_score": 28.78
       }
     },
     {
@@ -149,18 +149,18 @@
         "stability": 79.0
       },
       "quality_score": {
-        "overall_score": 84.79,
-        "speed_score": 72.97,
-        "latency_score": 91.25,
-        "stability_score": 94.08,
+        "overall_score": 82.73,
+        "speed_score": 71.19,
+        "latency_score": 89.03,
+        "stability_score": 91.8,
         "rating": "Excellent"
       },
       "timestamp": "2026-01-15T11:00:00",
       "ml_analysis": {
-        "improvement_potential": 15.21,
+        "improvement_potential": 17.27,
         "distance_from_city_km": 0.0,
         "is_rural": false,
-        "priority_score": 20.14
+        "priority_score": 23.11
       }
     },
     {
@@ -205,18 +205,18 @@
         "stability": 43.599999999999994
       },
       "quality_score": {
-        "overall_score": 50.92,
-        "speed_score": 52.11,
-        "latency_score": 47.8,
-        "stability_score": 52.44,
+        "overall_score": 49.45,
+        "speed_score": 50.61,
+        "latency_score": 46.43,
+        "stability_score": 50.92,
         "rating": "Fair"
       },
       "timestamp": "2026-01-15T12:00:00",
       "ml_analysis": {
-        "improvement_potential": 49.08,
+        "improvement_potential": 50.55,
         "distance_from_city_km": 0.0,
         "is_rural": false,
-        "priority_score": 64.99
+        "priority_score": 67.66
       }
     },
     {
@@ -233,15 +233,15 @@
         "stability": 17.4
       },
       "quality_score": {
-        "overall_score": 24.48,
-        "speed_score": 40.38,
-        "latency_score": 6.89,
-        "stability_score": 20.85,
+        "overall_score": 25.29,
+        "speed_score": 41.72,
+        "latency_score": 7.12,
+        "stability_score": 21.54,
         "rating": "Poor"
       },
       "timestamp": "2026-01-15T12:30:00",
       "ml_analysis": {
-        "improvement_potential": 75.52,
+        "improvement_potential": 74.71,
         "distance_from_city_km": 0.01,
         "is_rural": false,
         "priority_score": 100.0
