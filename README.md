@@ -19,6 +19,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 ## ✨ Features
 
+- ⚡ **CSV Upload Script** - Standalone validator for easy speedtest data import (NEW!)
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
@@ -29,7 +30,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **55 Comprehensive Tests** - 80%+ code coverage with pytest
 
 ---
 
@@ -71,6 +72,39 @@ matplotlib>=3.7.0      # Data visualization
 ---
 
 ## 📖 Usage
+
+### Quick Start - CSV Upload Script ⚡
+
+**Lowest barrier to entry for contributors and rural testers!**
+
+Upload and validate speedtest data with a single command:
+
+```bash
+python upload_csv.py example_speedtests.csv
+```
+
+**Key Features:**
+- ✅ Validates schema (timestamp, lat/lon, download/upload) before processing
+- 📊 Detailed validation reports with clear error messages
+- 🚀 Easy to demo and document with included `example_speedtests.csv`
+- 💾 Outputs clean JSON format ready for further analysis
+
+**Usage Examples:**
+```bash
+# Basic upload with validation
+python upload_csv.py example_speedtests.csv
+
+# Custom output file
+python upload_csv.py my_data.csv --output results.json
+
+# Dry-run mode (validate without saving)
+python upload_csv.py data.csv --dry-run --verbose
+```
+
+**Required CSV Columns:** `timestamp`, `latitude`, `longitude`, `download`, `upload`  
+**Optional CSV Columns:** `id`, `city`, `provider`, `latency`, `jitter`, `packet_loss`
+
+See `example_speedtests.csv` for a complete sample file with 10 test locations across Brazil.
 
 ### Quick Start - Demo Workflow
 
@@ -151,6 +185,8 @@ python main.py --debug \
 ```
 Rural-Connectivity-Mapper-2026/
 ├── main.py                      # CLI application
+├── upload_csv.py                # 🆕 Standalone CSV upload & validation script
+├── example_speedtests.csv       # 🆕 Sample CSV with 10 test locations
 ├── demo_workflow.py             # Complete demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
@@ -177,7 +213,7 @@ Rural-Connectivity-Mapper-2026/
 │       ├── sample_data.csv      # Sample points
 │       └── pontos.json          # Data storage
 │
-├── tests/                       # Test suite (36 tests)
+├── tests/                       # Test suite (55 tests)
 │   ├── test_models.py
 │   ├── test_validation_utils.py
 │   ├── test_data_utils.py
@@ -186,7 +222,8 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_report_utils.py
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
-│   └── test_analysis_utils.py
+│   ├── test_analysis_utils.py
+│   └── test_upload_csv.py       # 🆕 CSV upload script tests
 │
 └── docs/
     └── API.md                   # API reference
@@ -332,10 +369,10 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
-- **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
-- **5 sample cities** with real-world profiles
+- **35 files** across models, utilities, tests, documentation
+- **4,000+ lines of code** (Python)
+- **55 passing tests** (100% success rate)
+- **10 sample locations** in example_speedtests.csv
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
 
