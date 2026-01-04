@@ -25,11 +25,12 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
+- 🌍 **Multilingual Support** - Reports and analysis in English and Portuguese
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **50 Comprehensive Tests** - 80%+ code coverage with pytest
 
 ---
 
@@ -66,6 +67,7 @@ pandas>=2.0.0          # Data manipulation
 requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
+babel>=2.14.0          # Internationalization (i18n)
 ```
 
 ---
@@ -94,10 +96,14 @@ python main.py --importar src/data/sample_data.csv
 
 #### Generate Reports
 ```bash
-python main.py --relatorio html    # HTML report
+python main.py --relatorio html    # HTML report (English)
 python main.py --relatorio json    # JSON report
 python main.py --relatorio csv     # CSV report
 python main.py --relatorio txt     # Text report
+
+# Generate reports in Portuguese
+python main.py --relatorio html --language pt    # HTML report in Portuguese
+python main.py --relatorio txt --lang pt         # Text report in Portuguese
 ```
 
 #### Simulate Router Improvements
@@ -114,9 +120,10 @@ python main.py --map
 
 #### Analyze Temporal Evolution
 ```bash
-python main.py --analyze
+python main.py --analyze                # Analyze in English
+python main.py --analyze --language pt  # Analyze in Portuguese
 ```
-*Shows trends, insights, provider statistics*
+*Shows trends, insights, provider statistics in selected language*
 
 #### Enable Debug Mode
 ```bash
@@ -143,6 +150,7 @@ python main.py --debug \
 | `--simulate` | Simulate router impact | Flag |
 | `--map` | Generate interactive map | Flag |
 | `--analyze` | Analyze temporal trends | Flag |
+| `--language <code>` or `--lang <code>` | Language for reports/analysis | en (English), pt (Portuguese) |
 
 ---
 
@@ -279,7 +287,7 @@ pytest tests/ --cov=src --cov-report=html
 - [ ] GeoJSON/KML export
 
 ### v2.0.0 (H2 2026)
-- [ ] Multi-language support (Portuguese/English)
+- [x] Multi-language support (Portuguese/English) ✅ **Completed!**
 - [ ] Mobile app for field data collection
 - [ ] Advanced analytics (churn prediction)
 - [ ] Integration with Starlink APIs
@@ -332,9 +340,10 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
-- **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
+- **35 files** across models, utilities, tests, documentation
+- **4,000+ lines of code** (Python)
+- **50 passing tests** (100% success rate)
+- **2 supported languages** (English, Portuguese)
 - **5 sample cities** with real-world profiles
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
