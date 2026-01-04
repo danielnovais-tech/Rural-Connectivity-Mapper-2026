@@ -21,7 +21,8 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
-- 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
+- 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, Starlink API
+- 🛰️ **Starlink API Integration** - Fetch coverage, performance metrics, and compare with competitors (Viasat, HughesNet)
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
@@ -29,7 +30,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **58 Comprehensive Tests** - 80%+ code coverage with pytest
 
 ---
 
@@ -82,6 +83,22 @@ python demo_workflow.py
 
 **Auto-generates:**
 - `demo_report.json`, `.csv`, `.txt`, `.html`
+- `demo_connectivity_map.html` (interactive map)
+- Console output with statistics
+
+### Starlink API Demo
+
+Test the Starlink API module for provider comparison:
+
+```bash
+python demo_starlink_api.py
+```
+
+**Features demonstrated:**
+- Coverage data retrieval with API fallback
+- Performance metrics for multiple locations
+- Provider comparison (Starlink vs. Viasat vs. HughesNet)
+- Quality score calculations and recommendations
 - `demo_connectivity_map.html` (interactive map)
 - Console output with statistics
 
@@ -152,6 +169,7 @@ python main.py --debug \
 Rural-Connectivity-Mapper-2026/
 ├── main.py                      # CLI application
 ├── demo_workflow.py             # Complete demo
+├── demo_starlink_api.py         # Starlink API demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
 ├── LICENSE                      # MIT License
@@ -161,6 +179,38 @@ Rural-Connectivity-Mapper-2026/
 │   ├── models/                  # Data models
 │   │   ├── ConnectivityPoint.py
 │   │   ├── SpeedTest.py
+│   │   └── QualityScore.py
+│   │
+│   ├── utils/                   # Utility modules
+│   │   ├── validation_utils.py
+│   │   ├── data_utils.py
+│   │   ├── measurement_utils.py
+│   │   ├── geocoding_utils.py
+│   │   ├── report_utils.py
+│   │   ├── simulation_utils.py
+│   │   ├── mapping_utils.py
+│   │   ├── analysis_utils.py
+│   │   └── starlink_api.py      # NEW: Starlink API integration
+│   │
+│   └── data/
+│       ├── sample_data.csv      # Sample points
+│       └── pontos.json          # Data storage
+│
+├── tests/                       # Test suite (58 tests)
+│   ├── test_models.py
+│   ├── test_validation_utils.py
+│   ├── test_data_utils.py
+│   ├── test_measurement_utils.py
+│   ├── test_geocoding_utils.py
+│   ├── test_report_utils.py
+│   ├── test_simulation_utils.py
+│   ├── test_mapping_utils.py
+│   ├── test_analysis_utils.py
+│   └── test_starlink_api.py     # NEW: Starlink API tests
+│
+└── docs/
+    └── API.md                   # API reference
+```
 │   │   └── QualityScore.py
 │   │
 │   ├── utils/                   # Utility modules
@@ -247,9 +297,10 @@ pytest tests/ --cov=src --cov-report=html
 ```
 
 **Test Coverage:**
-- 36 total tests (180% of requirement)
+- 58 total tests (290% of requirement)
 - 5 model tests
 - 31 utility tests
+- 22 Starlink API tests
 - 80%+ code coverage
 
 ---
@@ -267,6 +318,7 @@ pytest tests/ --cov=src --cov-report=html
 ## 🗺️ Roadmap
 
 ### v1.1.0 (Q1 2026)
+- [x] Integration with Starlink APIs ✅ (Completed: starlink_api.py module)
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
@@ -282,7 +334,6 @@ pytest tests/ --cov=src --cov-report=html
 - [ ] Multi-language support (Portuguese/English)
 - [ ] Mobile app for field data collection
 - [ ] Advanced analytics (churn prediction)
-- [ ] Integration with Starlink APIs
 
 ---
 
@@ -332,9 +383,10 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
-- **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
+- **35+ files** across models, utilities, tests, documentation
+- **4,500+ lines of code** (Python)
+- **58 passing tests** (100% success rate)
+- **9 utility modules** including Starlink API integration
 - **5 sample cities** with real-world profiles
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
