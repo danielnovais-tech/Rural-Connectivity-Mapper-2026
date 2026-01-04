@@ -15,6 +15,9 @@ report_*.txt
 report_*.html
 connectivity_map_*.html
 
+# Ecosystem exports
+exports/
+
 # Distribution / packaging
 .Python
 build/
