@@ -276,12 +276,12 @@ class TestHelperFunctions:
         assert 0 <= score <= 100
     
     def test_calculate_provider_score_missing_data(self):
-        """Test score calculation with missing data."""
+        """Test score calculation with missing data defaults to 0 values."""
         performance_data = {}
         
         score = _calculate_provider_score(performance_data)
         
-        # With all zeros, latency score is 100, others are 0, so: 0*0.4 + 100*0.3 + 100*0.3 = 60
+        # With all missing data (defaults to 0), score should still be valid
         assert 0 <= score <= 100
         assert isinstance(score, float)
     

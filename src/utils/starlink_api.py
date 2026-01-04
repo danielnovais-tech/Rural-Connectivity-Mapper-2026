@@ -6,18 +6,26 @@ automatic fallback to simulated data when the API is unavailable.
 """
 
 import logging
+import random
 import requests
 from typing import Dict, Optional, List
 
 logger = logging.getLogger(__name__)
 
-# Starlink API endpoints (these would be real endpoints in production)
-STARLINK_COVERAGE_API = "https://api.starlink.com/v1/coverage"
-STARLINK_PERFORMANCE_API = "https://api.starlink.com/v1/performance"
-STARLINK_AVAILABILITY_API = "https://api.starlink.com/v1/availability"
+# Starlink API endpoints (placeholder URLs - not real/functional endpoints)
+# In production, replace with actual Starlink API URLs
+STARLINK_COVERAGE_API = "https://api.starlink.example/v1/coverage"
+STARLINK_PERFORMANCE_API = "https://api.starlink.example/v1/performance"
+STARLINK_AVAILABILITY_API = "https://api.starlink.example/v1/availability"
 
 # Request timeout in seconds
 REQUEST_TIMEOUT = 10
+
+# Geographic boundaries for Brazil coverage (for simulated data)
+BRAZIL_LAT_MIN = -33.0
+BRAZIL_LAT_MAX = 5.0
+BRAZIL_LON_MIN = -74.0
+BRAZIL_LON_MAX = -34.0
 
 
 def get_coverage_data(latitude: float, longitude: float) -> Optional[Dict]:
@@ -233,7 +241,8 @@ def _get_simulated_coverage(latitude: float, longitude: float) -> Dict:
         Dict: Simulated coverage information
     """
     # Brazil is within Starlink's coverage area as of 2026
-    in_brazil = -33.0 <= latitude <= 5.0 and -74.0 <= longitude <= -34.0
+    in_brazil = (BRAZIL_LAT_MIN <= latitude <= BRAZIL_LAT_MAX and 
+                 BRAZIL_LON_MIN <= longitude <= BRAZIL_LON_MAX)
     
     return {
         'available': in_brazil,
@@ -259,7 +268,6 @@ def _get_simulated_performance(latitude: float, longitude: float) -> Dict:
         Dict: Simulated performance data
     """
     # Vary performance slightly based on location
-    import random
     random.seed(int((latitude + 90) * 1000 + (longitude + 180) * 1000))
     
     download_base = 150.0
@@ -286,7 +294,8 @@ def _get_simulated_availability(latitude: float, longitude: float) -> Dict:
     Returns:
         Dict: Simulated availability information
     """
-    in_brazil = -33.0 <= latitude <= 5.0 and -74.0 <= longitude <= -34.0
+    in_brazil = (BRAZIL_LAT_MIN <= latitude <= BRAZIL_LAT_MAX and 
+                 BRAZIL_LON_MIN <= longitude <= BRAZIL_LON_MAX)
     
     return {
         'service_available': in_brazil,
@@ -348,6 +357,10 @@ def _calculate_provider_score(performance_data: Dict) -> float:
     Uses the same algorithm as QualityScore model: 
     Speed (40%) + Latency (30%) + Stability (30%)
     
+    Note: This is a simplified version adapted for raw performance dictionaries
+    rather than SpeedTest objects. The core algorithm matches QualityScore.calculate()
+    to ensure consistent scoring across the application.
+    
     Args:
         performance_data: Dictionary with download, upload, latency metrics
         
@@ -361,19 +374,19 @@ def _calculate_provider_score(performance_data: Dict) -> float:
         packet_loss = performance_data.get('packet_loss_percent', 0)
         jitter = performance_data.get('jitter_ms', 0)
         
-        # Speed score (40%)
+        # Speed score (40%) - matches QualityScore.TARGET_DOWNLOAD/UPLOAD
         speed_score = ((download / 200.0) + (upload / 20.0)) / 2 * 100
         speed_score = min(100, speed_score)
         
-        # Latency score (30%)
+        # Latency score (30%) - matches QualityScore latency calculation
         latency_score = max(0, 100 - (latency - 20) * 1.25)
         latency_score = min(100, latency_score)
         
-        # Stability score (30%)
+        # Stability score (30%) - adapted for jitter and packet_loss metrics
         stability_score = 100 - (jitter * 2 + packet_loss * 10)
         stability_score = max(0, min(100, stability_score))
         
-        # Overall score
+        # Overall score - matches QualityScore weight distribution
         overall_score = (speed_score * 0.4) + (latency_score * 0.3) + (stability_score * 0.3)
         
         return round(overall_score, 1)
