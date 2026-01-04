@@ -19,6 +19,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 ## ✨ Features
 
+- 🌐 **Web Dashboard** - Streamlit-based interactive web interface with data upload and visualization
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
@@ -28,6 +29,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
+- 🚀 **On-Demand Speed Tests** - Run live speed tests directly from the web dashboard
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
 - 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
 
@@ -66,11 +68,36 @@ pandas>=2.0.0          # Data manipulation
 requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
+streamlit>=1.28.0      # Web dashboard framework
 ```
 
 ---
 
 ## 📖 Usage
+
+### 🌐 Web Dashboard (NEW in v1.1)
+
+Launch the interactive Streamlit dashboard for browser-based analysis:
+
+```bash
+streamlit run dashboard.py
+```
+
+**Dashboard Features:**
+- **📊 Dashboard Overview** - View statistics, data table, and generate reports
+- **📤 Upload Data** - Import CSV files with connectivity data
+- **🚀 Speed Test** - Run on-demand speed tests on your current connection
+- **🗺️ Map View** - Interactive Folium maps with color-coded quality markers
+- **📈 Analysis** - Temporal evolution trends and insights
+- **🔧 Simulation** - Model router impact on connectivity quality
+
+**CSV Upload Format:**
+```csv
+id,city,provider,latitude,longitude,download,upload,latency,jitter,packet_loss,timestamp
+1,São Paulo,Starlink,-23.5505,-46.6333,165.4,22.8,28.5,3.2,0.1,2026-01-15T10:30:00
+```
+
+The dashboard automatically opens at `http://localhost:8501` and provides a user-friendly interface for all connectivity analysis tasks.
 
 ### Quick Start - Demo Workflow
 
@@ -267,13 +294,13 @@ pytest tests/ --cov=src --cov-report=html
 ## 🗺️ Roadmap
 
 ### v1.1.0 (Q1 2026)
-- [ ] Real-time speedtest integration
+- [x] Web dashboard (Streamlit)
+- [x] Real-time speedtest integration
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
 - [ ] Docker containerization
 
 ### v1.2.0 (Q2 2026)
-- [ ] Web dashboard (Flask/Streamlit)
 - [ ] REST API endpoints
 - [ ] Machine learning predictions
 - [ ] GeoJSON/KML export
