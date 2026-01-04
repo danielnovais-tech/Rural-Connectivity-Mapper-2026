@@ -13,10 +13,10 @@
       "stability": 71.6
     },
     "quality_score": {
-      "overall_score": 78.18,
-      "speed_score": 65.2,
-      "latency_score": 84.84,
-      "stability_score": 88.84,
+      "overall_score": 75.18,
+      "speed_score": 62.7,
+      "latency_score": 81.59,
+      "stability_score": 85.43,
       "rating": "Good"
     },
     "timestamp": "2026-01-15T10:30:00"
@@ -35,10 +35,10 @@
       "stability": 79.0
     },
     "quality_score": {
-      "overall_score": 82.23,
-      "speed_score": 70.76,
-      "latency_score": 88.49,
-      "stability_score": 91.23,
+      "overall_score": 87.27,
+      "speed_score": 75.1,
+      "latency_score": 93.91,
+      "stability_score": 96.83,
       "rating": "Excellent"
     },
     "timestamp": "2026-01-15T11:00:00"
@@ -79,10 +79,10 @@
       "stability": 43.599999999999994
     },
     "quality_score": {
-      "overall_score": 50.62,
-      "speed_score": 51.81,
-      "latency_score": 47.53,
-      "stability_score": 52.13,
+      "overall_score": 51.45,
+      "speed_score": 52.65,
+      "latency_score": 48.3,
+      "stability_score": 52.98,
       "rating": "Fair"
     },
     "timestamp": "2026-01-15T12:00:00"
@@ -101,10 +101,10 @@
       "stability": 17.4
     },
     "quality_score": {
-      "overall_score": 25.06,
-      "speed_score": 41.34,
-      "latency_score": 7.05,
-      "stability_score": 21.34,
+      "overall_score": 25.2,
+      "speed_score": 41.57,
+      "latency_score": 7.09,
+      "stability_score": 21.46,
       "rating": "Poor"
     },
     "timestamp": "2026-01-15T12:30:00"
