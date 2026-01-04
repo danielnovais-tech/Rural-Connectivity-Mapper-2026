@@ -190,7 +190,6 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         # Extract features for clustering
         features = []
         point_ids = []
-        point_indices = {}  # Map point data to feature index
         
         for idx, point in enumerate(data):
             speed_test = point.get('speed_test', {})
@@ -205,8 +204,7 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
             ]
             
             features.append(feature_vector)
-            point_ids.append(point.get('id', f'point_{len(point_ids)}'))
-            point_indices[id(point)] = idx
+            point_ids.append(point.get('id', f'point_{idx}'))
         
         # Convert to numpy array
         X = np.array(features)
@@ -216,7 +214,7 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         X_scaled = scaler.fit_transform(X)
         
         # Perform K-Means clustering
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
         cluster_labels = kmeans.fit_predict(X_scaled)
         
         # Inverse transform centroids to original scale
@@ -228,7 +226,8 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         for idx, label in enumerate(cluster_labels):
             clusters[int(label)].append({
                 'id': point_ids[idx],
-                'data': data[idx]
+                'data': data[idx],
+                'feature_idx': idx  # Store feature index for efficient lookup
             })
         
         # Calculate cluster statistics
@@ -236,7 +235,8 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         feature_names = ['download', 'upload', 'latency', 'quality_score']
         
         for cluster_id, points in clusters.items():
-            cluster_features = [features[point_indices[id(p['data'])]] for p in points]
+            # Use stored feature index for efficient lookup
+            cluster_features = [features[p['feature_idx']] for p in points]
             cluster_array = np.array(cluster_features)
             
             cluster_stats[cluster_id] = {
@@ -370,8 +370,9 @@ def forecast_quality_scores(data: List[Dict], forecast_horizon: int = 5) -> Dict
         else:
             confidence = 'low'
         
-        # Cluster-based enhancement
-        if len(data) >= 3:
+        # Optional cluster-based enhancement for larger datasets
+        # Only use clustering if we have sufficient data and it would be meaningful
+        if len(data) >= 5:
             try:
                 clustering_result = cluster_connectivity_points(data, n_clusters=min(3, len(data)))
                 # Use cluster centroids to refine forecasts
@@ -382,9 +383,9 @@ def forecast_quality_scores(data: List[Dict], forecast_horizon: int = 5) -> Dict
                         for stats in cluster_stats.values()
                     ]
                     cluster_avg = np.mean(cluster_quality_scores)
-                    # Blend cluster-based prediction with trend-based
+                    # Blend cluster-based prediction with trend-based (lighter weight)
                     forecasts = [
-                        round(0.6 * f + 0.4 * cluster_avg, 2)
+                        round(0.7 * f + 0.3 * cluster_avg, 2)
                         for f in forecasts
                     ]
             except Exception as e:
