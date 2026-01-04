@@ -22,6 +22,7 @@ except ImportError:
 
 from src.models import ConnectivityPoint, SpeedTest
 from src.utils import load_data, save_data, validate_coordinates
+from src.config import DATA_FILE_PATH
 
 
 def get_location():
@@ -178,10 +179,9 @@ def interactive_submit():
     )
     
     # Save to data file
-    data_file = 'src/data/pontos.json'
-    existing_data = load_data(data_file)
+    existing_data = load_data(DATA_FILE_PATH)
     existing_data.append(point.to_dict())
-    save_data(data_file, existing_data)
+    save_data(DATA_FILE_PATH, existing_data)
     
     print("\n✅ Success! Your data has been submitted.")
     print(f"   Point ID: {point.id}")
@@ -337,10 +337,9 @@ Examples:
     )
     
     # Save to data file
-    data_file = 'src/data/pontos.json'
-    existing_data = load_data(data_file)
+    existing_data = load_data(DATA_FILE_PATH)
     existing_data.append(point.to_dict())
-    save_data(data_file, existing_data)
+    save_data(DATA_FILE_PATH, existing_data)
     
     print(f"\n✅ Success! Data submitted (ID: {point.id})")
     print(f"   Quality Score: {point.quality_score.overall_score:.1f}/100 ({point.quality_score.rating})\n")

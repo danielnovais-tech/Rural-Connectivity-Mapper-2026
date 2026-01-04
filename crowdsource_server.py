@@ -17,12 +17,13 @@ from typing import Dict, Optional
 
 from src.models import ConnectivityPoint, SpeedTest
 from src.utils import load_data, save_data, validate_coordinates
+from src.config import DATA_FILE_PATH
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DATA_FILE = 'src/data/pontos.json'
+DATA_FILE = DATA_FILE_PATH
 
 # Mobile-friendly HTML form template
 FORM_HTML = """
@@ -317,8 +318,8 @@ def submit_data():
             return jsonify({'error': 'Invalid coordinates'}), 400
         
         # Validate speed test values
-        if download <= 0 or upload <= 0 or latency <= 0:
-            return jsonify({'error': 'Speed test values must be positive'}), 400
+        if download < 0 or upload < 0 or latency < 0:
+            return jsonify({'error': 'Speed test values must be non-negative'}), 400
         
         if jitter < 0 or packet_loss < 0:
             return jsonify({'error': 'Jitter and packet loss must be non-negative'}), 400
