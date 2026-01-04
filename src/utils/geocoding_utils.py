@@ -72,15 +72,19 @@ def geocode_address(
     Args:
         address: Address string to geocode
         timeout: Request timeout in seconds (default: 10)
-        country_code: ISO country code for language preference (default: uses default country)
+        country_code: ISO country code (optional, for future enhancements)
         
     Returns:
         Optional[Tuple[float, float]]: (latitude, longitude) if successful, None otherwise
+        
+    Note:
+        The country_code parameter is currently used for API consistency but not 
+        applied to Nominatim's geocode method, which primarily uses address content
+        to determine location.
     """
     try:
         logger.debug(f"Geocoding address: {address}")
         
-        # Note: Nominatim geocode doesn't use language parameter, but we keep it for consistency
         location = geolocator.geocode(address, timeout=timeout)
         
         if location:
