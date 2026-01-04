@@ -7,11 +7,13 @@
 [![Last Commit](https://img.shields.io/github/last-commit/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/commits/main)
 [![Release](https://img.shields.io/github/v/release/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/releases/latest)
 
-Python-based tool to map and analyze rural internet connectivity in Brazil, aligned with Starlink's 2026 expansion roadmap.
+Python-based tool to map and analyze rural internet connectivity across Latin America, aligned with Starlink's 2026 expansion roadmap.
 
 ## 🌍 Overview
 
-The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across Brazil, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across Latin America, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+
+**NEW in v1.1:** Real ANATEL & IBGE data integration, Starlink API, Interactive Streamlit Dashboard, and support for 10 LATAM countries!
 
 **Aligned with Starlink's 2026 roadmap:** 10M rural connections & 20-30% agricultural productivity gains.
 
@@ -19,9 +21,10 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 ## ✨ Features
 
+### Core Features
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
-- 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
+- 🛠️ **12 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, ANATEL, IBGE, Starlink, country config
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
@@ -29,7 +32,16 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **73 Comprehensive Tests** - 80%+ code coverage with pytest
+
+### NEW Features v1.1
+- 🇧🇷 **ANATEL Integration** - Real Brazilian telecom data from National Telecommunications Agency
+- 📊 **IBGE Integration** - Demographic and geographic data from Brazilian Institute of Statistics
+- 🛰️ **Starlink API** - Check service availability, coverage maps, and service plans
+- 🌎 **LATAM Support** - Support for 10 Latin American countries (BR, AR, CL, CO, MX, PE, EC, UY, PY, BO)
+- 📱 **Streamlit Dashboard** - Interactive web dashboard with real-time data visualization
+- 🗺️ **Country Configurations** - Country-specific data sources, providers, and regulators
+- 🌐 **Multi-language** - Portuguese and Spanish field translations
 
 ---
 
@@ -66,11 +78,30 @@ pandas>=2.0.0          # Data manipulation
 requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
+streamlit>=1.28.0      # Web dashboard
+streamlit-folium>=0.15.0  # Folium maps in Streamlit
+plotly>=5.17.0         # Interactive charts
 ```
 
 ---
 
 ## 📖 Usage
+
+### Quick Start - Streamlit Dashboard (NEW!)
+
+Launch the interactive web dashboard:
+
+```bash
+streamlit run dashboard.py
+```
+
+**Features:**
+- 🌍 Select from 10 LATAM countries
+- 📊 View ANATEL broadband and mobile data
+- 👥 Explore IBGE demographic statistics
+- 🛰️ Check Starlink availability and service plans
+- 🌎 Compare connectivity across LATAM countries
+- 🗺️ Interactive maps with real-time data
 
 ### Quick Start - Demo Workflow
 
@@ -133,6 +164,54 @@ python main.py --debug \
   --relatorio html
 ```
 
+### Using the New Data Integration Features
+
+#### Fetch ANATEL Data
+```python
+from src.utils import fetch_anatel_broadband_data, fetch_anatel_mobile_data
+
+# Get broadband data
+broadband = fetch_anatel_broadband_data(state='SP')
+
+# Get mobile coverage data
+mobile = fetch_anatel_mobile_data(state='RJ')
+```
+
+#### Fetch IBGE Demographics
+```python
+from src.utils import get_rural_areas_needing_connectivity, get_ibge_statistics_summary
+
+# Get priority rural areas
+priority_areas = get_rural_areas_needing_connectivity()
+
+# Get Brazil connectivity summary
+summary = get_ibge_statistics_summary()
+```
+
+#### Check Starlink Availability
+```python
+from src.utils import check_starlink_availability, get_starlink_service_plans
+
+# Check availability at coordinates
+availability = check_starlink_availability(-15.7801, -47.9292)
+
+# Get service plans
+plans = get_starlink_service_plans()
+```
+
+#### Work with LATAM Countries
+```python
+from src.utils import get_supported_countries, get_country_config
+
+# Get all supported countries
+countries = get_supported_countries()  # ['BR', 'AR', 'CL', 'CO', 'MX', ...]
+
+# Get country configuration
+config = get_country_config('AR')
+print(config.name)  # 'Argentina'
+print(config.telecom_regulator)  # 'ENACOM'
+```
+
 ### CLI Arguments Reference
 
 | Argument | Description | Choices/Format |
@@ -151,6 +230,7 @@ python main.py --debug \
 ```
 Rural-Connectivity-Mapper-2026/
 ├── main.py                      # CLI application
+├── dashboard.py                 # NEW: Streamlit web dashboard
 ├── demo_workflow.py             # Complete demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
@@ -163,7 +243,7 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── SpeedTest.py
 │   │   └── QualityScore.py
 │   │
-│   ├── utils/                   # Utility modules
+│   ├── utils/                   # Utility modules (12 modules)
 │   │   ├── validation_utils.py
 │   │   ├── data_utils.py
 │   │   ├── measurement_utils.py
@@ -171,13 +251,17 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── report_utils.py
 │   │   ├── simulation_utils.py
 │   │   ├── mapping_utils.py
-│   │   └── analysis_utils.py
+│   │   ├── analysis_utils.py
+│   │   ├── anatel_utils.py      # NEW: ANATEL data integration
+│   │   ├── ibge_utils.py        # NEW: IBGE demographics
+│   │   ├── starlink_utils.py    # NEW: Starlink API
+│   │   └── country_config.py    # NEW: LATAM country configs
 │   │
 │   └── data/
 │       ├── sample_data.csv      # Sample points
 │       └── pontos.json          # Data storage
 │
-├── tests/                       # Test suite (36 tests)
+├── tests/                       # Test suite (73 tests)
 │   ├── test_models.py
 │   ├── test_validation_utils.py
 │   ├── test_data_utils.py
@@ -186,7 +270,11 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_report_utils.py
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
-│   └── test_analysis_utils.py
+│   ├── test_analysis_utils.py
+│   ├── test_anatel_utils.py     # NEW: ANATEL tests
+│   ├── test_ibge_utils.py       # NEW: IBGE tests
+│   ├── test_starlink_utils.py   # NEW: Starlink tests
+│   └── test_country_config.py   # NEW: Country config tests
 │
 └── docs/
     └── API.md                   # API reference
@@ -247,20 +335,43 @@ pytest tests/ --cov=src --cov-report=html
 ```
 
 **Test Coverage:**
-- 36 total tests (180% of requirement)
+- 73 total tests (365% of original requirement)
 - 5 model tests
-- 31 utility tests
+- 31 original utility tests
+- 37 new integration tests (ANATEL, IBGE, Starlink, Country Config)
 - 80%+ code coverage
 
 ---
 
 ## 🌍 Use Cases
 
-1. **Rural Expansion Planning** - Identify priority areas for Starlink installations
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations across LATAM
 2. **ISP Performance Benchmarking** - Compare Starlink vs. traditional providers
 3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
-4. **Policy Advocacy** - Generate reports for government stakeholders
-5. **Academic Research** - Analyze connectivity's socioeconomic impact
+4. **Policy Advocacy** - Generate reports for government stakeholders using real ANATEL/IBGE data
+5. **Academic Research** - Analyze connectivity's socioeconomic impact with demographic integration
+6. **Cross-Country Analysis** - Compare connectivity metrics across 10 LATAM countries
+7. **Starlink Market Entry** - Assess service availability and competitive landscape
+8. **Digital Divide Studies** - Track rural-urban connectivity gaps with IBGE statistics
+
+---
+
+## 🌎 Supported Countries
+
+The tool now supports **10 Latin American countries**:
+
+| Country | Code | Telecom Regulator | Stats Agency | Starlink Status |
+|---------|------|-------------------|--------------|-----------------|
+| 🇧🇷 Brazil | BR | ANATEL | IBGE | Active (98.5% coverage) |
+| 🇦🇷 Argentina | AR | ENACOM | INDEC | Active (97.0% coverage) |
+| 🇨🇱 Chile | CL | SUBTEL | INE | Active (98.0% coverage) |
+| 🇨🇴 Colombia | CO | CRC | DANE | Active (90.0% coverage) |
+| 🇲🇽 Mexico | MX | IFT | INEGI | Active (95.0% coverage) |
+| 🇵🇪 Peru | PE | OSIPTEL | INEI | Active (88.0% coverage) |
+| 🇪🇨 Ecuador | EC | ARCOTEL | INEC | Active |
+| 🇺🇾 Uruguay | UY | URSEC | INE | Active |
+| 🇵🇾 Paraguay | PY | CONATEL | DGEEC | Active |
+| 🇧🇴 Bolivia | BO | ATT | INE | Active |
 
 ---
 
