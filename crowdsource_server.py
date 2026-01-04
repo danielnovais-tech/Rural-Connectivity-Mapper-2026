@@ -485,8 +485,13 @@ def health():
 
 
 if __name__ == '__main__':
+    import os
+    
     # Ensure data directory exists
     Path(DATA_FILE).parent.mkdir(parents=True, exist_ok=True)
+    
+    # Check if running in development mode (default to False for security)
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() in ('true', '1', 'yes')
     
     # Run server
     print("\n" + "=" * 70)
@@ -499,6 +504,13 @@ if __name__ == '__main__':
     print("   POST /api/upload-csv    - Upload CSV file")
     print("   GET  /api/template      - Download CSV template")
     print("   GET  /health            - Health check")
+    
+    if debug_mode:
+        print("\n⚠️  WARNING: Running in DEBUG mode - NOT for production!")
+    else:
+        print("\n✓ Running in production mode")
+        print("  To enable debug mode, set: export FLASK_DEBUG=True")
+    
     print("\n" + "=" * 70 + "\n")
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
