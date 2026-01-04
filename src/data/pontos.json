@@ -108,5 +108,27 @@
       "rating": "Poor"
     },
     "timestamp": "2026-01-15T12:30:00"
+  },
+  {
+    "id": "352c9a05-4df0-44cd-89a8-e14114f275e4",
+    "latitude": -23.5505,
+    "longitude": -46.6333,
+    "provider": "Test Provider",
+    "speed_test": {
+      "download": 100.0,
+      "upload": 15.0,
+      "latency": 40.0,
+      "jitter": 0.0,
+      "packet_loss": 0.0,
+      "stability": 100.0
+    },
+    "quality_score": {
+      "overall_score": 77.5,
+      "speed_score": 62.5,
+      "latency_score": 75.0,
+      "stability_score": 100.0,
+      "rating": "Good"
+    },
+    "timestamp": "2026-01-04T00:08:50.847454"
   }
 ]
