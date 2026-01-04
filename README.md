@@ -377,23 +377,27 @@ The tool now supports **10 Latin American countries**:
 
 ## 🗺️ Roadmap
 
-### v1.1.0 (Q1 2026)
-- [ ] Real-time speedtest integration
+### v1.1.0 (Q1 2026) ✅ COMPLETED
+- [x] Real-time ANATEL data integration
+- [x] IBGE demographics integration  
+- [x] Starlink API integration
+- [x] Streamlit web dashboard
+- [x] Support for 10 LATAM countries
+- [x] Country-specific configurations
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
 - [ ] Docker containerization
 
 ### v1.2.0 (Q2 2026)
-- [ ] Web dashboard (Flask/Streamlit)
 - [ ] REST API endpoints
 - [ ] Machine learning predictions
 - [ ] GeoJSON/KML export
 
 ### v2.0.0 (H2 2026)
-- [ ] Multi-language support (Portuguese/English)
+- [ ] Multi-language UI (Portuguese/Spanish/English)
 - [ ] Mobile app for field data collection
 - [ ] Advanced analytics (churn prediction)
-- [ ] Integration with Starlink APIs
+- [ ] Live Starlink satellite tracking
 
 ---
 
@@ -427,9 +431,12 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ## 🙏 Acknowledgments
 
 - **SpaceX Starlink** - 2026 expansion targets and satellite innovation
+- **ANATEL** - Brazilian telecommunications data and regulatory framework
+- **IBGE** - Brazilian demographic and geographic statistics
+- **LATAM Regulators** - ENACOM, SUBTEL, CRC, IFT, OSIPTEL, and others
 - **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
 - **Satellite ISPs** - Viasat, HughesNet for rural comparisons
-- **Open Source Community** - geopy, folium, pytest, pandas
+- **Open Source Community** - geopy, folium, pytest, pandas, streamlit, plotly
 
 ---
 
@@ -443,21 +450,30 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
-- **32 files** across models, utilities, tests, documentation
-- **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
-- **5 sample cities** with real-world profiles
+- **40 files** across models, utilities, tests, documentation
+- **5,119 lines of code** (Python)
+- **73 passing tests** (100% success rate)
+- **10 LATAM countries** fully configured
+- **4 data sources** (ANATEL, IBGE, Starlink API, Manual)
+- **6 dashboard views** in Streamlit
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
 
 ---
 
-**🇧🇷 Made with ❤️ for improving rural connectivity in Brazil**
+**🇧🇷 🇦🇷 🇨🇱 🇨🇴 🇲🇽 Made with ❤️ for improving rural connectivity across Latin America**
 
 *Supporting Starlink's 2026 roadmap to connect 10M rural users and enable 20-30% agricultural productivity gains.*
 
 ---
 
-**Release Date:** December 28, 2025  
-**Version:** 1.0.0  
+## 📚 Additional Documentation
+
+- **[New Features Guide](docs/NEW_FEATURES.md)** - Comprehensive guide for ANATEL, IBGE, Starlink API, and LATAM support
+- **[API Reference](docs/API.md)** - Full API documentation
+
+---
+
+**Release Date:** January 4, 2026  
+**Version:** 1.1.0  
 **Status:** Production Ready ✅
