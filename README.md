@@ -23,13 +23,14 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
+- 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
 
 ---
 
@@ -110,7 +111,13 @@ python main.py --simulate
 ```bash
 python main.py --map
 ```
-*Generates Folium HTML map with color-coded markers*
+*Generates Folium HTML map with color-coded markers and Starlink coverage overlay*
+
+#### Create Map Without Starlink Coverage
+```bash
+python main.py --map --no-starlink-coverage
+```
+*Generates map without the coverage layer for simplified view*
 
 #### Analyze Temporal Evolution
 ```bash
@@ -142,6 +149,7 @@ python main.py --debug \
 | `--importar <csv>` | Import from CSV | Path to file |
 | `--simulate` | Simulate router impact | Flag |
 | `--map` | Generate interactive map | Flag |
+| `--no-starlink-coverage` | Disable Starlink coverage overlay | Flag (use with --map) |
 | `--analyze` | Analyze temporal trends | Flag |
 
 ### Alternative Data Submission Methods
@@ -481,7 +489,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 - **32 files** across models, utilities, tests, documentation
 - **3,591 lines of code** (Python)
-- **36 passing tests** (100% success rate)
+- **39 passing tests** (100% success rate)
 - **5 sample cities** with real-world profiles
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **80%+ test coverage**
