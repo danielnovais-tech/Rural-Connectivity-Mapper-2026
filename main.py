@@ -206,6 +206,7 @@ Examples:
         logger.info(f"Report generated: {report_path}")
     
     # Generate map
+    # Note: Map generation does not currently support multilingual features
     if args.map:
         logger.info("Generating interactive map...")
         map_path = generate_map(data)

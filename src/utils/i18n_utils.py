@@ -125,8 +125,10 @@ def get_translation(key: str, language: str = None, **kwargs) -> str:
     if language is None:
         language = DEFAULT_LANGUAGE
     
-    # Normalize language code
-    language = language.lower()[:2]
+    # Normalize and validate language code
+    language = str(language).lower().strip()
+    if len(language) > 2:
+        language = language[:2]
     
     # Fall back to English if language not supported
     if language not in TRANSLATIONS:
@@ -141,7 +143,9 @@ def get_translation(key: str, language: str = None, **kwargs) -> str:
         try:
             translation = translation.format(**kwargs)
         except KeyError as e:
-            logger.warning(f"Missing format parameter {e} for key '{key}'")
+            # Extract the missing parameter name from the exception
+            missing_param = str(e).strip("'\"")
+            logger.warning(f"Missing format parameter '{missing_param}' for translation key '{key}'")
     
     return translation
 
