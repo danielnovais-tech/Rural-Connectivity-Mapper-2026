@@ -182,7 +182,7 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
             return {
                 'clusters': {},
                 'cluster_labels': [],
-                'cluster_centers': [],
+                'cluster_stats': {},
                 'n_clusters': 0,
                 'features_used': []
             }
@@ -190,8 +190,9 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         # Extract features for clustering
         features = []
         point_ids = []
+        point_indices = {}  # Map point data to feature index
         
-        for point in data:
+        for idx, point in enumerate(data):
             speed_test = point.get('speed_test', {})
             quality_score = point.get('quality_score', {})
             
@@ -205,6 +206,7 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
             
             features.append(feature_vector)
             point_ids.append(point.get('id', f'point_{len(point_ids)}'))
+            point_indices[id(point)] = idx
         
         # Convert to numpy array
         X = np.array(features)
@@ -214,7 +216,7 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         X_scaled = scaler.fit_transform(X)
         
         # Perform K-Means clustering
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42)
         cluster_labels = kmeans.fit_predict(X_scaled)
         
         # Inverse transform centroids to original scale
@@ -234,7 +236,7 @@ def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
         feature_names = ['download', 'upload', 'latency', 'quality_score']
         
         for cluster_id, points in clusters.items():
-            cluster_features = [features[data.index(p['data'])] for p in points]
+            cluster_features = [features[point_indices[id(p['data'])]] for p in points]
             cluster_array = np.array(cluster_features)
             
             cluster_stats[cluster_id] = {
