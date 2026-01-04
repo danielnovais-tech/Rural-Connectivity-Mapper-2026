@@ -69,6 +69,8 @@ folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
 ```
 
+**💡 For production deployments, migrations, and rollback procedures, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+
 ---
 
 ## 📖 Usage
@@ -194,6 +196,7 @@ Rural-Connectivity-Mapper-2026/
 ├── demo_workflow.py             # Complete demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
+├── DEPLOYMENT.md                # Deployment notes
 ├── LICENSE                      # MIT License
 ├── .gitignore                   # Git ignore
 │
