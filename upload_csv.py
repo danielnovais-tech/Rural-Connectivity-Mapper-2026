@@ -40,6 +40,16 @@ REQUIRED_FIELDS = ['timestamp', 'latitude', 'longitude', 'download', 'upload']
 OPTIONAL_FIELDS = ['id', 'city', 'provider', 'latency', 'jitter', 'packet_loss']
 ALL_FIELDS = REQUIRED_FIELDS + OPTIONAL_FIELDS
 
+# Coordinate validation ranges
+LATITUDE_MIN = -90
+LATITUDE_MAX = 90
+LONGITUDE_MIN = -180
+LONGITUDE_MAX = 180
+
+# Error reporting constants
+MAX_ERRORS_DISPLAYED = 20
+CSV_HEADER_ROW = 1  # Row 1 is header, data starts at row 2
+
 
 def validate_timestamp(timestamp_str: str) -> Tuple[bool, str]:
     """Validate timestamp format.
@@ -52,6 +62,7 @@ def validate_timestamp(timestamp_str: str) -> Tuple[bool, str]:
     """
     try:
         # Try parsing ISO format
+        # Note: replace('Z', '+00:00') handles UTC timezone indicator 'Z' for ISO 8601 compatibility
         datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
         return True, ""
     except (ValueError, AttributeError):
@@ -72,11 +83,11 @@ def validate_coordinate(value: str, coord_type: str) -> Tuple[bool, str]:
         coord = float(value)
         
         if coord_type == 'latitude':
-            if coord < -90 or coord > 90:
-                return False, f"Latitude must be between -90 and 90, got {coord}"
+            if coord < LATITUDE_MIN or coord > LATITUDE_MAX:
+                return False, f"Latitude must be between {LATITUDE_MIN} and {LATITUDE_MAX}, got {coord}"
         elif coord_type == 'longitude':
-            if coord < -180 or coord > 180:
-                return False, f"Longitude must be between -180 and 180, got {coord}"
+            if coord < LONGITUDE_MIN or coord > LONGITUDE_MAX:
+                return False, f"Longitude must be between {LONGITUDE_MIN} and {LONGITUDE_MAX}, got {coord}"
         
         return True, ""
     except (ValueError, TypeError):
@@ -210,7 +221,7 @@ def load_and_validate_csv(csv_path: str) -> Tuple[List[Dict], List[str], Dict]:
                 return [], [f"CSV header missing required fields: {', '.join(missing_required)}"], stats
             
             # Process each row
-            for row_num, row in enumerate(reader, start=2):  # Start at 2 (header is row 1)
+            for row_num, row in enumerate(reader, start=CSV_HEADER_ROW + 1):
                 stats['total_rows'] += 1
                 
                 is_valid, errors = validate_row(row, row_num)
@@ -312,10 +323,10 @@ def print_validation_report(stats: Dict, errors: List[str], verbose: bool = Fals
     if errors:
         print(f"\n⚠️  Found {len(errors)} validation error(s):")
         if verbose:
-            for error in errors[:20]:  # Limit to first 20 errors
+            for error in errors[:MAX_ERRORS_DISPLAYED]:
                 print(f"  • {error}")
-            if len(errors) > 20:
-                print(f"  ... and {len(errors) - 20} more error(s)")
+            if len(errors) > MAX_ERRORS_DISPLAYED:
+                print(f"  ... and {len(errors) - MAX_ERRORS_DISPLAYED} more error(s)")
         else:
             print(f"  (Use --verbose to see detailed error messages)")
     
