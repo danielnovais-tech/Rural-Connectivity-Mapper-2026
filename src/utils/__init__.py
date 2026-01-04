@@ -8,6 +8,12 @@ from .report_utils import generate_report
 from .simulation_utils import simulate_router_impact
 from .mapping_utils import generate_map
 from .analysis_utils import analyze_temporal_evolution
+from .ml_utils import (
+    predict_improvement_potential,
+    identify_expansion_zones,
+    analyze_starlink_roi,
+    generate_ml_report
+)
 
 __all__ = [
     'validate_coordinates',
@@ -22,5 +28,9 @@ __all__ = [
     'generate_report',
     'simulate_router_impact',
     'generate_map',
-    'analyze_temporal_evolution'
+    'analyze_temporal_evolution',
+    'predict_improvement_potential',
+    'identify_expansion_zones',
+    'analyze_starlink_roi',
+    'generate_ml_report'
 ]

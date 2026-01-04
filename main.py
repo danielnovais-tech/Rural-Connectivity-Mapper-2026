@@ -11,7 +11,8 @@ from datetime import datetime
 from src.models import ConnectivityPoint, SpeedTest, QualityScore
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
-    generate_map, analyze_temporal_evolution, validate_coordinates
+    generate_map, analyze_temporal_evolution, validate_coordinates,
+    generate_ml_report
 )
 
 
@@ -138,6 +139,12 @@ Examples:
         help='Analyze temporal evolution'
     )
     
+    parser.add_argument(
+        '--ml-analyze',
+        action='store_true',
+        help='Perform ML-enhanced geospatial analysis for rural connectivity and Starlink expansion'
+    )
+    
     args = parser.parse_args()
     
     # Setup logging
@@ -147,7 +154,7 @@ Examples:
     logger.info("Rural Connectivity Mapper 2026 - Starting")
     
     # Check if any action was specified
-    if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze]):
+    if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze, args.ml_analyze]):
         parser.print_help()
         sys.exit(0)
     
@@ -190,6 +197,62 @@ Examples:
         for insight in analysis['insights']:
             print(f"  • {insight}")
         print("=" * 80 + "\n")
+    
+    # ML-enhanced geospatial analysis
+    if args.ml_analyze:
+        logger.info("Performing ML-enhanced geospatial analysis...")
+        ml_report = generate_ml_report(data)
+        
+        print("\n" + "=" * 80)
+        print("ML-ENHANCED GEOSPATIAL ANALYSIS FOR RURAL CONNECTIVITY")
+        print("=" * 80)
+        print(f"\n📊 SUMMARY")
+        print(f"  Total Points Analyzed: {ml_report['summary']['total_points_analyzed']}")
+        print(f"  ML Model Version: {ml_report['summary']['ml_model_version']}")
+        
+        print(f"\n💰 STARLINK ROI ANALYSIS")
+        roi = ml_report['roi_analysis']
+        print(f"  Rural Coverage: {roi['rural_percentage']:.1f}% ({roi['rural_points']}/{roi['total_points']} points)")
+        print(f"  High Priority Areas: {roi['high_priority_points']} points need immediate attention")
+        print(f"  Current Avg Quality: {roi['avg_current_quality']:.1f}/100")
+        print(f"  Starlink Suitability Score: {roi['starlink_suitability_score']:.1f}/100")
+        print(f"\n  Recommendations:")
+        for rec in roi['recommendations']:
+            print(f"    • {rec}")
+        
+        print(f"\n🗺️  EXPANSION ZONES")
+        zones = ml_report['expansion_zones']
+        print(f"  Identified {zones['total_zones']} optimal expansion zones")
+        print(f"  Top Priority: {zones['top_priority_zone']}")
+        print(f"\n  Zone Details:")
+        for zone_id, zone_data in zones['zones'].items():
+            print(f"\n  {zone_id.upper()}:")
+            print(f"    Location: ({zone_data['center']['latitude']:.4f}, {zone_data['center']['longitude']:.4f})")
+            print(f"    Points: {zone_data['point_count']}")
+            print(f"    Avg Quality: {zone_data['avg_quality_score']:.1f}/100")
+            print(f"    Distance from City: {zone_data['avg_distance_from_city_km']:.1f} km")
+            print(f"    Rural Area: {'Yes' if zone_data['is_primarily_rural'] else 'No'}")
+            print(f"    Priority Score: {zone_data['priority_score']:.1f}")
+            print(f"    → {zone_data['recommendation']}")
+        
+        print(f"\n🎯 TOP 5 PRIORITY AREAS FOR IMPROVEMENT")
+        for i, area in enumerate(ml_report['top_priority_areas'], 1):
+            print(f"\n  #{i} - {area['provider']}")
+            print(f"    Location: ({area['latitude']:.4f}, {area['longitude']:.4f})")
+            print(f"    Current Quality: {area['current_quality']:.1f}/100")
+            print(f"    Priority Score: {area['priority_score']:.1f}/100")
+            print(f"    Distance from City: {area['distance_from_city_km']:.1f} km")
+            print(f"    Rural: {'Yes' if area['is_rural'] else 'No'}")
+        
+        print("\n" + "=" * 80 + "\n")
+        
+        # Save ML analysis to JSON
+        import json
+        ml_output_path = 'ml_analysis_report.json'
+        with open(ml_output_path, 'w', encoding='utf-8') as f:
+            json.dump(ml_report, f, indent=2, ensure_ascii=False)
+        logger.info(f"ML analysis saved to {ml_output_path}")
+        print(f"✓ ML analysis report saved to {ml_output_path}\n")
     
     # Generate report
     if args.relatorio:
