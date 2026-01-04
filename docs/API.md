@@ -502,7 +502,7 @@ python main.py --importar google_forms_responses.csv --map --relatorio html
 
 **Best for:** Real-time data submission, mobile apps, automated systems
 
-A REST API is planned for Q2 2026 that will allow:
+A REST API is planned for later in 2026 (v1.2.0 release) that will allow:
 - Real-time data submission via HTTP POST
 - JSON-based data format
 - Authentication and rate limiting
