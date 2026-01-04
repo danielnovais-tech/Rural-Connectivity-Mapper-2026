@@ -8,6 +8,22 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+# Failover indicator thresholds
+FAILOVER_RELIABLE_THRESHOLD = 60  # Minimum quality score for reliable connection
+FAILOVER_LOW_LATENCY_THRESHOLD = 100  # Maximum latency (ms) for low latency classification
+FAILOVER_STABLE_THRESHOLD = 70  # Minimum stability score for stable connection
+FAILOVER_PRIMARY_THRESHOLD = 80  # Minimum quality score for primary connection recommendation
+
+# Farm suitability thresholds
+FARM_IOT_LATENCY_THRESHOLD = 200  # Maximum latency (ms) for IoT sensors
+FARM_IOT_QUALITY_THRESHOLD = 40  # Minimum quality score for IoT sensors
+FARM_VIDEO_DOWNLOAD_THRESHOLD = 25  # Minimum download speed (Mbps) for video monitoring
+FARM_VIDEO_QUALITY_THRESHOLD = 60  # Minimum quality score for video monitoring
+FARM_CONTROL_LATENCY_THRESHOLD = 50  # Maximum latency (ms) for real-time control
+FARM_CONTROL_QUALITY_THRESHOLD = 80  # Minimum quality score for real-time control
+FARM_ANALYTICS_DOWNLOAD_THRESHOLD = 10  # Minimum download speed (Mbps) for data analytics
+FARM_ANALYTICS_QUALITY_THRESHOLD = 40  # Minimum quality score for data analytics
+
 
 def export_for_hybrid_simulator(
     data: List[Dict],
@@ -69,10 +85,10 @@ def export_for_hybrid_simulator(
                 'rating': quality_score.get('rating', 'Unknown')
             },
             'failover_indicators': {
-                'connection_reliable': quality_score.get('overall_score', 0.0) >= 60,
-                'low_latency': speed_test.get('latency', 999) < 100,
-                'stable_connection': speed_test.get('stability', 0.0) >= 70,
-                'recommended_primary': quality_score.get('overall_score', 0.0) >= 80
+                'connection_reliable': quality_score.get('overall_score', 0.0) >= FAILOVER_RELIABLE_THRESHOLD,
+                'low_latency': speed_test.get('latency', 999) < FAILOVER_LOW_LATENCY_THRESHOLD,
+                'stable_connection': speed_test.get('stability', 0.0) >= FAILOVER_STABLE_THRESHOLD,
+                'recommended_primary': quality_score.get('overall_score', 0.0) >= FAILOVER_PRIMARY_THRESHOLD
             }
         }
         
@@ -148,10 +164,10 @@ def export_for_agrix_boost(
                 'packet_loss_pct': speed_test.get('packet_loss', 0.0)
             },
             'farm_suitability': {
-                'iot_sensors_supported': speed_test.get('latency', 999) < 200 and quality_score.get('overall_score', 0.0) >= 40,
-                'video_monitoring_supported': speed_test.get('download', 0.0) >= 25 and quality_score.get('overall_score', 0.0) >= 60,
-                'real_time_control_supported': speed_test.get('latency', 999) < 50 and quality_score.get('overall_score', 0.0) >= 80,
-                'data_analytics_supported': speed_test.get('download', 0.0) >= 10 and quality_score.get('overall_score', 0.0) >= 40
+                'iot_sensors_supported': speed_test.get('latency', 999) < FARM_IOT_LATENCY_THRESHOLD and quality_score.get('overall_score', 0.0) >= FARM_IOT_QUALITY_THRESHOLD,
+                'video_monitoring_supported': speed_test.get('download', 0.0) >= FARM_VIDEO_DOWNLOAD_THRESHOLD and quality_score.get('overall_score', 0.0) >= FARM_VIDEO_QUALITY_THRESHOLD,
+                'real_time_control_supported': speed_test.get('latency', 999) < FARM_CONTROL_LATENCY_THRESHOLD and quality_score.get('overall_score', 0.0) >= FARM_CONTROL_QUALITY_THRESHOLD,
+                'data_analytics_supported': speed_test.get('download', 0.0) >= FARM_ANALYTICS_DOWNLOAD_THRESHOLD and quality_score.get('overall_score', 0.0) >= FARM_ANALYTICS_QUALITY_THRESHOLD
             },
             'recommendations': _generate_farm_recommendations(speed_test, quality_score)
         }

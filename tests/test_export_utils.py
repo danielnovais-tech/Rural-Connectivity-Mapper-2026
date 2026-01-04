@@ -324,9 +324,9 @@ def test_failover_indicators_thresholds(sample_data, temp_output_dir):
     # Check Fair quality point (index 2)
     fair_point = data['connectivity_points'][2]
     
-    # Fair quality should not be recommended as primary
+    # Fair quality (50.6) is below threshold (< 60), so not recommended as primary
     assert fair_point['failover_indicators']['recommended_primary'] is False
-    # But should still be considered reliable (>= 60)
+    # Fair quality (50.6) is below reliable threshold (< 60)
     assert fair_point['failover_indicators']['connection_reliable'] is False
     # Latency 68.2ms is < 100, so low_latency should be True
     assert fair_point['failover_indicators']['low_latency'] is True
