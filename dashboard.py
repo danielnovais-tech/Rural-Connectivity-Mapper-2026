@@ -18,6 +18,11 @@ from src.utils import (
 )
 
 
+# Configuration constants
+DATA_PATH = 'src/data/pontos.json'
+MAP_HEIGHT = 600  # Height in pixels for embedded maps
+
+
 # Page configuration
 st.set_page_config(
     page_title="Rural Connectivity Mapper 2026",
@@ -177,8 +182,7 @@ def upload_csv_data():
             
             if points:
                 # Save to data file
-                data_path = 'src/data/pontos.json'
-                save_data(data_path, points)
+                save_data(DATA_PATH, points)
                 st.success(f"✅ Successfully imported {len(points)} connectivity points!")
                 st.rerun()
             else:
@@ -240,7 +244,7 @@ def visualize_map(data):
             with open(map_path, 'r', encoding='utf-8') as f:
                 map_html = f.read()
             
-            st.components.v1.html(map_html, height=600, scrolling=True)
+            st.components.v1.html(map_html, height=MAP_HEIGHT, scrolling=True)
     
     except Exception as e:
         st.error(f"Error generating map: {e}")
@@ -316,8 +320,7 @@ def simulate_improvements(data):
             improved_data = simulate_router_impact(data)
             
             # Save improved data
-            data_path = 'src/data/pontos.json'
-            save_data(data_path, improved_data)
+            save_data(DATA_PATH, improved_data)
             
             st.success("✅ Simulation completed and saved!")
             st.rerun()
@@ -359,8 +362,7 @@ def main():
     )
     
     # Load data
-    data_path = 'src/data/pontos.json'
-    data = load_data(data_path)
+    data = load_data(DATA_PATH)
     
     # Display selected page
     if page == "📊 Dashboard":
