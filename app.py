@@ -311,10 +311,30 @@ def get_map():
         HTML: Interactive Folium map
     """
     try:
-        data = load_data(DATA_PATH)
-        map_path = generate_map(data, 'connectivity_map.html')
+        import tempfile
+        import os
         
-        return send_file(map_path)
+        data = load_data(DATA_PATH)
+        
+        # Create a temporary file for the map
+        fd, temp_path = tempfile.mkstemp(suffix='.html', prefix='connectivity_map_')
+        os.close(fd)
+        
+        map_path = generate_map(data, temp_path)
+        
+        # Send file and delete after sending
+        response = send_file(map_path, mimetype='text/html')
+        
+        # Schedule cleanup of temp file
+        @response.call_on_close
+        def cleanup():
+            try:
+                if os.path.exists(temp_path):
+                    os.unlink(temp_path)
+            except Exception:
+                pass
+        
+        return response
     except Exception as e:
         logger.error(f"Error generating map: {e}")
         return jsonify({
@@ -342,5 +362,7 @@ if __name__ == '__main__':
     Path('src/data').mkdir(parents=True, exist_ok=True)
     
     # Run Flask development server
+    # Debug mode is only enabled in development (when FLASK_ENV is not set to production)
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    debug_mode = os.environ.get('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
