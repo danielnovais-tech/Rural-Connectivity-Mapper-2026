@@ -11,7 +11,8 @@ from datetime import datetime
 from src.models import ConnectivityPoint, SpeedTest, QualityScore
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
-    generate_map, analyze_temporal_evolution, validate_coordinates
+    generate_map, analyze_temporal_evolution, validate_coordinates,
+    validate_csv_row
 )
 
 
@@ -42,50 +43,107 @@ def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json') -> None
     
     try:
         points = []
+        errors = []
+        skipped_count = 0
         
         with open(csv_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             
-            for row in reader:
-                # Validate coordinates
-                lat = float(row['latitude'])
-                lon = float(row['longitude'])
-                
-                if not validate_coordinates(lat, lon):
-                    logger.warning(f"Skipping row with invalid coordinates: {row}")
+            # Validate CSV has required columns
+            if reader.fieldnames is None:
+                logger.error("CSV file is empty or has no header row")
+                sys.exit(1)
+            
+            required_cols = ['latitude', 'longitude', 'provider', 'download', 'upload', 'latency']
+            missing_cols = [col for col in required_cols if col not in reader.fieldnames]
+            if missing_cols:
+                logger.error(f"CSV is missing required columns: {', '.join(missing_cols)}")
+                logger.error(f"Found columns: {', '.join(reader.fieldnames)}")
+                sys.exit(1)
+            
+            for row_num, row in enumerate(reader, start=2):  # start=2 because row 1 is header
+                # Validate row before processing
+                is_valid, error_msg = validate_csv_row(row, row_num)
+                if not is_valid:
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                    skipped_count += 1
                     continue
                 
-                # Create SpeedTest
-                speed_test = SpeedTest(
-                    download=float(row['download']),
-                    upload=float(row['upload']),
-                    latency=float(row['latency']),
-                    jitter=float(row.get('jitter', 0)),
-                    packet_loss=float(row.get('packet_loss', 0))
-                )
-                
-                # Create ConnectivityPoint
-                point = ConnectivityPoint(
-                    latitude=lat,
-                    longitude=lon,
-                    provider=row['provider'],
-                    speed_test=speed_test,
-                    timestamp=row.get('timestamp', datetime.now().isoformat()),
-                    point_id=row.get('id')
-                )
-                
-                points.append(point.to_dict())
-                logger.debug(f"Imported point: {point}")
+                try:
+                    # Convert numeric fields with error handling
+                    lat = float(row['latitude'])
+                    lon = float(row['longitude'])
+                    download = float(row['download'])
+                    upload = float(row['upload'])
+                    latency = float(row['latency'])
+                    jitter = float(row.get('jitter', 0))
+                    packet_loss = float(row.get('packet_loss', 0))
+                    
+                    # Additional validation for coordinates
+                    if not validate_coordinates(lat, lon):
+                        logger.warning(f"Row {row_num}: Invalid coordinates ({lat}, {lon}), skipping")
+                        skipped_count += 1
+                        continue
+                    
+                    # Create SpeedTest
+                    speed_test = SpeedTest(
+                        download=download,
+                        upload=upload,
+                        latency=latency,
+                        jitter=jitter,
+                        packet_loss=packet_loss
+                    )
+                    
+                    # Create ConnectivityPoint
+                    point = ConnectivityPoint(
+                        latitude=lat,
+                        longitude=lon,
+                        provider=row['provider'],
+                        speed_test=speed_test,
+                        timestamp=row.get('timestamp', datetime.now().isoformat()),
+                        point_id=row.get('id')
+                    )
+                    
+                    points.append(point.to_dict())
+                    logger.debug(f"Imported point: {point}")
+                    
+                except ValueError as e:
+                    error_msg = f"Row {row_num}: Invalid numeric value - {e}"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                    skipped_count += 1
+                    continue
+                except Exception as e:
+                    error_msg = f"Row {row_num}: Unexpected error - {e}"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                    skipped_count += 1
+                    continue
         
         # Save to JSON
-        save_data(output_path, points)
-        logger.info(f"Successfully imported {len(points)} points to {output_path}")
+        if points:
+            save_data(output_path, points)
+            logger.info(f"Successfully imported {len(points)} points to {output_path}")
+            
+            if skipped_count > 0:
+                logger.warning(f"Skipped {skipped_count} invalid rows")
+                logger.info("Run with --debug flag to see details of skipped rows")
+        else:
+            logger.error("No valid data points found in CSV file")
+            if errors:
+                logger.error("Errors encountered:")
+                for error in errors[:10]:  # Show first 10 errors
+                    logger.error(f"  {error}")
+                if len(errors) > 10:
+                    logger.error(f"  ... and {len(errors) - 10} more errors")
+            sys.exit(1)
     
     except FileNotFoundError:
         logger.error(f"CSV file not found: {csv_path}")
         sys.exit(1)
     except Exception as e:
-        logger.error(f"Error importing CSV: {e}")
+        logger.error(f"Error importing CSV: {e}", exc_info=True)
         sys.exit(1)
 
 

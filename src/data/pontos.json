@@ -3,7 +3,7 @@
     "id": "1",
     "latitude": -23.5505,
     "longitude": -46.6333,
-    "provider": "Various",
+    "provider": "Starlink",
     "speed_test": {
       "download": 85.2,
       "upload": 12.5,
@@ -13,100 +13,12 @@
       "stability": 71.6
     },
     "quality_score": {
-      "overall_score": 78.18,
-      "speed_score": 65.2,
-      "latency_score": 84.84,
-      "stability_score": 88.84,
+      "overall_score": 63.01,
+      "speed_score": 52.55,
+      "latency_score": 68.38,
+      "stability_score": 71.6,
       "rating": "Good"
     },
     "timestamp": "2026-01-15T10:30:00"
-  },
-  {
-    "id": "2",
-    "latitude": -22.9068,
-    "longitude": -43.1729,
-    "provider": "Claro",
-    "speed_test": {
-      "download": 92.1,
-      "upload": 15.3,
-      "latency": 38.7,
-      "jitter": 6.5,
-      "packet_loss": 0.8,
-      "stability": 79.0
-    },
-    "quality_score": {
-      "overall_score": 82.23,
-      "speed_score": 70.76,
-      "latency_score": 88.49,
-      "stability_score": 91.23,
-      "rating": "Excellent"
-    },
-    "timestamp": "2026-01-15T11:00:00"
-  },
-  {
-    "id": "3",
-    "latitude": -15.7801,
-    "longitude": -47.9292,
-    "provider": "Starlink",
-    "speed_test": {
-      "download": 165.4,
-      "upload": 22.8,
-      "latency": 28.5,
-      "jitter": 3.2,
-      "packet_loss": 0.1,
-      "stability": 92.6
-    },
-    "quality_score": {
-      "overall_score": 100,
-      "speed_score": 100,
-      "latency_score": 100,
-      "stability_score": 100,
-      "rating": "Excellent"
-    },
-    "timestamp": "2026-01-15T11:30:00"
-  },
-  {
-    "id": "4",
-    "latitude": -12.9714,
-    "longitude": -38.5014,
-    "provider": "Viasat",
-    "speed_test": {
-      "download": 75.3,
-      "upload": 9.8,
-      "latency": 68.2,
-      "jitter": 15.7,
-      "packet_loss": 2.5,
-      "stability": 43.599999999999994
-    },
-    "quality_score": {
-      "overall_score": 50.62,
-      "speed_score": 51.81,
-      "latency_score": 47.53,
-      "stability_score": 52.13,
-      "rating": "Fair"
-    },
-    "timestamp": "2026-01-15T12:00:00"
-  },
-  {
-    "id": "5",
-    "latitude": -3.7172,
-    "longitude": -38.5433,
-    "provider": "HughesNet",
-    "speed_test": {
-      "download": 62.8,
-      "upload": 7.2,
-      "latency": 95.4,
-      "jitter": 22.3,
-      "packet_loss": 3.8,
-      "stability": 17.4
-    },
-    "quality_score": {
-      "overall_score": 25.06,
-      "speed_score": 41.34,
-      "latency_score": 7.05,
-      "stability_score": 21.34,
-      "rating": "Poor"
-    },
-    "timestamp": "2026-01-15T12:30:00"
   }
 ]
