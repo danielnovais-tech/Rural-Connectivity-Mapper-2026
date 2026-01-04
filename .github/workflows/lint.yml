@@ -25,9 +25,11 @@ jobs:
         pip install ruff flake8
     
     - name: Run ruff
+      continue-on-error: true
       run: |
-        ruff check . --select=E,F,W --ignore=E501 || true
+        ruff check . --select=E,F,W --ignore=E501
     
     - name: Run flake8
+      continue-on-error: true
       run: |
-        flake8 src/ tests/ main.py demo_workflow.py --max-line-length=120 --statistics || true
+        flake8 src/ tests/ main.py demo_workflow.py --max-line-length=120 --statistics

@@ -1,5 +1,5 @@
 # Ruff configuration
-# https://beta.ruff.rs/docs/configuration/
+# https://docs.astral.sh/ruff/configuration/
 
 line-length = 120
 
