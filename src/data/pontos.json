@@ -13,6 +13,10 @@
       "stability": 71.6
     },
     "quality_score": {
+      "overall_score": 77.0,
+      "speed_score": 64.22,
+      "latency_score": 83.57,
+      "stability_score": 87.5,
       "overall_score": 63.01,
       "speed_score": 52.55,
       "latency_score": 68.38,
@@ -35,6 +39,11 @@
       "stability": 79.0
     },
     "quality_score": {
+      "overall_score": 84.92,
+      "speed_score": 73.08,
+      "latency_score": 91.38,
+      "stability_score": 94.22,
+      "rating": "Excellent"
       "overall_score": 71.2,
       "speed_score": 61.27,
       "latency_score": 76.62,
@@ -79,6 +88,10 @@
       "stability": 43.599999999999994
     },
     "quality_score": {
+      "overall_score": 48.93,
+      "speed_score": 50.08,
+      "latency_score": 45.94,
+      "stability_score": 50.39,
       "overall_score": 42.34,
       "speed_score": 43.33,
       "latency_score": 39.75,
@@ -101,6 +114,10 @@
       "stability": 17.4
     },
     "quality_score": {
+      "overall_score": 23.75,
+      "speed_score": 39.17,
+      "latency_score": 6.68,
+      "stability_score": 20.22,
       "overall_score": 20.43,
       "speed_score": 33.7,
       "latency_score": 5.75,
