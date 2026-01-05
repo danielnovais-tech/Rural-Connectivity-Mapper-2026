@@ -18,6 +18,7 @@ class ConnectivityPoint:
         quality_score (QualityScore): Calculated quality score
         timestamp (str): ISO format timestamp of measurement
         id (str): Unique identifier for the point
+        country (str): ISO 3166-1 alpha-2 country code (e.g., 'BR', 'US')
     """
     
     def __init__(
@@ -28,7 +29,8 @@ class ConnectivityPoint:
         speed_test: SpeedTest,
         quality_score: Optional[QualityScore] = None,
         timestamp: Optional[str] = None,
-        point_id: Optional[str] = None
+        point_id: Optional[str] = None,
+        country: str = "BR"
     ):
         """Initialize ConnectivityPoint instance.
         
@@ -40,6 +42,7 @@ class ConnectivityPoint:
             quality_score: QualityScore instance, auto-calculated if None
             timestamp: ISO format timestamp, auto-generated if None
             point_id: Unique identifier, auto-generated if None
+            country: ISO 3166-1 alpha-2 country code (default: 'BR')
         """
         self.latitude = latitude
         self.longitude = longitude
@@ -48,6 +51,7 @@ class ConnectivityPoint:
         self.quality_score = quality_score if quality_score else QualityScore.calculate(speed_test)
         self.timestamp = timestamp if timestamp else datetime.now().isoformat()
         self.id = point_id if point_id else str(uuid.uuid4())
+        self.country = country.upper() if country else "BR"
     
     def to_dict(self) -> Dict:
         """Convert ConnectivityPoint to dictionary representation.
@@ -62,7 +66,8 @@ class ConnectivityPoint:
             'provider': self.provider,
             'speed_test': self.speed_test.to_dict(),
             'quality_score': self.quality_score.to_dict(),
-            'timestamp': self.timestamp
+            'timestamp': self.timestamp,
+            'country': self.country
         }
     
     @classmethod
@@ -95,7 +100,8 @@ class ConnectivityPoint:
             speed_test=speed_test,
             quality_score=quality_score,
             timestamp=data.get('timestamp'),
-            point_id=data.get('id')
+            point_id=data.get('id'),
+            country=data.get('country', 'BR')
         )
     
     def __repr__(self) -> str:

@@ -11,7 +11,16 @@ from datetime import datetime
 from src.models import ConnectivityPoint, SpeedTest, QualityScore
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
-    generate_map, analyze_temporal_evolution, validate_coordinates
+    generate_map, analyze_temporal_evolution, validate_coordinates,
+
+    validate_csv_row
+
+
+    list_available_countries, get_default_country
+
+    export_for_hybrid_simulator, export_for_agrix_boost, export_ecosystem_bundle
+
+
 )
 
 
@@ -30,38 +39,109 @@ def setup_logging(debug: bool = False) -> None:
     )
 
 
-def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json') -> None:
+def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json', country_code: str = None) -> None:
     """Import connectivity data from CSV file.
     
     Args:
         csv_path: Path to CSV file
         output_path: Path to save JSON data
+        country_code: ISO country code for the data (default: uses default country)
     """
     logger = logging.getLogger(__name__)
     logger.info(f"Importing data from {csv_path}...")
     
+    if country_code is None:
+        country_code = get_default_country()
+    
     try:
         points = []
+        errors = []
+        skipped_count = 0
         
         with open(csv_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             
-            for row in reader:
-                # Validate coordinates
-                lat = float(row['latitude'])
-                lon = float(row['longitude'])
-                
-                if not validate_coordinates(lat, lon):
-                    logger.warning(f"Skipping row with invalid coordinates: {row}")
+            # Validate CSV has required columns
+            if reader.fieldnames is None:
+                logger.error("CSV file is empty or has no header row")
+                sys.exit(1)
+            
+            required_cols = ['latitude', 'longitude', 'provider', 'download', 'upload', 'latency']
+            missing_cols = [col for col in required_cols if col not in reader.fieldnames]
+            if missing_cols:
+                logger.error(f"CSV is missing required columns: {', '.join(missing_cols)}")
+                logger.error(f"Found columns: {', '.join(reader.fieldnames)}")
+                sys.exit(1)
+            
+            for row_num, row in enumerate(reader, start=2):  # start=2 because row 1 is header
+                # Validate row before processing
+                is_valid, error_msg = validate_csv_row(row, row_num)
+                if not is_valid:
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                    skipped_count += 1
                     continue
                 
+
+                try:
+                    # Convert numeric fields with error handling
+                    lat = float(row['latitude'])
+                    lon = float(row['longitude'])
+                    download = float(row['download'])
+                    upload = float(row['upload'])
+                    latency = float(row['latency'])
+                    jitter = float(row.get('jitter', 0))
+                    packet_loss = float(row.get('packet_loss', 0))
+                    
+                    # Additional validation for coordinates
+                    if not validate_coordinates(lat, lon):
+                        logger.warning(f"Row {row_num}: Invalid coordinates ({lat}, {lon}), skipping")
+                        skipped_count += 1
+                        continue
+                    
+                    # Create SpeedTest
+                    speed_test = SpeedTest(
+                        download=download,
+                        upload=upload,
+                        latency=latency,
+                        jitter=jitter,
+                        packet_loss=packet_loss
+                    )
+                    
+                    # Create ConnectivityPoint
+                    point = ConnectivityPoint(
+                        latitude=lat,
+                        longitude=lon,
+                        provider=row['provider'],
+                        speed_test=speed_test,
+                        timestamp=row.get('timestamp', datetime.now().isoformat()),
+                        point_id=row.get('id')
+                    )
+                    
+                    points.append(point.to_dict())
+                    logger.debug(f"Imported point: {point}")
+                    
+                except ValueError as e:
+                    error_msg = f"Row {row_num}: Invalid numeric value - {e}"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                    skipped_count += 1
+                    continue
+                except Exception as e:
+                    error_msg = f"Row {row_num}: Unexpected error - {e}"
+                    logger.warning(error_msg)
+                    errors.append(error_msg)
+                    skipped_count += 1
+                    continue
+
                 # Create SpeedTest
                 speed_test = SpeedTest(
                     download=float(row['download']),
                     upload=float(row['upload']),
                     latency=float(row['latency']),
                     jitter=float(row.get('jitter', 0)),
-                    packet_loss=float(row.get('packet_loss', 0))
+                    packet_loss=float(row.get('packet_loss', 0)),
+                    obstruction=float(row.get('obstruction', 0))
                 )
                 
                 # Create ConnectivityPoint
@@ -71,34 +151,51 @@ def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json') -> None
                     provider=row['provider'],
                     speed_test=speed_test,
                     timestamp=row.get('timestamp', datetime.now().isoformat()),
-                    point_id=row.get('id')
+                    point_id=row.get('id'),
+                    country=row.get('country', country_code)
                 )
                 
                 points.append(point.to_dict())
                 logger.debug(f"Imported point: {point}")
+
         
         # Save to JSON
-        save_data(output_path, points)
-        logger.info(f"Successfully imported {len(points)} points to {output_path}")
+        if points:
+            save_data(output_path, points)
+            logger.info(f"Successfully imported {len(points)} points to {output_path}")
+            
+            if skipped_count > 0:
+                logger.warning(f"Skipped {skipped_count} invalid rows")
+                logger.info("Run with --debug flag to see details of skipped rows")
+        else:
+            logger.error("No valid data points found in CSV file")
+            if errors:
+                logger.error("Errors encountered:")
+                for error in errors[:10]:  # Show first 10 errors
+                    logger.error(f"  {error}")
+                if len(errors) > 10:
+                    logger.error(f"  ... and {len(errors) - 10} more errors")
+            sys.exit(1)
     
     except FileNotFoundError:
         logger.error(f"CSV file not found: {csv_path}")
         sys.exit(1)
     except Exception as e:
-        logger.error(f"Error importing CSV: {e}")
+        logger.error(f"Error importing CSV: {e}", exc_info=True)
         sys.exit(1)
 
 
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        description='Rural Connectivity Mapper 2026 - Analyze Starlink expansion in Brazil',
+        description='Rural Connectivity Mapper 2026 - Analyze rural connectivity worldwide',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   %(prog)s --debug --importar src/data/sample_data.csv --relatorio json
-  %(prog)s --simulate --map
-  %(prog)s --analyze --relatorio html
+  %(prog)s --simulate --map --country US
+  %(prog)s --analyze --relatorio html --country CA
+  %(prog)s --list-countries
         """
     )
     
@@ -106,6 +203,18 @@ Examples:
         '--debug',
         action='store_true',
         help='Enable debug mode with verbose logging'
+    )
+    
+    parser.add_argument(
+        '--country',
+        metavar='CODE',
+        help='ISO country code (e.g., BR, US, CA, GB). Use --list-countries to see all available.'
+    )
+    
+    parser.add_argument(
+        '--list-countries',
+        action='store_true',
+        help='List all available country codes and exit'
     )
     
     parser.add_argument(
@@ -133,9 +242,29 @@ Examples:
     )
     
     parser.add_argument(
+        '--no-starlink-coverage',
+        action='store_true',
+        help='Disable Starlink coverage overlay on the map'
+    )
+    
+    parser.add_argument(
         '--analyze',
         action='store_true',
         help='Analyze temporal evolution'
+    )
+    
+    parser.add_argument(
+
+        '--language',
+        '--lang',
+        choices=['en', 'pt'],
+        default='en',
+        help='Language for reports and analysis output (en=English, pt=Portuguese)'
+
+        '--export',
+        choices=['hybrid', 'agrix', 'ecosystem'],
+        help='Export data for ecosystem integration (hybrid=Hybrid Architecture Simulator, agrix=AgriX-Boost, ecosystem=Full bundle)'
+
     )
     
     args = parser.parse_args()
@@ -144,10 +273,34 @@ Examples:
     setup_logging(args.debug)
     logger = logging.getLogger(__name__)
     
+    # Handle list-countries command
+    if args.list_countries:
+        countries = list_available_countries()
+        print("\nAvailable country codes:")
+        print("=" * 50)
+        from src.utils.config_utils import get_country_info
+        for code in sorted(countries):
+            info = get_country_info(code)
+            print(f"  {code}: {info['name']}")
+        print("=" * 50)
+        sys.exit(0)
+    
     logger.info("Rural Connectivity Mapper 2026 - Starting")
     
+    # Get country code
+    country_code = args.country if args.country else get_default_country()
+    logger.info(f"Using country: {country_code}")
+
+    # Validate country code early to provide clear feedback
+    available_countries = list_available_countries()
+    if country_code not in available_countries:
+        logger.error(f"Invalid country code: {country_code}")
+        print(f"Error: '{country_code}' is not a valid country code.")
+        print("Use --list-countries to see all available country codes.")
+        sys.exit(1)
+    
     # Check if any action was specified
-    if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze]):
+    if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze, args.export]):
         parser.print_help()
         sys.exit(0)
     
@@ -155,7 +308,7 @@ Examples:
     
     # Import CSV data
     if args.importar:
-        import_csv(args.importar, data_path)
+        import_csv(args.importar, data_path, country_code)
     
     # Load existing data
     data = load_data(data_path)
@@ -175,7 +328,7 @@ Examples:
     # Analyze temporal evolution
     if args.analyze:
         logger.info("Analyzing temporal evolution...")
-        analysis = analyze_temporal_evolution(data)
+        analysis = analyze_temporal_evolution(data, args.language)
         
         print("\n" + "=" * 80)
         print("TEMPORAL ANALYSIS RESULTS")
@@ -194,14 +347,47 @@ Examples:
     # Generate report
     if args.relatorio:
         logger.info(f"Generating {args.relatorio.upper()} report...")
-        report_path = generate_report(data, args.relatorio)
+        report_path = generate_report(data, args.relatorio, language=args.language)
         logger.info(f"Report generated: {report_path}")
     
     # Generate map
+    # Note: Map generation does not currently support multilingual features
     if args.map:
         logger.info("Generating interactive map...")
-        map_path = generate_map(data)
+
+        map_path = generate_map(data, country_code=country_code)
+
+        include_coverage = not args.no_starlink_coverage
+        if include_coverage:
+            logger.info("Including Starlink coverage overlay layer")
+        map_path = generate_map(data, include_starlink_coverage=include_coverage)
+
         logger.info(f"Map generated: {map_path}")
+    
+    # Export for ecosystem integration
+    if args.export:
+        logger.info(f"Exporting data for ecosystem integration ({args.export})...")
+        
+        if args.export == 'hybrid':
+            export_path = export_for_hybrid_simulator(data)
+            logger.info(f"Exported for Hybrid Architecture Simulator: {export_path}")
+            print(f"\n✓ Data exported for Hybrid Architecture Simulator: {export_path}")
+        
+        elif args.export == 'agrix':
+            export_path = export_for_agrix_boost(data)
+            logger.info(f"Exported for AgriX-Boost: {export_path}")
+            print(f"\n✓ Data exported for AgriX-Boost: {export_path}")
+        
+        elif args.export == 'ecosystem':
+            export_paths = export_ecosystem_bundle(data)
+            logger.info("Exported complete ecosystem bundle")
+            print("\n" + "=" * 80)
+            print("ECOSYSTEM BUNDLE EXPORTED")
+            print("=" * 80)
+            print(f"  Hybrid Architecture Simulator: {export_paths['hybrid_simulator']}")
+            print(f"  AgriX-Boost: {export_paths['agrix_boost']}")
+            print(f"  Ecosystem Manifest: {export_paths['manifest']}")
+            print("=" * 80 + "\n")
     
     logger.info("Rural Connectivity Mapper 2026 - Completed successfully")
 
