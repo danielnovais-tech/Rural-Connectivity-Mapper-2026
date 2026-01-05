@@ -1,0 +1,131 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "São Paulo Region",
+        "coverage_type": "Active",
+        "quality": "Excellent",
+        "color": "#00ff00"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-47.5, -24.0],
+            [-46.0, -24.0],
+            [-46.0, -23.0],
+            [-47.5, -23.0],
+            [-47.5, -24.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rio de Janeiro Region",
+        "coverage_type": "Active",
+        "quality": "Excellent",
+        "color": "#00ff00"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-44.0, -23.5],
+            [-42.5, -23.5],
+            [-42.5, -22.5],
+            [-44.0, -22.5],
+            [-44.0, -23.5]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brasília Region",
+        "coverage_type": "Active",
+        "quality": "Excellent",
+        "color": "#00ff00"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-48.5, -16.5],
+            [-47.0, -16.5],
+            [-47.0, -15.0],
+            [-48.5, -15.0],
+            [-48.5, -16.5]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Salvador Region",
+        "coverage_type": "Planned",
+        "quality": "Good",
+        "color": "#ffff00"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-39.0, -13.5],
+            [-38.0, -13.5],
+            [-38.0, -12.5],
+            [-39.0, -12.5],
+            [-39.0, -13.5]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Fortaleza Region",
+        "coverage_type": "Planned",
+        "quality": "Good",
+        "color": "#ffff00"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-39.0, -4.2],
+            [-38.0, -4.2],
+            [-38.0, -3.2],
+            [-39.0, -3.2],
+            [-39.0, -4.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Amazon Region",
+        "coverage_type": "Limited",
+        "quality": "Fair",
+        "color": "#ffa500"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-62.0, -5.0],
+            [-58.0, -5.0],
+            [-58.0, -2.0],
+            [-62.0, -2.0],
+            [-62.0, -5.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

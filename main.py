@@ -246,9 +246,15 @@ Examples:
     )
     
     parser.add_argument(
+
+        '--starlink-coverage',
+        action='store_true',
+        help='Add Starlink coverage overlay to the map (requires --map)'
+
         '--no-starlink-coverage',
         action='store_true',
         help='Disable Starlink coverage overlay on the map'
+
     )
     
     parser.add_argument(
@@ -425,6 +431,9 @@ Examples:
     if args.map:
         logger.info("Generating interactive map...")
 
+        map_path = generate_map(data, show_starlink_coverage=args.starlink_coverage)
+
+
         map_path = generate_map(data, country_code=country_code)
 
         include_coverage = not args.no_starlink_coverage
@@ -432,7 +441,10 @@ Examples:
             logger.info("Including Starlink coverage overlay layer")
         map_path = generate_map(data, include_starlink_coverage=include_coverage)
 
+
         logger.info(f"Map generated: {map_path}")
+        if args.starlink_coverage:
+            logger.info("Starlink coverage overlay enabled")
     
     # Export for ecosystem integration
     if args.export:

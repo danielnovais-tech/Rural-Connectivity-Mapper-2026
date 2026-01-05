@@ -1,6 +1,9 @@
 """Mapping utilities for interactive map generation."""
 
 import logging
+
+import json
+from typing import List, Dict
 from typing import List, Dict, Optional
 from pathlib import Path
 from datetime import datetime
@@ -22,6 +25,8 @@ from .starlink_coverage_utils import (
 logger = logging.getLogger(__name__)
 
 
+
+def generate_map(data: List[Dict], output_path: str = None, show_starlink_coverage: bool = False) -> str:
 
 def generate_map(
     data: List[Dict], 
@@ -116,15 +121,20 @@ def get_starlink_coverage_zones():
 
 def generate_map(data: List[Dict], output_path: str = None, include_starlink_coverage: bool = True) -> str:
 
+
     """Generate interactive Folium map from connectivity data.
     
     Args:
         data: List of connectivity point dictionaries
         output_path: Optional output file path for HTML map
 
+        show_starlink_coverage: If True, add Starlink coverage overlay layer
+
+
         country_code: ISO country code for map center (default: uses default country)
 
         include_starlink_coverage: Whether to include Starlink coverage overlay layer (default: True)
+
 
         
     Returns:
@@ -375,7 +385,105 @@ def generate_map(data: List[Dict], output_path: str = None, include_starlink_cov
             folium.LayerControl(position='topright', collapsed=False).add_to(m)
 
         
+        # Add Starlink coverage overlay if requested
+        if show_starlink_coverage:
+            coverage_path = Path(__file__).parent.parent / 'data' / 'starlink_coverage.json'
+            
+            if coverage_path.exists():
+                try:
+                    with open(coverage_path, 'r', encoding='utf-8') as f:
+                        coverage_data = json.load(f)
+                    
+                    # Create a feature group for the coverage layer (toggleable)
+                    coverage_layer = folium.FeatureGroup(name='Starlink Coverage', show=True)
+                    
+                    # Add coverage polygons
+                    for feature in coverage_data.get('features', []):
+                        properties = feature.get('properties', {})
+                        
+                        # Determine color and opacity based on coverage type
+                        coverage_type = properties.get('coverage_type', 'Unknown')
+                        quality = properties.get('quality', 'Unknown')
+                        name = properties.get('name', 'Unknown Region')
+                        
+                        if coverage_type == 'Active':
+                            fill_color = '#00ff00'
+                            fill_opacity = 0.2
+                        elif coverage_type == 'Planned':
+                            fill_color = '#ffff00'
+                            fill_opacity = 0.15
+                        else:  # Limited
+                            fill_color = '#ffa500'
+                            fill_opacity = 0.1
+                        
+                        # Create tooltip for coverage zone
+                        coverage_tooltip = f"""
+                        <div style="font-family: Arial;">
+                            <b>{name}</b><br>
+                            Coverage: {coverage_type}<br>
+                            Quality: {quality}
+                        </div>
+                        """
+                        
+                        # Add polygon to coverage layer
+                        folium.GeoJson(
+                            feature,
+                            style_function=lambda x, fc=fill_color, fo=fill_opacity: {
+                                'fillColor': fc,
+                                'color': fc,
+                                'weight': 2,
+                                'fillOpacity': fo,
+                                'opacity': 0.6
+                            },
+                            tooltip=folium.Tooltip(coverage_tooltip)
+                        ).add_to(coverage_layer)
+                    
+                    coverage_layer.add_to(m)
+                    
+                    # Add layer control to toggle coverage on/off
+                    folium.LayerControl(position='topright').add_to(m)
+                    
+                    logger.info(f"Added Starlink coverage overlay with {len(coverage_data.get('features', []))} zones")
+                    
+                except Exception as e:
+                    logger.warning(f"Failed to load Starlink coverage data: {e}")
+            else:
+                logger.warning(f"Starlink coverage data file not found: {coverage_path}")
+        
         # Add legend
+
+        if show_starlink_coverage:
+            legend_html = '''
+            <div style="position: fixed; 
+                        bottom: 50px; right: 50px; width: 200px; height: auto; 
+                        background-color: white; border:2px solid grey; z-index:9999; 
+                        font-size:14px; padding: 10px">
+            <p style="margin: 0; font-weight: bold;">Quality Rating</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:green"></i> Excellent (80+)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:blue"></i> Good (60-79)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:orange"></i> Fair (40-59)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:red"></i> Poor (&lt;40)</p>
+            <hr style="margin: 10px 0;">
+            <p style="margin: 0; font-weight: bold;">Starlink Coverage</p>
+            <p style="margin: 5px 0;"><i class="fa fa-square" style="color:rgba(0,255,0,0.4)"></i> Active</p>
+            <p style="margin: 5px 0;"><i class="fa fa-square" style="color:rgba(255,255,0,0.4)"></i> Planned</p>
+            <p style="margin: 5px 0;"><i class="fa fa-square" style="color:rgba(255,165,0,0.4)"></i> Limited</p>
+            </div>
+            '''
+        else:
+            legend_html = '''
+            <div style="position: fixed; 
+                        bottom: 50px; right: 50px; width: 180px; height: 140px; 
+                        background-color: white; border:2px solid grey; z-index:9999; 
+                        font-size:14px; padding: 10px">
+            <p style="margin: 0; font-weight: bold;">Quality Rating</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:green"></i> Excellent (80+)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:blue"></i> Good (60-79)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:orange"></i> Fair (40-59)</p>
+            <p style="margin: 5px 0;"><i class="fa fa-circle" style="color:red"></i> Poor (&lt;40)</p>
+            </div>
+            '''
+
         legend_html = '''
         <div style="position: fixed; 
 
@@ -421,6 +529,7 @@ def generate_map(data: List[Dict], output_path: str = None, include_starlink_cov
             '''
         
         legend_html += '</div>'
+
         m.get_root().html.add_child(folium.Element(legend_html))
         
         # Save map
