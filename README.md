@@ -7,11 +7,13 @@
 [![Last Commit](https://img.shields.io/github/last-commit/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/commits/main)
 [![Release](https://img.shields.io/github/v/release/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/releases/latest)
 
-Python-based tool to map and analyze rural internet connectivity in Brazil, aligned with Starlink's 2026 expansion roadmap.
+Python-based tool to map and analyze rural internet connectivity worldwide, aligned with Starlink's 2026 expansion roadmap.
 
 ## 🌍 Overview
 
-The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across Brazil, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across multiple countries, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+
+**Multi-Country Support:** Now supports 9 countries with country-specific provider lists and localized settings.
 
 **Aligned with Starlink's 2026 roadmap:** 10M rural connections & 20-30% agricultural productivity gains.
 
@@ -22,15 +24,28 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 - ⚡ **CSV Upload Script** - Standalone validator for easy speedtest data import (NEW!)
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
+
+- 🌎 **Multi-Country Support** - 9 countries supported (BR, US, CA, GB, AU, DE, FR, IN, MX)
+- 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
+- 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, config
+- 🗺️ **Interactive Folium Maps** - Color-coded quality markers with country-specific centers
+
 - 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
+
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
 - 🌍 **Multilingual Support** - Reports and analysis in English and Portuguese
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
+
+- 🏢 **Provider Comparison** - Benchmark ISPs with country-specific provider lists
+- 🏷️ **Tag System** - Categorize points with custom tags
+- 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+- 🧪 **46 Comprehensive Tests** - 80%+ code coverage with pytest
+
 
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, Starlink High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
 - 🏷️ **Tag System** - Categorize points with custom tags
@@ -249,6 +264,9 @@ python demo_workflow.py
 
 ### CLI Commands
 
+
+#### List Available Countries
+
 #### 🌍 Crowdsourced Data Collection (NEW!)
 
 **Start the web server for data collection:**
@@ -275,15 +293,29 @@ python submit_speedtest.py --auto-speedtest -p Starlink
 ---
 
 #### Import Data
+
 ```bash
-python main.py --importar src/data/sample_data.csv
+python main.py --list-countries
+```
+*Shows all supported country codes and names*
+
+#### Import Data (with Country)
+```bash
+python main.py --importar src/data/sample_data.csv --country BR
+python main.py --importar src/data/sample_data_us.csv --country US
 ```
 
 #### Generate Reports
 ```bash
+
+python main.py --relatorio html    # HTML report (default country)
+python main.py --relatorio json --country US    # JSON report for US
+python main.py --relatorio csv --country CA     # CSV report for Canada
+
 python main.py --relatorio html    # HTML report (English)
 python main.py --relatorio json    # JSON report
 python main.py --relatorio csv     # CSV report
+
 python main.py --relatorio txt     # Text report
 
 # Generate reports in Portuguese
@@ -294,13 +326,23 @@ python main.py --relatorio txt --lang pt         # Text report in Portuguese
 #### Simulate Router Improvements
 ```bash
 python main.py --simulate
+python main.py --simulate --country US
 ```
 *Models 15-25% quality score boost from router upgrades*
 
 #### Create Interactive Map
 ```bash
 python main.py --map
+python main.py --map --country US  # Map centered on United States
 ```
+
+*Generates Folium HTML map with color-coded markers and country-specific center*
+
+#### Analyze Temporal Evolution
+```bash
+python main.py --analyze
+python main.py --analyze --country GB  # Analyze UK data
+
 *Generates Folium HTML map with color-coded markers and Starlink coverage overlay*
 
 #### Create Map Without Starlink Coverage
@@ -313,18 +355,20 @@ python main.py --map --no-starlink-coverage
 ```bash
 python main.py --analyze                # Analyze in English
 python main.py --analyze --language pt  # Analyze in Portuguese
+
 ```
 *Shows trends, insights, provider statistics in selected language*
 
 #### Enable Debug Mode
 ```bash
-python main.py --debug --importar data.csv
+python main.py --debug --importar data.csv --country DE
 ```
 
 #### Combined Workflow
 ```bash
 python main.py --debug \
-  --importar src/data/sample_data.csv \
+  --country US \
+  --importar src/data/sample_data_us.csv \
   --simulate \
   --map \
   --analyze \
@@ -349,6 +393,8 @@ python main.py --export ecosystem
 | Argument | Description | Choices/Format |
 |----------|-------------|----------------|
 | `--debug` | Enable verbose logging | Flag |
+| `--country <code>` | ISO country code | BR, US, CA, GB, AU, DE, FR, IN, MX |
+| `--list-countries` | List all available countries | Flag |
 | `--relatorio <format>` | Generate report | json, csv, txt, html |
 | `--importar <csv>` | Import from CSV | Path to file |
 | `--simulate` | Simulate router impact | Flag |
@@ -407,27 +453,35 @@ Rural-Connectivity-Mapper-2026/
 ├── LICENSE                      # MIT License
 ├── .gitignore                   # Git ignore
 │
+├── config/                      # Configuration files
+│   └── countries.json           # Country-specific settings
+│
 ├── src/
 │   ├── models/                  # Data models
-│   │   ├── ConnectivityPoint.py
+│   │   ├── ConnectivityPoint.py # With country support
 │   │   ├── SpeedTest.py
 │   │   └── QualityScore.py
 │   │
 │   ├── utils/                   # Utility modules
-│   │   ├── validation_utils.py
+│   │   ├── config_utils.py      # Country configuration loader
+│   │   ├── validation_utils.py  # Country-aware validation
 │   │   ├── data_utils.py
 │   │   ├── measurement_utils.py
-│   │   ├── geocoding_utils.py
+│   │   ├── geocoding_utils.py   # Multi-language support
 │   │   ├── report_utils.py
 │   │   ├── simulation_utils.py
+│   │   ├── mapping_utils.py     # Country-specific centers
+│   │   └── analysis_utils.py
 │   │   ├── mapping_utils.py
 │   │   ├── analysis_utils.py
 │   │   └── export_utils.py      # NEW: Ecosystem exports
 │   │
 │   └── data/
-│       ├── sample_data.csv      # Sample points
+│       ├── sample_data.csv      # Sample Brazil data
+│       ├── sample_data_us.csv   # Sample US data
 │       └── pontos.json          # Data storage
 │
+├── tests/                       # Test suite (46 tests)
 ├── tests/                       # Test suite (55 tests)
 ├── tests/                       # Test suite (46 tests)
 ├── examples/                    # CSV templates for contributions
@@ -437,6 +491,7 @@ Rural-Connectivity-Mapper-2026/
 │
 ├── tests/                       # Test suite (36 tests)
 │   ├── test_models.py
+│   ├── test_config_utils.py     # Config tests (NEW)
 │   ├── test_validation_utils.py
 │   ├── test_data_utils.py
 │   ├── test_measurement_utils.py
@@ -506,6 +561,44 @@ Pre-configured connectivity data for 10 Brazilian cities (2026 data):
 | **Porto Alegre** | Oi | 81.2 Mbps | 13.8 Mbps | 39.2 ms | 7.8 ms | 1.1% | 0% | 66.7/100 (Good) |
 | **Belo Horizonte** | **Starlink Gen2** ⭐ | 172.8 Mbps | 24.2 Mbps | 26.9 ms | 2.8 ms | 0.08% | 3.8% | **92.5/100 (Excellent)** |
 
+
+---
+
+## 🌎 Multi-Country Support
+
+The tool now supports **9 countries** with country-specific configurations:
+
+| Country | Code | Language | Key Providers |
+|---------|------|----------|---------------|
+| **Brazil** | BR | Portuguese | Starlink, Viasat, HughesNet, Claro, Vivo, TIM, Oi |
+| **United States** | US | English | Starlink, Viasat, HughesNet, AT&T, Verizon, T-Mobile |
+| **Canada** | CA | English | Starlink, Xplornet, Bell, Rogers, Telus, Shaw |
+| **United Kingdom** | GB | English | Starlink, BT, Virgin Media, Sky, TalkTalk, Vodafone |
+| **Australia** | AU | English | Starlink, NBN Co, Telstra, Optus, TPG, Vodafone |
+| **Germany** | DE | German | Starlink, Deutsche Telekom, Vodafone, O2, 1&1 |
+| **France** | FR | French | Starlink, Orange, SFR, Bouygues Telecom, Free |
+| **India** | IN | English | Starlink, Jio, Airtel, BSNL, Vi, ACT Fibernet |
+| **Mexico** | MX | Spanish | Starlink, Telmex, Telcel, AT&T Mexico, Izzi, Megacable |
+
+### Country Configuration Features
+
+- **Localized Geocoding**: Addresses returned in the country's primary language
+- **Provider Validation**: Country-specific ISP lists for accurate validation
+- **Map Centering**: Interactive maps automatically center on the selected country
+- **Customizable**: Add new countries by editing `config/countries.json`
+
+### Example: Using Different Countries
+
+```bash
+# Analyze US data
+python main.py --country US --importar src/data/sample_data_us.csv --map
+
+# Generate report for Canada
+python main.py --country CA --analyze --relatorio json
+
+# List all supported countries
+python main.py --list-countries
+```
 
 ---
 
@@ -663,6 +756,13 @@ pytest tests/ --cov=src --cov-report=html
 ## 🗺️ Roadmap
 
 
+### v1.1.0 (Q1 2026) - COMPLETED ✅
+- [x] Multi-country support (9 countries)
+- [x] Country-specific provider lists
+- [x] Localized geocoding
+- [x] Configurable map centers
+
+
 ### v1.0.0 (Current) ✅
 - [x] Complete CLI application with ecosystem integration
 - [x] Export data for Hybrid Architecture Simulator (failover testing)
@@ -675,6 +775,7 @@ pytest tests/ --cov=src --cov-report=html
 
 
 ### v1.1.0 (Q1 2026)
+
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
@@ -686,6 +787,8 @@ pytest tests/ --cov=src --cov-report=html
 - [ ] GeoJSON/KML export
 
 ### v2.0.0 (H2 2026)
+
+- [ ] Additional countries support
 - [x] Multi-language support (Portuguese/English) ✅ **Completed!**
 - [ ] Mobile app for field data collection
 - [ ] Advanced analytics (churn prediction)
@@ -832,7 +935,12 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 🙏 Acknowledgments
 
+
+- **SpaceX Starlink** - 2026 expansion targets and satellite innovation
+- **Global ISPs** - AT&T, Verizon, Bell, BT, Telstra, Deutsche Telekom and many others
+
 - **SpaceX Starlink** - 2026 expansion targets and Gen2/High Performance dish innovation
+
 - **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
 - **Satellite ISPs** - Viasat, HughesNet for rural comparisons
 - **Open Source Community** - geopy, folium, pytest, pandas
@@ -848,6 +956,14 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ---
 
 ## 📊 Project Statistics
+
+
+- **38 files** across models, utilities, tests, documentation, config
+- **4,500+ lines of code** (Python)
+- **46 passing tests** (100% success rate)
+- **9 supported countries** with localized settings
+- **10+ sample cities** with real-world profiles
+- **4 export formats** (JSON, CSV, TXT, HTML)
 
 
 - **35 files** across models, utilities, tests, documentation
@@ -884,14 +1000,15 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **7 export formats** (JSON, CSV, TXT, HTML, Hybrid Simulator, AgriX-Boost, Ecosystem Bundle)
 
 
+
 - **80%+ test coverage**
 - **3 integrated ecosystem components**
 
 ---
 
-**🇧🇷 Made with ❤️ for improving rural connectivity in Brazil**
+**🌍 Made with ❤️ for improving rural connectivity worldwide**
 
-*Supporting Starlink's 2026 roadmap to connect 10M rural users and enable 20-30% agricultural productivity gains.*
+*Supporting Starlink's 2026 roadmap to connect 10M rural users globally and enable 20-30% agricultural productivity gains.*
 
 *Part of the Rural Connectivity Ecosystem 2026 - integrating with Hybrid Architecture Simulator and AgriX-Boost.*
 

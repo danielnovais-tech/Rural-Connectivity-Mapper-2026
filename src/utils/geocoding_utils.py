@@ -4,6 +4,7 @@ import logging
 from typing import Optional, Tuple
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
+from .config_utils import get_language, get_default_country
 
 logger = logging.getLogger(__name__)
 
@@ -11,13 +12,19 @@ logger = logging.getLogger(__name__)
 geolocator = Nominatim(user_agent="rural-connectivity-mapper-2026")
 
 
-def geocode_coordinates(latitude: float, longitude: float, timeout: int = 10) -> Optional[str]:
+def geocode_coordinates(
+    latitude: float, 
+    longitude: float, 
+    timeout: int = 10,
+    country_code: Optional[str] = None
+) -> Optional[str]:
     """Convert coordinates to address using reverse geocoding.
     
     Args:
         latitude: Latitude coordinate
         longitude: Longitude coordinate
         timeout: Request timeout in seconds (default: 10)
+        country_code: ISO country code for language preference (default: uses default country)
         
     Returns:
         Optional[str]: Address string if successful, None otherwise
@@ -25,10 +32,15 @@ def geocode_coordinates(latitude: float, longitude: float, timeout: int = 10) ->
     try:
         logger.debug(f"Geocoding coordinates: ({latitude}, {longitude})")
         
+        # Determine language from country code
+        if country_code is None:
+            country_code = get_default_country()
+        language = get_language(country_code)
+        
         location = geolocator.reverse(
             f"{latitude}, {longitude}",
             timeout=timeout,
-            language='pt'
+            language=language
         )
         
         if location:
@@ -50,15 +62,25 @@ def geocode_coordinates(latitude: float, longitude: float, timeout: int = 10) ->
         return None
 
 
-def geocode_address(address: str, timeout: int = 10) -> Optional[Tuple[float, float]]:
+def geocode_address(
+    address: str, 
+    timeout: int = 10,
+    country_code: Optional[str] = None
+) -> Optional[Tuple[float, float]]:
     """Convert address to coordinates using forward geocoding.
     
     Args:
         address: Address string to geocode
         timeout: Request timeout in seconds (default: 10)
+        country_code: ISO country code (optional, for future enhancements)
         
     Returns:
         Optional[Tuple[float, float]]: (latitude, longitude) if successful, None otherwise
+        
+    Note:
+        The country_code parameter is currently used for API consistency but not 
+        applied to Nominatim's geocode method, which primarily uses address content
+        to determine location.
     """
     try:
         logger.debug(f"Geocoding address: {address}")

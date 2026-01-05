@@ -12,7 +12,11 @@ from src.models import ConnectivityPoint, SpeedTest, QualityScore
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
     generate_map, analyze_temporal_evolution, validate_coordinates,
+
+    list_available_countries, get_default_country
+
     export_for_hybrid_simulator, export_for_agrix_boost, export_ecosystem_bundle
+
 )
 
 
@@ -31,15 +35,19 @@ def setup_logging(debug: bool = False) -> None:
     )
 
 
-def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json') -> None:
+def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json', country_code: str = None) -> None:
     """Import connectivity data from CSV file.
     
     Args:
         csv_path: Path to CSV file
         output_path: Path to save JSON data
+        country_code: ISO country code for the data (default: uses default country)
     """
     logger = logging.getLogger(__name__)
     logger.info(f"Importing data from {csv_path}...")
+    
+    if country_code is None:
+        country_code = get_default_country()
     
     try:
         points = []
@@ -73,7 +81,8 @@ def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json') -> None
                     provider=row['provider'],
                     speed_test=speed_test,
                     timestamp=row.get('timestamp', datetime.now().isoformat()),
-                    point_id=row.get('id')
+                    point_id=row.get('id'),
+                    country=row.get('country', country_code)
                 )
                 
                 points.append(point.to_dict())
@@ -94,13 +103,14 @@ def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json') -> None
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        description='Rural Connectivity Mapper 2026 - Analyze Starlink expansion in Brazil',
+        description='Rural Connectivity Mapper 2026 - Analyze rural connectivity worldwide',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   %(prog)s --debug --importar src/data/sample_data.csv --relatorio json
-  %(prog)s --simulate --map
-  %(prog)s --analyze --relatorio html
+  %(prog)s --simulate --map --country US
+  %(prog)s --analyze --relatorio html --country CA
+  %(prog)s --list-countries
         """
     )
     
@@ -108,6 +118,18 @@ Examples:
         '--debug',
         action='store_true',
         help='Enable debug mode with verbose logging'
+    )
+    
+    parser.add_argument(
+        '--country',
+        metavar='CODE',
+        help='ISO country code (e.g., BR, US, CA, GB). Use --list-countries to see all available.'
+    )
+    
+    parser.add_argument(
+        '--list-countries',
+        action='store_true',
+        help='List all available country codes and exit'
     )
     
     parser.add_argument(
@@ -166,7 +188,31 @@ Examples:
     setup_logging(args.debug)
     logger = logging.getLogger(__name__)
     
+    # Handle list-countries command
+    if args.list_countries:
+        countries = list_available_countries()
+        print("\nAvailable country codes:")
+        print("=" * 50)
+        from src.utils.config_utils import get_country_info
+        for code in sorted(countries):
+            info = get_country_info(code)
+            print(f"  {code}: {info['name']}")
+        print("=" * 50)
+        sys.exit(0)
+    
     logger.info("Rural Connectivity Mapper 2026 - Starting")
+    
+    # Get country code
+    country_code = args.country if args.country else get_default_country()
+    logger.info(f"Using country: {country_code}")
+
+    # Validate country code early to provide clear feedback
+    available_countries = list_available_countries()
+    if country_code not in available_countries:
+        logger.error(f"Invalid country code: {country_code}")
+        print(f"Error: '{country_code}' is not a valid country code.")
+        print("Use --list-countries to see all available country codes.")
+        sys.exit(1)
     
     # Check if any action was specified
     if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze, args.export]):
@@ -177,7 +223,7 @@ Examples:
     
     # Import CSV data
     if args.importar:
-        import_csv(args.importar, data_path)
+        import_csv(args.importar, data_path, country_code)
     
     # Load existing data
     data = load_data(data_path)
@@ -223,10 +269,14 @@ Examples:
     # Note: Map generation does not currently support multilingual features
     if args.map:
         logger.info("Generating interactive map...")
+
+        map_path = generate_map(data, country_code=country_code)
+
         include_coverage = not args.no_starlink_coverage
         if include_coverage:
             logger.info("Including Starlink coverage overlay layer")
         map_path = generate_map(data, include_starlink_coverage=include_coverage)
+
         logger.info(f"Map generated: {map_path}")
     
     # Export for ecosystem integration
