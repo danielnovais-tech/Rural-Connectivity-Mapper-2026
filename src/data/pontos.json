@@ -15,6 +15,12 @@
     },
     "quality_score": {
 
+      "overall_score": 76.61,
+      "speed_score": 63.89,
+      "latency_score": 83.14,
+      "stability_score": 87.06,
+
+
       "overall_score": 78.5,
       "speed_score": 65.47,
       "latency_score": 85.19,
@@ -47,6 +53,7 @@
       "stability_score": 71.6,
 
 
+
       "rating": "Good"
     },
     "timestamp": "2026-01-15T10:30:00",
@@ -67,6 +74,12 @@
       "stability": 79.0
     },
     "quality_score": {
+
+      "overall_score": 87.96,
+      "speed_score": 75.69,
+      "latency_score": 94.65,
+      "stability_score": 97.59,
+
 
       "overall_score": 82.73,
       "speed_score": 71.19,
@@ -89,6 +102,7 @@
       "speed_score": 73.08,
       "latency_score": 91.38,
       "stability_score": 94.22,
+
 
 
       "rating": "Excellent"
@@ -170,6 +184,12 @@
     },
     "quality_score": {
 
+      "overall_score": 49.97,
+      "speed_score": 51.14,
+      "latency_score": 46.91,
+      "stability_score": 51.46,
+
+
       "overall_score": 49.45,
       "speed_score": 50.61,
       "latency_score": 46.43,
@@ -197,6 +217,7 @@
       "speed_score": 43.33,
       "latency_score": 39.75,
       "stability_score": 43.6,
+
 
 
       "rating": "Fair"
@@ -231,6 +252,12 @@
     },
     "quality_score": {
 
+      "overall_score": 23.51,
+      "speed_score": 38.78,
+      "latency_score": 6.62,
+      "stability_score": 20.02,
+
+
       "overall_score": 25.29,
       "speed_score": 41.72,
       "latency_score": 7.12,
@@ -262,6 +289,7 @@
     },
     "timestamp": "2026-01-15T12:30:00",
     "country": "BR"
+
 
 
 

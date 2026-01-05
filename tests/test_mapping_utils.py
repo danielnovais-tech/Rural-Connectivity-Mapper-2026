@@ -93,6 +93,37 @@ def test_generate_map_default_path(sample_data, tmp_path, monkeypatch):
     assert map_path.endswith('.html')
 
 
+
+def test_generate_map_with_starlink_coverage(sample_data, tmp_path):
+    """Test that map includes Starlink coverage layers."""
+    output_path = tmp_path / "coverage_map.html"
+    
+    map_path = generate_map(sample_data, str(output_path))
+    
+    assert Path(map_path).exists()
+    
+    # Verify HTML content includes Starlink coverage elements
+    with open(map_path, 'r') as f:
+        content = f.read()
+    
+    # Should contain Starlink coverage zone references
+    assert 'Starlink Coverage Zones' in content or 'starlink coverage zones' in content.lower()
+    
+    # Should contain layer control for toggling layers
+    assert (
+        'LayerControl' in content
+        or 'leaflet-control-layers' in content.lower()
+        or 'layer-control' in content.lower()
+    )
+    
+    # Should contain legend with coverage information
+    assert 'map legend' in content.lower()
+    
+    # Should still contain original connectivity data
+    assert 'Starlink' in content
+    assert 'Claro' in content
+
+
 def test_get_starlink_coverage_zones():
     """Test Starlink coverage zones retrieval."""
     zones = get_starlink_coverage_zones()
@@ -157,3 +188,4 @@ def test_generate_map_without_starlink_coverage(sample_data, tmp_path):
     
     # Should not contain coverage legend section
     assert 'Starlink Coverage' not in content
+

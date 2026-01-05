@@ -16,6 +16,14 @@ from .analysis_utils import (
 
 from .analysis_utils import analyze_temporal_evolution, compare_providers
 from .analysis_utils import analyze_temporal_evolution
+
+from .starlink_coverage_utils import (
+    get_starlink_coverage_zones,
+    get_starlink_signal_points,
+    get_coverage_color,
+    get_coverage_rating
+)
+
 from .anatel_utils import (
     fetch_anatel_broadband_data,
     fetch_anatel_mobile_data,
@@ -68,6 +76,7 @@ from .export_utils import (
 
 
 
+
 __all__ = [
     'validate_coordinates',
     'validate_speed_test',
@@ -83,6 +92,12 @@ __all__ = [
     'simulate_router_impact',
     'generate_map',
     'analyze_temporal_evolution',
+
+    'get_starlink_coverage_zones',
+    'get_starlink_signal_points',
+    'get_coverage_color',
+    'get_coverage_rating'
+
 
     'fetch_anatel_broadband_data',
     'fetch_anatel_mobile_data',
@@ -127,8 +142,6 @@ __all__ = [
     'export_for_hybrid_simulator',
     'export_for_agrix_boost',
     'export_ecosystem_bundle'
-
-
 
 
 
