@@ -50,7 +50,7 @@ jobs:
         echo "- Multi-format reporting (JSON, CSV, TXT, HTML)" >> release_notes.md
     
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
       with:
         body_path: release_notes.md
         draft: false
