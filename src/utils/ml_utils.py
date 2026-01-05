@@ -97,16 +97,18 @@ def extract_geospatial_features(data: List[Dict]) -> np.ndarray:
 
 
 def predict_improvement_potential(data: List[Dict]) -> List[Dict]:
-    """Predict improvement potential for each connectivity point using ML.
+    """Predict improvement potential for each connectivity point using a rule-based score.
     
-    Uses ensemble methods to predict which areas have highest improvement potential
-    based on geospatial features and current connectivity metrics.
+    Uses a heuristic formula based on geospatial features (e.g., distance from major cities)
+    and current connectivity metrics (e.g., overall quality score) to estimate which areas
+    have the highest potential for improvement. Rural areas far from major cities with poor
+    connectivity receive higher improvement potential and priority scores.
     
     Args:
         data: List of connectivity point dictionaries
         
     Returns:
-        List[Dict]: Data enriched with ML predictions
+        List[Dict]: Data enriched with improvement potential scores and related metrics
     """
     try:
         logger.info("Predicting improvement potential with ML...")
