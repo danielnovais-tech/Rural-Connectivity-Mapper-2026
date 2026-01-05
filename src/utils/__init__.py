@@ -16,6 +16,14 @@ from .analysis_utils import (
 
 from .analysis_utils import analyze_temporal_evolution, compare_providers
 from .analysis_utils import analyze_temporal_evolution
+
+from .ml_utils import (
+    predict_improvement_potential,
+    identify_expansion_zones,
+    analyze_starlink_roi,
+    generate_ml_report
+)
+
 from .config_utils import (
     load_country_config,
     get_country_info,
@@ -38,6 +46,7 @@ from .export_utils import (
 
 
 
+
 __all__ = [
     'validate_coordinates',
     'validate_speed_test',
@@ -53,6 +62,12 @@ __all__ = [
     'simulate_router_impact',
     'generate_map',
     'analyze_temporal_evolution',
+
+    'predict_improvement_potential',
+    'identify_expansion_zones',
+    'analyze_starlink_roi',
+    'generate_ml_report'
+
 
     'cluster_connectivity_points',
     'forecast_quality_scores'
@@ -76,6 +91,7 @@ __all__ = [
     'export_for_hybrid_simulator',
     'export_for_agrix_boost',
     'export_ecosystem_bundle'
+
 
 
 

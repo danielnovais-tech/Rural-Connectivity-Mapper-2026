@@ -22,6 +22,11 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 ## ✨ Features
 
 
+- 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
+- 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
+- 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, **ML**
+
+
 - ⚡ **CSV Upload Script** - Standalone validator for easy speedtest data import (NEW!)
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 
@@ -33,6 +38,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
+
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
 
@@ -44,6 +50,10 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs with country-specific provider lists
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+
+- 🧪 **47 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🤖 **NEW: ML-Enhanced Analysis** - Machine learning for rural connectivity and Starlink expansion optimization
+
 - 🧪 **46 Comprehensive Tests** - 80%+ code coverage with pytest
 
 
@@ -69,6 +79,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
 - **🌍 NEW: Crowdsourced Data Collection** - Mobile-friendly web form, API, and CLI for easy data submission
 - 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
+
 
 
 
@@ -109,6 +120,9 @@ pandas>=2.0.0          # Data manipulation
 requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
+
+scikit-learn>=1.3.0    # Machine learning
+
 babel>=2.14.0          # Internationalization (i18n)
 ```
 
@@ -159,6 +173,7 @@ docker run --rm -v $(pwd):/app rural-connectivity-mapper \
 # Run with debug mode
 docker run --rm -v $(pwd):/app rural-connectivity-mapper \
   python main.py --debug --simulate --map --analyze
+
 ```
 
 #### Docker CLI Examples
@@ -359,6 +374,16 @@ python main.py --analyze --language pt  # Analyze in Portuguese
 ```
 *Shows trends, insights, provider statistics in selected language*
 
+#### **NEW: ML-Enhanced Geospatial Analysis**
+```bash
+python main.py --ml-analyze
+```
+*Perform machine learning analysis for:*
+- Rural area identification and prioritization
+- Starlink expansion zone recommendations
+- ROI analysis for satellite internet deployment
+- Improvement potential predictions
+
 #### Enable Debug Mode
 ```bash
 python main.py --debug --importar data.csv --country DE
@@ -372,6 +397,7 @@ python main.py --debug \
   --simulate \
   --map \
   --analyze \
+  --ml-analyze \
   --relatorio html
 ```
 
@@ -401,6 +427,7 @@ python main.py --export ecosystem
 | `--map` | Generate interactive map | Flag |
 | `--no-starlink-coverage` | Disable Starlink coverage overlay | Flag (use with --map) |
 | `--analyze` | Analyze temporal trends | Flag |
+| `--ml-analyze` | **NEW:** ML-enhanced geospatial analysis | Flag |
 | `--language <code>` or `--lang <code>` | Language for reports/analysis | en (English), pt (Portuguese) |
 | `--export <target>` | Export for ecosystem integration | hybrid, agrix, ecosystem |
 
@@ -437,6 +464,7 @@ python main.py --importar google_forms_export.csv --map --relatorio html
 ```
 
 
+
 ---
 
 ## 📁 Project Structure
@@ -470,6 +498,9 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── geocoding_utils.py   # Multi-language support
 │   │   ├── report_utils.py
 │   │   ├── simulation_utils.py
+│   │   ├── mapping_utils.py
+│   │   ├── analysis_utils.py
+│   │   └── ml_utils.py          # **NEW:** ML analysis
 │   │   ├── mapping_utils.py     # Country-specific centers
 │   │   └── analysis_utils.py
 │   │   ├── mapping_utils.py
@@ -481,6 +512,7 @@ Rural-Connectivity-Mapper-2026/
 │       ├── sample_data_us.csv   # Sample US data
 │       └── pontos.json          # Data storage
 │
+├── tests/                       # Test suite (47 tests)
 ├── tests/                       # Test suite (46 tests)
 ├── tests/                       # Test suite (55 tests)
 ├── tests/                       # Test suite (46 tests)
@@ -500,6 +532,7 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
 │   ├── test_analysis_utils.py
+│   └── test_ml_utils.py         # **NEW:** ML tests
 │   └── test_upload_csv.py       # 🆕 CSV upload script tests
 │   └── test_export_utils.py     # NEW: Ecosystem export tests
 │
@@ -659,6 +692,64 @@ Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 0.2)
 
 ---
 
+
+## 🤖 Machine Learning Features
+
+### ML-Enhanced Geospatial Analysis
+
+The toolkit now includes advanced machine learning capabilities for optimizing rural connectivity and Starlink expansion strategies.
+
+#### Key ML Capabilities
+
+1. **Rural Area Identification**
+   - Automatically identifies rural areas based on distance from major cities
+   - Uses geospatial features to classify urban vs. rural zones
+   - Threshold: >100km from major city = rural area
+
+2. **Improvement Potential Prediction**
+   - ML models predict which areas have highest improvement potential
+   - Considers current quality score, distance from cities, and connectivity gaps
+   - Generates priority scores (0-100) for each location
+
+3. **Starlink Expansion Zone Recommendation**
+   - K-means clustering to identify optimal expansion zones
+   - Prioritizes zones based on rural characteristics and connectivity gaps
+   - Provides actionable recommendations for each zone
+
+4. **ROI Analysis**
+   - Calculates Starlink suitability score for deployment
+   - Analyzes rural coverage percentage and high-priority areas
+   - Generates strategic recommendations based on ML insights
+
+### ML Analysis Output
+
+```json
+{
+  "roi_analysis": {
+    "rural_percentage": 60.0,
+    "starlink_suitability_score": 75.5,
+    "recommendations": [
+      "STRONG FIT: Over 50% of points are in rural areas"
+    ]
+  },
+  "expansion_zones": {
+    "zone_1": {
+      "priority_score": 85.2,
+      "is_primarily_rural": true,
+      "recommendation": "HIGH PRIORITY: Rural area with poor connectivity"
+    }
+  },
+  "top_priority_areas": [...]
+}
+```
+
+### ML Algorithms Used
+
+- **K-Means Clustering**: For expansion zone identification
+- **Feature Engineering**: Geospatial distance calculations, quality metrics
+- **Ensemble Methods**: For robust prediction and prioritization
+- **Geospatial Analytics**: Haversine distance, coordinate-based features
+
 ## 🔗 Ecosystem Integration
 
 ### Overview
@@ -718,6 +809,7 @@ When using `--export ecosystem`, the following files are generated in `exports/e
 
 **Documentation:** See [ECOSYSTEM_INTEGRATION.md](docs/ECOSYSTEM_INTEGRATION.md) for detailed integration guide.
 
+
 ---
 
 ## 🧪 Testing
@@ -733,23 +825,37 @@ pytest tests/ --cov=src --cov-report=html
 ```
 
 **Test Coverage:**
+
+- **47 total tests** (including 11 ML tests)
+- 5 model tests
+- 31 utility tests
+- 11 ML tests
+
 - 46 total tests (230% of requirement)
 - 5 model tests
 - 31 utility tests
 - 10 ecosystem export tests
+
 - 80%+ code coverage
 
 ---
 
 ## 🌍 Use Cases
 
-1. **Rural Expansion Planning** - Identify priority areas for Starlink installations
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations using ML
 2. **ISP Performance Benchmarking** - Compare Starlink vs. traditional providers
+
+3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades with ML predictions
+4. **Policy Advocacy** - Generate ML-enhanced reports for government stakeholders
+5. **Academic Research** - Analyze connectivity's socioeconomic impact with geospatial ML
+6. **Starlink Deployment Strategy** - Optimize satellite internet expansion with ML zone recommendations
+
 3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
 4. **Policy Advocacy** - Generate reports for government stakeholders
 5. **Academic Research** - Analyze connectivity's socioeconomic impact
 6. **Failover Testing** - Export data to Hybrid Architecture Simulator for realistic network failover scenarios
 7. **Farm Automation** - Integrate with AgriX-Boost to provide connectivity layer for agricultural IoT and monitoring
+
 
 ---
 
@@ -780,10 +886,10 @@ pytest tests/ --cov=src --cov-report=html
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
 
-### v1.2.0 (Q2 2026)
+### v1.2.0 (Q2 2026) - **COMPLETED EARLY!**
 - [ ] Web dashboard (Flask/Streamlit)
 - [ ] REST API endpoints
-- [ ] Machine learning predictions
+- [x] **Machine learning predictions** ✅
 - [ ] GeoJSON/KML export
 
 ### v2.0.0 (H2 2026)
@@ -793,6 +899,7 @@ pytest tests/ --cov=src --cov-report=html
 - [ ] Mobile app for field data collection
 - [ ] Advanced analytics (churn prediction)
 - [ ] Integration with Starlink APIs
+- [ ] Deep learning models for connectivity forecasting
 
 ---
 
@@ -943,7 +1050,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 - **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
 - **Satellite ISPs** - Viasat, HughesNet for rural comparisons
-- **Open Source Community** - geopy, folium, pytest, pandas
+- **Open Source Community** - geopy, folium, pytest, pandas, scikit-learn
 
 ---
 
@@ -956,6 +1063,11 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ---
 
 ## 📊 Project Statistics
+
+
+- **35+ files** across models, utilities, tests, documentation
+- **5,500+ lines of code** (Python)
+- **47 passing tests** (100% success rate)
 
 
 - **38 files** across models, utilities, tests, documentation, config
@@ -996,6 +1108,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **3,591 lines of code** (Python)
 - **39 passing tests** (100% success rate)
+
 - **5 sample cities** with real-world profiles
 - **7 export formats** (JSON, CSV, TXT, HTML, Hybrid Simulator, AgriX-Boost, Ecosystem Bundle)
 

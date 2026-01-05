@@ -9,9 +9,13 @@ from src.models import ConnectivityPoint, SpeedTest
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
 
+    generate_map, analyze_temporal_evolution, generate_ml_report
+
+
     generate_map, analyze_temporal_evolution, validate_csv_row
 
     generate_map, analyze_temporal_evolution, compare_providers
+
 
 )
 
@@ -165,6 +169,42 @@ def main():
             print(f"  • {insight}")
         print("-" * 80 + "\n")
         
+
+        # Step 7: ML-Enhanced Geospatial Analysis
+        logger.info("Step 5: Performing ML-enhanced geospatial analysis...")
+        print("\n" + "-" * 80)
+        print("ML-ENHANCED ANALYSIS FOR RURAL CONNECTIVITY & STARLINK EXPANSION")
+        print("-" * 80)
+        
+        ml_report = generate_ml_report(improved_data)
+        
+        # Display ROI Analysis
+        roi = ml_report['roi_analysis']
+        print(f"\n💰 Starlink ROI Analysis:")
+        print(f"  • Rural Coverage: {roi['rural_percentage']:.1f}% of points")
+        print(f"  • Starlink Suitability Score: {roi['starlink_suitability_score']:.1f}/100")
+        print(f"  • High Priority Areas: {roi['high_priority_points']} zones")
+        print(f"  • Key Recommendation: {roi['recommendations'][0]}")
+        
+        # Display Expansion Zones
+        zones = ml_report['expansion_zones']
+        print(f"\n🗺️  Identified {zones['total_zones']} Expansion Zones:")
+        for zone_id, zone_data in zones['zones'].items():
+            print(f"  • {zone_id}: Priority {zone_data['priority_score']:.0f}/100 - "
+                  f"{zone_data['point_count']} points, "
+                  f"{'Rural' if zone_data['is_primarily_rural'] else 'Urban'}")
+        
+        # Save ML report
+        import json
+        ml_report_path = 'demo_ml_analysis.json'
+        with open(ml_report_path, 'w', encoding='utf-8') as f:
+            json.dump(ml_report, f, indent=2, ensure_ascii=False)
+        print(f"\n✓ ML analysis saved: {ml_report_path}")
+        print("-" * 80 + "\n")
+        
+        # Step 8: Generate reports in multiple formats
+        logger.info("Step 6: Generating multi-format reports...")
+
         # Step 6.5: Compare providers
         logger.info("Step 4.5: Comparing provider performance...")
         provider_comparison = compare_providers(improved_data)
@@ -207,13 +247,14 @@ def main():
         
         # Step 7: Generate reports in multiple formats
         logger.info("Step 5: Generating multi-format reports...")
+
         formats = ['json', 'csv', 'txt', 'html']
         for fmt in formats:
             report_path = generate_report(improved_data, fmt, f'demo_report.{fmt}')
             print(f"✓ Generated {fmt.upper()} report: {report_path}")
         
-        # Step 8: Generate interactive map
-        logger.info("Step 6: Generating interactive map...")
+        # Step 9: Generate interactive map
+        logger.info("Step 7: Generating interactive map...")
         map_path = generate_map(improved_data, 'demo_connectivity_map.html')
         print(f"✓ Generated interactive map: {map_path}")
         
@@ -227,11 +268,13 @@ def main():
         print("  • demo_report.txt - Text format report")
         print("  • demo_report.html - HTML format report")
         print("  • demo_connectivity_map.html - Interactive Folium map")
+        print("  • demo_ml_analysis.json - ML-enhanced geospatial analysis")
         print("\nNext Steps:")
         print("  1. Open demo_connectivity_map.html in your browser to view the interactive map")
-        print("  2. Review the generated reports for detailed connectivity analysis")
-        print("  3. Use main.py with different flags for custom analysis")
-        print("\nExample: python main.py --debug --importar src/data/sample_data.csv --relatorio json")
+        print("  2. Review demo_ml_analysis.json for ML-powered insights")
+        print("  3. Review the generated reports for detailed connectivity analysis")
+        print("  4. Use main.py with different flags for custom analysis")
+        print("\nExample: python main.py --debug --importar src/data/sample_data.csv --ml-analyze")
         print("=" * 80 + "\n")
         
     except FileNotFoundError as e:
