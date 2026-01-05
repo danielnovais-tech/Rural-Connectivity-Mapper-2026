@@ -1,0 +1,123 @@
+name: Documentation Improvement
+description: Suggest improvements to documentation, guides, or examples
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Clear docs help everyone use the tool better.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs improvement?
+      options:
+        - README
+        - API Documentation
+        - Code Comments/Docstrings
+        - Usage Examples
+        - Installation Guide
+        - Contributing Guide
+        - Tutorial/Getting Started
+        - FAQ
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What kind of issue is this?
+      options:
+        - Missing Information
+        - Incorrect Information
+        - Outdated Information
+        - Unclear/Confusing
+        - Typo/Grammar
+        - Missing Examples
+        - Broken Links
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Where is the documentation that needs improvement?
+      placeholder: ex. README.md line 42, or docs/API.md section "Data Models"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-content
+    attributes:
+      label: Current Content
+      description: What does the current documentation say? (if applicable)
+      placeholder: Paste the current text here
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: What's wrong with the current documentation?
+      placeholder: The documentation is unclear because...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested Improvement
+      description: How should it be improved?
+      placeholder: It should instead say...
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit from this improvement?
+      options:
+        - New Users
+        - Advanced Users
+        - Developers/Contributors
+        - Researchers
+        - Policy Makers
+        - All Users
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Links to related docs, screenshots, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you like to help improve this documentation?
+      options:
+        - label: I would be willing to submit a PR for this improvement
+          required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have checked that this issue hasn't been reported before
+          required: true

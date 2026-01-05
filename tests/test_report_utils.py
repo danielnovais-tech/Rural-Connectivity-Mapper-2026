@@ -113,6 +113,24 @@ def test_generate_html_report(sample_data, tmp_path):
     assert 'Excellent' in content
 
 
+def test_generate_html_report_portuguese(sample_data, tmp_path):
+    """Test HTML report generation in Portuguese."""
+    output_path = tmp_path / "test_report_pt.html"
+    
+    result_path = generate_report(sample_data, 'html', str(output_path), language='pt')
+    
+    assert Path(result_path).exists()
+    
+    # Verify Portuguese content
+    with open(result_path, 'r') as f:
+        content = f.read()
+    
+    assert '<!DOCTYPE html>' in content
+    assert 'Provedor' in content
+    assert 'Excelente' in content
+    assert 'MAPEADOR DE CONECTIVIDADE RURAL' in content
+
+
 def test_generate_txt_report(sample_data, tmp_path):
     """Test TXT report generation."""
     output_path = tmp_path / "test_report.txt"
@@ -128,6 +146,24 @@ def test_generate_txt_report(sample_data, tmp_path):
     assert 'RURAL CONNECTIVITY MAPPER 2026' in content
     assert 'Starlink' in content
     assert 'Total Points: 2' in content
+
+
+def test_generate_txt_report_portuguese(sample_data, tmp_path):
+    """Test TXT report generation in Portuguese."""
+    output_path = tmp_path / "test_report_pt.txt"
+    
+    result_path = generate_report(sample_data, 'txt', str(output_path), language='pt')
+    
+    assert Path(result_path).exists()
+    
+    # Verify Portuguese TXT content
+    with open(result_path, 'r') as f:
+        content = f.read()
+    
+    assert 'MAPEADOR DE CONECTIVIDADE RURAL' in content
+    assert 'Provedor' in content
+    assert 'Total de Pontos: 2' in content
+    assert 'Excelente' in content
 
 
 def test_generate_report_invalid_format(sample_data):
