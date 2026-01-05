@@ -1,6 +1,5 @@
 """Tests for Starlink coverage utilities."""
 
-import pytest
 from src.utils.starlink_coverage_utils import (
     get_starlink_coverage_zones,
     get_starlink_signal_points,
