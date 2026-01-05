@@ -410,6 +410,22 @@ def generate_ml_report(data: List[Dict]) -> Dict:
     try:
         logger.info("Generating comprehensive ML report...")
         
+        # Handle empty input early to avoid unnecessary ML processing
+        if not data:
+            logger.warning("No data provided for ML report generation")
+            empty_report = {
+                'summary': {
+                    'total_points_analyzed': 0,
+                    'ml_model_version': '1.0.0',
+                    'analysis_date': 'Real-time'
+                },
+                'roi_analysis': {},
+                'expansion_zones': {},
+                'top_priority_areas': [],
+                'enriched_data': []
+            }
+            return empty_report
+        
         # Get ML predictions for each point
         enriched_data = predict_improvement_potential(data)
         
