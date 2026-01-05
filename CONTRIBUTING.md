@@ -1,7 +1,7 @@
 # Contributing to Rural Connectivity Mapper 2026
+# Contributing to Rural Connectivity Mapper
 
-
-Thank you for your interest in contributing to the Rural Connectivity Mapper 2026 project! We welcome contributions from the community to help improve rural connectivity analysis in Brazil.
+Thank you for your interest in contributing to the Rural Connectivity Mapper project! We welcome contributions from the community to help improve rural connectivity analysis in Brazil.
 
 ## 🤝 How to Contribute
 
