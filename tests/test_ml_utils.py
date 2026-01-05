@@ -1,6 +1,5 @@
 """Tests for ML utilities."""
 
-import pytest
 from src.utils.ml_utils import (
     calculate_distance_from_major_city,
     extract_geospatial_features,
