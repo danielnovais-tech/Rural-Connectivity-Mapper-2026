@@ -12,7 +12,11 @@ from src.models import ConnectivityPoint, SpeedTest, QualityScore
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
     generate_map, analyze_temporal_evolution, validate_coordinates,
+
     list_available_countries, get_default_country
+
+    export_for_hybrid_simulator, export_for_agrix_boost, export_ecosystem_bundle
+
 )
 
 
@@ -66,7 +70,8 @@ def import_csv(csv_path: str, output_path: str = 'src/data/pontos.json', country
                     upload=float(row['upload']),
                     latency=float(row['latency']),
                     jitter=float(row.get('jitter', 0)),
-                    packet_loss=float(row.get('packet_loss', 0))
+                    packet_loss=float(row.get('packet_loss', 0)),
+                    obstruction=float(row.get('obstruction', 0))
                 )
                 
                 # Create ConnectivityPoint
@@ -152,9 +157,29 @@ Examples:
     )
     
     parser.add_argument(
+        '--no-starlink-coverage',
+        action='store_true',
+        help='Disable Starlink coverage overlay on the map'
+    )
+    
+    parser.add_argument(
         '--analyze',
         action='store_true',
         help='Analyze temporal evolution'
+    )
+    
+    parser.add_argument(
+
+        '--language',
+        '--lang',
+        choices=['en', 'pt'],
+        default='en',
+        help='Language for reports and analysis output (en=English, pt=Portuguese)'
+
+        '--export',
+        choices=['hybrid', 'agrix', 'ecosystem'],
+        help='Export data for ecosystem integration (hybrid=Hybrid Architecture Simulator, agrix=AgriX-Boost, ecosystem=Full bundle)'
+
     )
     
     args = parser.parse_args()
@@ -182,7 +207,7 @@ Examples:
     logger.info(f"Using country: {country_code}")
     
     # Check if any action was specified
-    if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze]):
+    if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze, args.export]):
         parser.print_help()
         sys.exit(0)
     
@@ -210,7 +235,7 @@ Examples:
     # Analyze temporal evolution
     if args.analyze:
         logger.info("Analyzing temporal evolution...")
-        analysis = analyze_temporal_evolution(data)
+        analysis = analyze_temporal_evolution(data, args.language)
         
         print("\n" + "=" * 80)
         print("TEMPORAL ANALYSIS RESULTS")
@@ -229,14 +254,47 @@ Examples:
     # Generate report
     if args.relatorio:
         logger.info(f"Generating {args.relatorio.upper()} report...")
-        report_path = generate_report(data, args.relatorio)
+        report_path = generate_report(data, args.relatorio, language=args.language)
         logger.info(f"Report generated: {report_path}")
     
     # Generate map
+    # Note: Map generation does not currently support multilingual features
     if args.map:
         logger.info("Generating interactive map...")
+
         map_path = generate_map(data, country_code=country_code)
+
+        include_coverage = not args.no_starlink_coverage
+        if include_coverage:
+            logger.info("Including Starlink coverage overlay layer")
+        map_path = generate_map(data, include_starlink_coverage=include_coverage)
+
         logger.info(f"Map generated: {map_path}")
+    
+    # Export for ecosystem integration
+    if args.export:
+        logger.info(f"Exporting data for ecosystem integration ({args.export})...")
+        
+        if args.export == 'hybrid':
+            export_path = export_for_hybrid_simulator(data)
+            logger.info(f"Exported for Hybrid Architecture Simulator: {export_path}")
+            print(f"\n✓ Data exported for Hybrid Architecture Simulator: {export_path}")
+        
+        elif args.export == 'agrix':
+            export_path = export_for_agrix_boost(data)
+            logger.info(f"Exported for AgriX-Boost: {export_path}")
+            print(f"\n✓ Data exported for AgriX-Boost: {export_path}")
+        
+        elif args.export == 'ecosystem':
+            export_paths = export_ecosystem_bundle(data)
+            logger.info("Exported complete ecosystem bundle")
+            print("\n" + "=" * 80)
+            print("ECOSYSTEM BUNDLE EXPORTED")
+            print("=" * 80)
+            print(f"  Hybrid Architecture Simulator: {export_paths['hybrid_simulator']}")
+            print(f"  AgriX-Boost: {export_paths['agrix_boost']}")
+            print(f"  Ecosystem Manifest: {export_paths['manifest']}")
+            print("=" * 80 + "\n")
     
     logger.info("Rural Connectivity Mapper 2026 - Completed successfully")
 

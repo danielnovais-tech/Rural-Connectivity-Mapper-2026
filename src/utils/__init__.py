@@ -7,6 +7,7 @@ from .geocoding_utils import geocode_coordinates, geocode_address
 from .report_utils import generate_report
 from .simulation_utils import simulate_router_impact
 from .mapping_utils import generate_map
+from .analysis_utils import analyze_temporal_evolution, compare_providers
 from .analysis_utils import analyze_temporal_evolution
 from .config_utils import (
     load_country_config,
@@ -18,6 +19,16 @@ from .config_utils import (
     get_zoom_level,
     list_available_countries
 )
+
+from .i18n_utils import get_translation, get_rating_translation, get_supported_languages
+
+from .export_utils import (
+    export_for_hybrid_simulator,
+    export_for_agrix_boost,
+    export_ecosystem_bundle
+)
+
+
 
 __all__ = [
     'validate_coordinates',
@@ -33,6 +44,7 @@ __all__ = [
     'simulate_router_impact',
     'generate_map',
     'analyze_temporal_evolution',
+
     'load_country_config',
     'get_country_info',
     'get_default_country',
@@ -41,4 +53,17 @@ __all__ = [
     'get_map_center',
     'get_zoom_level',
     'list_available_countries'
+
+
+    'get_translation',
+    'get_rating_translation',
+    'get_supported_languages'
+
+    'compare_providers'
+    'export_for_hybrid_simulator',
+    'export_for_agrix_boost',
+    'export_ecosystem_bundle'
+
+
+
 ]
