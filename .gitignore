@@ -14,10 +14,14 @@ report_*.csv
 report_*.txt
 report_*.html
 connectivity_map_*.html
+
+speedtest_data.json
+
 *_backup_*.json
 
 # Ecosystem exports
 exports/
+
 
 # Distribution / packaging
 .Python
