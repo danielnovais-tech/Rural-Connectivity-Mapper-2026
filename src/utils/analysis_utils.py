@@ -1,9 +1,12 @@
 """Analysis utilities for temporal evolution and trends."""
 
 import logging
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from datetime import datetime
 from collections import defaultdict
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
 
 from .i18n_utils import get_translation
 
@@ -162,6 +165,253 @@ def analyze_temporal_evolution(data: List[Dict], language: str = 'en') -> Dict:
         raise
 
 
+
+def cluster_connectivity_points(data: List[Dict], n_clusters: int = 3) -> Dict:
+    """Cluster connectivity points using K-Means based on quality metrics.
+    
+    Groups connectivity points into clusters based on download speed, upload speed,
+    latency, and quality score to identify patterns and similar connectivity profiles.
+    
+    Args:
+        data: List of connectivity point dictionaries
+        n_clusters: Number of clusters to create (default: 3)
+        
+    Returns:
+        Dict: Clustering results with cluster assignments and centroids
+    """
+    try:
+        logger.info(f"Clustering {len(data)} connectivity points into {n_clusters} clusters...")
+        
+        if not data or len(data) < n_clusters:
+            logger.warning(f"Insufficient data for clustering (need at least {n_clusters} points)")
+            return {
+                'clusters': {},
+                'cluster_labels': [],
+                'cluster_stats': {},
+                'n_clusters': 0,
+                'features_used': []
+            }
+        
+        # Extract features for clustering
+        features = []
+        point_ids = []
+        
+        for idx, point in enumerate(data):
+            speed_test = point.get('speed_test', {})
+            quality_score = point.get('quality_score', {})
+            
+            # Feature vector: [download, upload, latency, overall_score]
+            feature_vector = [
+                speed_test.get('download', 0),
+                speed_test.get('upload', 0),
+                speed_test.get('latency', 0),
+                quality_score.get('overall_score', 0)
+            ]
+            
+            features.append(feature_vector)
+            point_ids.append(point.get('id', f'point_{idx}'))
+        
+        # Convert to numpy array
+        X = np.array(features)
+        
+        # Standardize features
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+        
+        # Perform K-Means clustering
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
+        cluster_labels = kmeans.fit_predict(X_scaled)
+        
+        # Inverse transform centroids to original scale
+        centroids_scaled = kmeans.cluster_centers_
+        centroids = scaler.inverse_transform(centroids_scaled)
+        
+        # Organize results by cluster
+        clusters = defaultdict(list)
+        for idx, label in enumerate(cluster_labels):
+            clusters[int(label)].append({
+                'id': point_ids[idx],
+                'data': data[idx],
+                'feature_idx': idx  # Store feature index for efficient lookup
+            })
+        
+        # Calculate cluster statistics
+        cluster_stats = {}
+        feature_names = ['download', 'upload', 'latency', 'quality_score']
+        
+        for cluster_id, points in clusters.items():
+            # Use stored feature index for efficient lookup
+            cluster_features = [features[p['feature_idx']] for p in points]
+            cluster_array = np.array(cluster_features)
+            
+            cluster_stats[cluster_id] = {
+                'count': len(points),
+                'centroid': {
+                    feature_names[i]: round(centroids[cluster_id][i], 2)
+                    for i in range(len(feature_names))
+                },
+                'avg_metrics': {
+                    feature_names[i]: round(np.mean(cluster_array[:, i]), 2)
+                    for i in range(len(feature_names))
+                },
+                'std_metrics': {
+                    feature_names[i]: round(np.std(cluster_array[:, i]), 2)
+                    for i in range(len(feature_names))
+                }
+            }
+        
+        result = {
+            'clusters': dict(clusters),
+            'cluster_labels': cluster_labels.tolist(),
+            'cluster_stats': cluster_stats,
+            'n_clusters': n_clusters,
+            'features_used': feature_names
+        }
+        
+        logger.info(f"Clustering completed with {n_clusters} clusters")
+        return result
+    
+    except Exception as e:
+        logger.error(f"Error clustering connectivity points: {e}")
+        raise
+
+
+def forecast_quality_scores(data: List[Dict], forecast_horizon: int = 5) -> Dict:
+    """Forecast future quality scores based on historical connectivity data.
+    
+    Uses historical patterns and clustering to predict future quality scores
+    for connectivity points. Implements a simple trend-based forecasting approach
+    combined with cluster-based predictions.
+    
+    Args:
+        data: List of connectivity point dictionaries with historical data
+        forecast_horizon: Number of future periods to forecast (default: 5)
+        
+    Returns:
+        Dict: Forecast results with predicted quality scores and confidence metrics
+    """
+    try:
+        logger.info(f"Forecasting quality scores for {forecast_horizon} future periods...")
+        
+        if not data:
+            logger.warning("No data provided for forecasting")
+            return {
+                'forecasts': [],
+                'baseline_score': 0,
+                'trend': 'stable',
+                'confidence': 'low'
+            }
+        
+        # Sort data by timestamp
+        sorted_data = sorted(data, key=lambda x: x.get('timestamp', ''))
+        
+        # Extract historical quality scores
+        historical_scores = []
+        timestamps = []
+        
+        for point in sorted_data:
+            quality_score = point.get('quality_score', {})
+            overall_score = quality_score.get('overall_score', 0)
+            timestamp = point.get('timestamp', '')
+            
+            if overall_score > 0 and timestamp:
+                historical_scores.append(overall_score)
+                timestamps.append(timestamp)
+        
+        if len(historical_scores) < 2:
+            logger.warning("Insufficient historical data for forecasting")
+            baseline = historical_scores[0] if historical_scores else 0
+            return {
+                'forecasts': [baseline] * forecast_horizon,
+                'baseline_score': baseline,
+                'trend': 'stable',
+                'confidence': 'low'
+            }
+        
+        # Calculate baseline statistics
+        baseline_score = np.mean(historical_scores)
+        score_std = np.std(historical_scores)
+        
+        # Determine trend
+        if len(historical_scores) >= 3:
+            # Simple linear trend
+            recent_avg = np.mean(historical_scores[-3:])
+            older_avg = np.mean(historical_scores[:-3]) if len(historical_scores) > 3 else historical_scores[0]
+            trend_direction = recent_avg - older_avg
+            
+            if trend_direction > 5:
+                trend = 'improving'
+                trend_factor = 1.02  # 2% improvement per period
+            elif trend_direction < -5:
+                trend = 'declining'
+                trend_factor = 0.98  # 2% decline per period
+            else:
+                trend = 'stable'
+                trend_factor = 1.0
+        else:
+            trend = 'stable'
+            trend_factor = 1.0
+        
+        # Generate forecasts
+        forecasts = []
+        last_score = historical_scores[-1]
+        
+        for i in range(forecast_horizon):
+            # Apply trend factor
+            predicted_score = last_score * (trend_factor ** (i + 1))
+            
+            # Add some regression to mean (scores tend to stabilize)
+            predicted_score = 0.7 * predicted_score + 0.3 * baseline_score
+            
+            # Ensure score stays in valid range [0, 100]
+            predicted_score = max(0, min(100, predicted_score))
+            forecasts.append(round(predicted_score, 2))
+        
+        # Determine confidence based on historical variance
+        if score_std < 5:
+            confidence = 'high'
+        elif score_std < 15:
+            confidence = 'medium'
+        else:
+            confidence = 'low'
+        
+        # Optional cluster-based enhancement for larger datasets
+        # Only use clustering if we have sufficient data and it would be meaningful
+        if len(data) >= 5:
+            try:
+                clustering_result = cluster_connectivity_points(data, n_clusters=min(3, len(data)))
+                # Use cluster centroids to refine forecasts
+                cluster_stats = clustering_result.get('cluster_stats', {})
+                if cluster_stats:
+                    cluster_quality_scores = [
+                        stats['centroid'].get('quality_score', baseline_score)
+                        for stats in cluster_stats.values()
+                    ]
+                    cluster_avg = np.mean(cluster_quality_scores)
+                    # Blend cluster-based prediction with trend-based (lighter weight)
+                    forecasts = [
+                        round(0.7 * f + 0.3 * cluster_avg, 2)
+                        for f in forecasts
+                    ]
+            except Exception as e:
+                logger.warning(f"Could not use clustering for forecast enhancement: {e}")
+        
+        result = {
+            'forecasts': forecasts,
+            'baseline_score': round(baseline_score, 2),
+            'trend': trend,
+            'confidence': confidence,
+            'historical_mean': round(np.mean(historical_scores), 2),
+            'historical_std': round(score_std, 2),
+            'forecast_horizon': forecast_horizon
+        }
+        
+        logger.info(f"Forecasting completed: trend={trend}, confidence={confidence}")
+        return result
+    
+    except Exception as e:
+        logger.error(f"Error forecasting quality scores: {e}")
+=======
 def compare_providers(data: List[Dict]) -> Dict:
     """Compare ISP performance with detailed metrics analysis.
     
@@ -357,4 +607,5 @@ def compare_providers(data: List[Dict]) -> Dict:
     
     except Exception as e:
         logger.error(f"Error comparing providers: {e}")
+
         raise

@@ -7,6 +7,13 @@ from .geocoding_utils import geocode_coordinates, geocode_address
 from .report_utils import generate_report
 from .simulation_utils import simulate_router_impact
 from .mapping_utils import generate_map
+
+from .analysis_utils import (
+    analyze_temporal_evolution,
+    cluster_connectivity_points,
+    forecast_quality_scores
+)
+
 from .analysis_utils import analyze_temporal_evolution, compare_providers
 from .analysis_utils import analyze_temporal_evolution
 from .config_utils import (
@@ -30,6 +37,7 @@ from .export_utils import (
 
 
 
+
 __all__ = [
     'validate_coordinates',
     'validate_speed_test',
@@ -45,6 +53,10 @@ __all__ = [
     'simulate_router_impact',
     'generate_map',
     'analyze_temporal_evolution',
+
+    'cluster_connectivity_points',
+    'forecast_quality_scores'
+
 
     'load_country_config',
     'get_country_info',
@@ -64,6 +76,7 @@ __all__ = [
     'export_for_hybrid_simulator',
     'export_for_agrix_boost',
     'export_ecosystem_bundle'
+
 
 
 
