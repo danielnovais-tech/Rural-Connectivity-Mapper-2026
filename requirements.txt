@@ -9,6 +9,9 @@ folium>=0.14.0
 matplotlib>=3.7.0
 
 streamlit>=1.28.0
+
+
+streamlit>=1.28.0
 streamlit-folium>=0.15.0
 plotly>=5.17.0
 
@@ -27,6 +30,7 @@ numpy>=1.21.0
 babel>=2.14.0
 
 flask>=3.0.0
+
 
 
 
