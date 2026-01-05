@@ -19,9 +19,9 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 ## ✨ Features
 
-- 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
+- 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
-- 🛠️ **8 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis
+- 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
@@ -30,9 +30,13 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+
+- 🔗 **Ecosystem Integration** - Export data for Hybrid Architecture Simulator & AgriX-Boost
+- 🧪 **46 Comprehensive Tests** - 80%+ code coverage with pytest
 - 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
 - **🌍 NEW: Crowdsourced Data Collection** - Mobile-friendly web form, API, and CLI for easy data submission
 - 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
+
 
 
 ---
@@ -268,6 +272,19 @@ python main.py --debug \
   --relatorio html
 ```
 
+#### Export for Ecosystem Integration
+```bash
+# Export for Hybrid Architecture Simulator
+python main.py --export hybrid
+
+# Export for AgriX-Boost
+python main.py --export agrix
+
+# Export complete ecosystem bundle
+python main.py --export ecosystem
+```
+*Generates data exports for integration with Hybrid Architecture Simulator (failover testing) and AgriX-Boost (farm dashboards)*
+
 ### CLI Arguments Reference
 
 | Argument | Description | Choices/Format |
@@ -279,6 +296,7 @@ python main.py --debug \
 | `--map` | Generate interactive map | Flag |
 | `--no-starlink-coverage` | Disable Starlink coverage overlay | Flag (use with --map) |
 | `--analyze` | Analyze temporal trends | Flag |
+| `--export <target>` | Export for ecosystem integration | hybrid, agrix, ecosystem |
 
 ### Alternative Data Submission Methods
 
@@ -340,12 +358,14 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── report_utils.py
 │   │   ├── simulation_utils.py
 │   │   ├── mapping_utils.py
-│   │   └── analysis_utils.py
+│   │   ├── analysis_utils.py
+│   │   └── export_utils.py      # NEW: Ecosystem exports
 │   │
 │   └── data/
 │       ├── sample_data.csv      # Sample points
 │       └── pontos.json          # Data storage
 │
+├── tests/                       # Test suite (46 tests)
 ├── examples/                    # CSV templates for contributions
 │   ├── README.md                # Template documentation
 │   ├── speedtest_template_basic.csv
@@ -360,11 +380,24 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_report_utils.py
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
-│   └── test_analysis_utils.py
+│   ├── test_analysis_utils.py
+│   └── test_export_utils.py     # NEW: Ecosystem export tests
 │
+├── docs/
+│   ├── API.md                   # API reference
+│   └── ECOSYSTEM_INTEGRATION.md # NEW: Ecosystem guide
+│
+└── exports/                     # Generated ecosystem exports
+    ├── hybrid_simulator_input.json
+    ├── agrix_boost_connectivity.json
+    └── ecosystem/
+        ├── hybrid_simulator_input.json
+        ├── agrix_boost_connectivity.json
+        └── ecosystem_manifest.json
 └── docs/
     ├── API.md                   # API reference
     └── GOOGLE_FORMS_INTEGRATION.md  # Google Forms setup guide
+
 ```
 
 ---
@@ -409,6 +442,67 @@ Stability Score = 100 - (jitter × 2 + packet_loss × 10)
 
 ---
 
+## 🔗 Ecosystem Integration
+
+### Overview
+
+Rural Connectivity Mapper 2026 integrates seamlessly with other projects to create a comprehensive rural connectivity ecosystem:
+
+1. **Rural Connectivity Mapper** - Measures and analyzes connectivity
+2. **Hybrid Architecture Simulator** - Tests failover scenarios with real data
+3. **AgriX-Boost** - Provides connectivity layer for farm dashboards
+
+### Export Data
+
+Generate ecosystem-compatible exports:
+
+```bash
+# Export for Hybrid Architecture Simulator (failover testing)
+python main.py --export hybrid
+
+# Export for AgriX-Boost (farm dashboards)
+python main.py --export agrix
+
+# Export complete ecosystem bundle
+python main.py --export ecosystem
+```
+
+### Ecosystem Bundle Contents
+
+When using `--export ecosystem`, the following files are generated in `exports/ecosystem/`:
+
+- **hybrid_simulator_input.json** - Failover testing data with:
+  - Signal quality metrics
+  - Latency and stability scores
+  - Failover indicators (connection reliability, low latency, stability)
+  - Recommended primary/backup connection flags
+
+- **agrix_boost_connectivity.json** - Farm connectivity layer with:
+  - Network performance metrics
+  - Farm suitability indicators (IoT, video, real-time control, analytics)
+  - Connectivity recommendations for agricultural use cases
+
+- **ecosystem_manifest.json** - Integration manifest with:
+  - Component descriptions and purposes
+  - Data summary and quality distribution
+  - Integration notes and references
+
+### Integration Benefits
+
+**For Hybrid Architecture Simulator:**
+- Test realistic failover scenarios with actual connectivity data
+- Model network degradation and recovery
+- Evaluate backup connection strategies
+
+**For AgriX-Boost:**
+- Display real-time connectivity status in farm dashboards
+- Assess farm suitability for IoT sensors, video monitoring, and automation
+- Provide connectivity-based recommendations for farmers
+
+**Documentation:** See [ECOSYSTEM_INTEGRATION.md](docs/ECOSYSTEM_INTEGRATION.md) for detailed integration guide.
+
+---
+
 ## 🧪 Testing
 
 ### Run All Tests
@@ -422,9 +516,10 @@ pytest tests/ --cov=src --cov-report=html
 ```
 
 **Test Coverage:**
-- 36 total tests (180% of requirement)
+- 46 total tests (230% of requirement)
 - 5 model tests
 - 31 utility tests
+- 10 ecosystem export tests
 - 80%+ code coverage
 
 ---
@@ -436,13 +531,24 @@ pytest tests/ --cov=src --cov-report=html
 3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
 4. **Policy Advocacy** - Generate reports for government stakeholders
 5. **Academic Research** - Analyze connectivity's socioeconomic impact
+6. **Failover Testing** - Export data to Hybrid Architecture Simulator for realistic network failover scenarios
+7. **Farm Automation** - Integrate with AgriX-Boost to provide connectivity layer for agricultural IoT and monitoring
 
 ---
 
 ## 🗺️ Roadmap
 
+
+### v1.0.0 (Current) ✅
+- [x] Complete CLI application with ecosystem integration
+- [x] Export data for Hybrid Architecture Simulator (failover testing)
+- [x] Export data for AgriX-Boost (farm dashboards)
+- [x] Ecosystem bundle generation
+- [x] 46 comprehensive tests
+
 ### v1.0.1 (Current Release)
 - [x] Docker containerization ✅ (Moved from v1.1.0)
+
 
 ### v1.1.0 (Q1 2026)
 - [ ] Real-time speedtest integration
@@ -619,12 +725,17 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
+
+- **40+ files** across models, utilities, tests, documentation, exports
+- **5,000+ lines of code** (Python)
+- **46 passing tests** (100% success rate)
 - **32 files** across models, utilities, tests, documentation
 - **3,591 lines of code** (Python)
 - **39 passing tests** (100% success rate)
 - **5 sample cities** with real-world profiles
-- **4 export formats** (JSON, CSV, TXT, HTML)
+- **7 export formats** (JSON, CSV, TXT, HTML, Hybrid Simulator, AgriX-Boost, Ecosystem Bundle)
 - **80%+ test coverage**
+- **3 integrated ecosystem components**
 
 ---
 
@@ -632,8 +743,10 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 *Supporting Starlink's 2026 roadmap to connect 10M rural users and enable 20-30% agricultural productivity gains.*
 
+*Part of the Rural Connectivity Ecosystem 2026 - integrating with Hybrid Architecture Simulator and AgriX-Boost.*
+
 ---
 
-**Release Date:** December 28, 2025  
+**Release Date:** January 3, 2026  
 **Version:** 1.0.0  
 **Status:** Production Ready ✅
