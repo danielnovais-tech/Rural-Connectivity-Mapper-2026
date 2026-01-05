@@ -113,7 +113,7 @@ def test_generate_map_with_starlink_coverage(sample_data, tmp_path):
     assert 'LayerControl' in content or 'layer' in content.lower()
     
     # Should contain legend with coverage information
-    assert 'Legend' in content or 'legend' in content.lower()
+    assert 'map legend' in content.lower()
     
     # Should still contain original connectivity data
     assert 'Starlink' in content
