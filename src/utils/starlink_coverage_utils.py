@@ -6,7 +6,7 @@ Ready to be replaced with official API when available.
 """
 
 import logging
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
 logger = logging.getLogger(__name__)
 
