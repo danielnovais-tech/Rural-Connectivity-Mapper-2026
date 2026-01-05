@@ -7,6 +7,15 @@
 [![Last Commit](https://img.shields.io/github/last-commit/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/commits/main)
 [![Release](https://img.shields.io/github/v/release/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/releases/latest)
 
+
+Python-based tool to map and analyze rural internet connectivity across Latin America, aligned with Starlink's 2026 expansion roadmap.
+
+## 🌍 Overview
+
+The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across Latin America, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+
+**NEW in v1.1:** Real ANATEL & IBGE data integration, Starlink API, Interactive Streamlit Dashboard, and support for 10 LATAM countries!
+
 Python-based tool to map and analyze rural internet connectivity worldwide, aligned with Starlink's 2026 expansion roadmap.
 
 ## 🌍 Overview
@@ -15,11 +24,15 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 **Multi-Country Support:** Now supports 9 countries with country-specific provider lists and localized settings.
 
+
 **Aligned with Starlink's 2026 roadmap:** 10M rural connections & 20-30% agricultural productivity gains.
 
 ---
 
 ## ✨ Features
+
+
+### Core Features
 
 
 - 🌐 **Web Dashboard** - Modern Flask-based GUI with real-time statistics and interactive visualizations
@@ -31,6 +44,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 - ⚡ **CSV Upload Script** - Standalone validator for easy speedtest data import (NEW!)
 
+
 - 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
 
 - 🌎 **Multi-Country Support** - 9 countries supported (BR, US, CA, GB, AU, DE, FR, IN, MX)
@@ -40,7 +54,11 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 
 - 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
+
+- 🛠️ **12 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, ANATEL, IBGE, Starlink, country config
+
 - 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
+
 
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
 - 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
@@ -64,6 +82,18 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
 
+- 🧪 **73 Comprehensive Tests** - 80%+ code coverage with pytest
+
+### NEW Features v1.1
+- 🇧🇷 **ANATEL Integration** - Real Brazilian telecom data from National Telecommunications Agency
+- 📊 **IBGE Integration** - Demographic and geographic data from Brazilian Institute of Statistics
+- 🛰️ **Starlink API** - Check service availability, coverage maps, and service plans
+- 🌎 **LATAM Support** - Support for 10 Latin American countries (BR, AR, CL, CO, MX, PE, EC, UY, PY, BO)
+- 📱 **Streamlit Dashboard** - Interactive web dashboard with real-time data visualization
+- 🗺️ **Country Configurations** - Country-specific data sources, providers, and regulators
+- 🌐 **Multi-language** - Portuguese and Spanish field translations
+
+
 - 🧪 **47 Comprehensive Tests** - 80%+ code coverage with pytest
 - 🔌 **REST API** - Full API for data management and integration
 
@@ -86,6 +116,7 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
 - **🌍 NEW: Crowdsourced Data Collection** - Mobile-friendly web form, API, and CLI for easy data submission
 - 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
+
 
 
 
@@ -129,6 +160,11 @@ requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
 
+streamlit>=1.28.0      # Web dashboard
+streamlit-folium>=0.15.0  # Folium maps in Streamlit
+plotly>=5.17.0         # Interactive charts
+
+
 Flask>=3.0.0           # Web framework
 Flask-CORS>=4.0.0      # CORS support
 
@@ -136,6 +172,7 @@ Flask-CORS>=4.0.0      # CORS support
 scikit-learn>=1.3.0    # Machine learning
 
 babel>=2.14.0          # Internationalization (i18n)
+
 ```
 
 
@@ -245,6 +282,23 @@ docker run --rm rural-connectivity-mapper python main.py --help
 ## 📖 Usage
 
 
+### Quick Start - Streamlit Dashboard (NEW!)
+
+Launch the interactive web dashboard:
+
+```bash
+streamlit run dashboard.py
+```
+
+**Features:**
+- 🌍 Select from 10 LATAM countries
+- 📊 View ANATEL broadband and mobile data
+- 👥 Explore IBGE demographic statistics
+- 🛰️ Check Starlink availability and service plans
+- 🌎 Compare connectivity across LATAM countries
+- 🗺️ Interactive maps with real-time data
+
+
 ### Web Dashboard (NEW! 🎉)
 
 Start the web-based dashboard for a modern GUI experience:
@@ -278,7 +332,7 @@ Then open your browser to `http://localhost:5000`
 ---
 
 ## 📖 CLI Usage
-=======
+
 ### Quick Start - CSV Upload Script ⚡
 
 **Lowest barrier to entry for contributors and rural testers!**
@@ -311,6 +365,7 @@ python upload_csv.py data.csv --dry-run --verbose
 **Optional CSV Columns:** `id`, `city`, `provider`, `latency`, `jitter`, `packet_loss`
 
 See `example_speedtests.csv` for a complete sample file with 10 test locations across Brazil.
+
 
 
 ### Quick Start - Demo Workflow
@@ -450,6 +505,55 @@ python main.py --debug \
   --relatorio html
 ```
 
+
+### Using the New Data Integration Features
+
+#### Fetch ANATEL Data
+```python
+from src.utils import fetch_anatel_broadband_data, fetch_anatel_mobile_data
+
+# Get broadband data
+broadband = fetch_anatel_broadband_data(state='SP')
+
+# Get mobile coverage data
+mobile = fetch_anatel_mobile_data(state='RJ')
+```
+
+#### Fetch IBGE Demographics
+```python
+from src.utils import get_rural_areas_needing_connectivity, get_ibge_statistics_summary
+
+# Get priority rural areas
+priority_areas = get_rural_areas_needing_connectivity()
+
+# Get Brazil connectivity summary
+summary = get_ibge_statistics_summary()
+```
+
+#### Check Starlink Availability
+```python
+from src.utils import check_starlink_availability, get_starlink_service_plans
+
+# Check availability at coordinates
+availability = check_starlink_availability(-15.7801, -47.9292)
+
+# Get service plans
+plans = get_starlink_service_plans()
+```
+
+#### Work with LATAM Countries
+```python
+from src.utils import get_supported_countries, get_country_config
+
+# Get all supported countries
+countries = get_supported_countries()  # ['BR', 'AR', 'CL', 'CO', 'MX', ...]
+
+# Get country configuration
+config = get_country_config('AR')
+print(config.name)  # 'Argentina'
+print(config.telecom_regulator)  # 'ENACOM'
+```
+
 #### Export for Ecosystem Integration
 ```bash
 # Export for Hybrid Architecture Simulator
@@ -462,6 +566,7 @@ python main.py --export agrix
 python main.py --export ecosystem
 ```
 *Generates data exports for integration with Hybrid Architecture Simulator (failover testing) and AgriX-Boost (farm dashboards)*
+
 
 ### CLI Arguments Reference
 
@@ -521,6 +626,8 @@ python main.py --importar google_forms_export.csv --map --relatorio html
 ```
 Rural-Connectivity-Mapper-2026/
 ├── main.py                      # CLI application
+├── dashboard.py                 # NEW: Streamlit web dashboard
+=======
 ├── app.py                       # Flask web application (NEW!)
 ├── upload_csv.py                # 🆕 Standalone CSV upload & validation script
 ├── example_speedtests.csv       # 🆕 Sample CSV with 10 test locations
@@ -542,6 +649,8 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── SpeedTest.py
 │   │   └── QualityScore.py
 │   │
+│   ├── utils/                   # Utility modules (12 modules)
+│   │   ├── validation_utils.py
 │   ├── utils/                   # Utility modules
 │   │   ├── config_utils.py      # Country configuration loader
 │   │   ├── validation_utils.py  # Country-aware validation
@@ -552,6 +661,10 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── simulation_utils.py
 │   │   ├── mapping_utils.py
 │   │   ├── analysis_utils.py
+│   │   ├── anatel_utils.py      # NEW: ANATEL data integration
+│   │   ├── ibge_utils.py        # NEW: IBGE demographics
+│   │   ├── starlink_utils.py    # NEW: Starlink API
+│   │   └── country_config.py    # NEW: LATAM country configs
 │   │   └── ml_utils.py          # **NEW:** ML analysis
 │   │   ├── mapping_utils.py     # Country-specific centers
 │   │   └── analysis_utils.py
@@ -564,6 +677,7 @@ Rural-Connectivity-Mapper-2026/
 │       ├── sample_data_us.csv   # Sample US data
 │       └── pontos.json          # Data storage
 │
+├── tests/                       # Test suite (73 tests)
 ├── tests/                       # Test suite (47 tests)
 ├── tests/                       # Test suite (46 tests)
 ├── tests/                       # Test suite (55 tests)
@@ -584,6 +698,10 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
 │   ├── test_analysis_utils.py
+│   ├── test_anatel_utils.py     # NEW: ANATEL tests
+│   ├── test_ibge_utils.py       # NEW: IBGE tests
+│   ├── test_starlink_utils.py   # NEW: Starlink tests
+│   └── test_country_config.py   # NEW: Country config tests
 │   └── test_app.py             # Web app tests (NEW!)
 │   └── test_ml_utils.py         # **NEW:** ML tests
 │   └── test_upload_csv.py       # 🆕 CSV upload script tests
@@ -884,6 +1002,12 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 
 **Test Coverage:**
 
+- 73 total tests (365% of original requirement)
+- 5 model tests
+- 31 original utility tests
+- 37 new integration tests (ANATEL, IBGE, Starlink, Country Config)
+
+
 - 47 total tests
 - 5 model tests
 - 31 utility tests
@@ -901,13 +1025,18 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 - 10 ecosystem export tests
 
 
+
 - 80%+ code coverage
 
 ---
 
 ## 🌍 Use Cases
 
+
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations across LATAM
+
 1. **Rural Expansion Planning** - Identify priority areas for Starlink installations using ML
+
 2. **ISP Performance Benchmarking** - Compare Starlink vs. traditional providers
 
 3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades with ML predictions
@@ -916,15 +1045,51 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 6. **Starlink Deployment Strategy** - Optimize satellite internet expansion with ML zone recommendations
 
 3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
+
+4. **Policy Advocacy** - Generate reports for government stakeholders using real ANATEL/IBGE data
+5. **Academic Research** - Analyze connectivity's socioeconomic impact with demographic integration
+6. **Cross-Country Analysis** - Compare connectivity metrics across 10 LATAM countries
+7. **Starlink Market Entry** - Assess service availability and competitive landscape
+8. **Digital Divide Studies** - Track rural-urban connectivity gaps with IBGE statistics
+
+---
+
+## 🌎 Supported Countries
+
+The tool now supports **10 Latin American countries**:
+
+| Country | Code | Telecom Regulator | Stats Agency | Starlink Status |
+|---------|------|-------------------|--------------|-----------------|
+| 🇧🇷 Brazil | BR | ANATEL | IBGE | Active (98.5% coverage) |
+| 🇦🇷 Argentina | AR | ENACOM | INDEC | Active (97.0% coverage) |
+| 🇨🇱 Chile | CL | SUBTEL | INE | Active (98.0% coverage) |
+| 🇨🇴 Colombia | CO | CRC | DANE | Active (90.0% coverage) |
+| 🇲🇽 Mexico | MX | IFT | INEGI | Active (95.0% coverage) |
+| 🇵🇪 Peru | PE | OSIPTEL | INEI | Active (88.0% coverage) |
+| 🇪🇨 Ecuador | EC | ARCOTEL | INEC | Active |
+| 🇺🇾 Uruguay | UY | URSEC | INE | Active |
+| 🇵🇾 Paraguay | PY | CONATEL | DGEEC | Active |
+| 🇧🇴 Bolivia | BO | ATT | INE | Active |
+=======
 4. **Policy Advocacy** - Generate reports for government stakeholders
 5. **Academic Research** - Analyze connectivity's socioeconomic impact
 6. **Failover Testing** - Export data to Hybrid Architecture Simulator for realistic network failover scenarios
 7. **Farm Automation** - Integrate with AgriX-Boost to provide connectivity layer for agricultural IoT and monitoring
 
 
+
 ---
 
 ## 🗺️ Roadmap
+
+
+### v1.1.0 (Q1 2026) ✅ COMPLETED
+- [x] Real-time ANATEL data integration
+- [x] IBGE demographics integration  
+- [x] Starlink API integration
+- [x] Streamlit web dashboard
+- [x] Support for 10 LATAM countries
+- [x] Country-specific configurations
 
 
 ### v1.1.0 (Q1 2026) - COMPLETED ✅
@@ -952,6 +1117,9 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 - [ ] GitHub Actions CI/CD
 
 
+### v1.2.0 (Q2 2026)
+
+
 ### v1.2.0 (Q2 2026) - COMPLETED! ✅
 - [x] Web dashboard (Flask)
 - [x] REST API endpoints
@@ -965,6 +1133,12 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 - [ ] GeoJSON/KML export
 
 ### v2.0.0 (H2 2026)
+
+- [ ] Multi-language UI (Portuguese/Spanish/English)
+- [ ] Mobile app for field data collection
+- [ ] Advanced analytics (churn prediction)
+- [ ] Live Starlink satellite tracking
+
 
 - [ ] Additional countries support
 - [x] Multi-language support (Portuguese/English) ✅ **Completed!**
@@ -1082,6 +1256,7 @@ git push origin data/your-location-name
 
 **Every data point helps! Thank you for contributing to better rural connectivity in Brazil! 🇧🇷**
 
+
 ---
 
 ## 🤝 Contributing Code
@@ -1116,6 +1291,14 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 
 - **SpaceX Starlink** - 2026 expansion targets and satellite innovation
+
+- **ANATEL** - Brazilian telecommunications data and regulatory framework
+- **IBGE** - Brazilian demographic and geographic statistics
+- **LATAM Regulators** - ENACOM, SUBTEL, CRC, IFT, OSIPTEL, and others
+- **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
+- **Satellite ISPs** - Viasat, HughesNet for rural comparisons
+- **Open Source Community** - geopy, folium, pytest, pandas, streamlit, plotly
+
 - **Global ISPs** - AT&T, Verizon, Bell, BT, Telstra, Deutsche Telekom and many others
 
 - **SpaceX Starlink** - 2026 expansion targets and Gen2/High Performance dish innovation
@@ -1123,6 +1306,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
 - **Satellite ISPs** - Viasat, HughesNet for rural comparisons
 - **Open Source Community** - geopy, folium, pytest, pandas, scikit-learn
+
 
 ---
 
@@ -1135,6 +1319,15 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ---
 
 ## 📊 Project Statistics
+
+
+- **40 files** across models, utilities, tests, documentation
+- **5,119 lines of code** (Python)
+- **73 passing tests** (100% success rate)
+- **10 LATAM countries** fully configured
+- **4 data sources** (ANATEL, IBGE, Starlink API, Manual)
+- **6 dashboard views** in Streamlit
+- **4 export formats** (JSON, CSV, TXT, HTML)
 
 
 - **35 files** across models, utilities, tests, documentation, web app
@@ -1192,6 +1385,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 
 
+
 - **80%+ test coverage**
 
 - **14 REST API endpoints** for data integration
@@ -1201,14 +1395,30 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ---
 
+
+**🇧🇷 🇦🇷 🇨🇱 🇨🇴 🇲🇽 Made with ❤️ for improving rural connectivity across Latin America**
+
 **🌍 Made with ❤️ for improving rural connectivity worldwide**
 
 *Supporting Starlink's 2026 roadmap to connect 10M rural users globally and enable 20-30% agricultural productivity gains.*
+
 
 *Part of the Rural Connectivity Ecosystem 2026 - integrating with Hybrid Architecture Simulator and AgriX-Boost.*
 
 ---
 
+
+## 📚 Additional Documentation
+
+- **[New Features Guide](docs/NEW_FEATURES.md)** - Comprehensive guide for ANATEL, IBGE, Starlink API, and LATAM support
+- **[API Reference](docs/API.md)** - Full API documentation
+
+---
+
+**Release Date:** January 4, 2026  
+**Version:** 1.1.0  
+
 **Release Date:** January 3, 2026  
 **Version:** 1.0.0  
+
 **Status:** Production Ready ✅

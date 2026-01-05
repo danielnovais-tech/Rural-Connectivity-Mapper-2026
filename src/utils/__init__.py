@@ -16,6 +16,27 @@ from .analysis_utils import (
 
 from .analysis_utils import analyze_temporal_evolution, compare_providers
 from .analysis_utils import analyze_temporal_evolution
+from .anatel_utils import (
+    fetch_anatel_broadband_data,
+    fetch_anatel_mobile_data,
+    get_anatel_provider_stats,
+    convert_anatel_to_connectivity_points
+)
+from .ibge_utils import (
+    fetch_ibge_municipalities,
+    get_rural_areas_needing_connectivity,
+    get_ibge_statistics_summary
+)
+from .starlink_utils import (
+    check_starlink_availability,
+    get_starlink_service_plans,
+    get_starlink_coverage_map
+)
+from .country_config import (
+    get_supported_countries,
+    get_country_config,
+    get_latam_summary
+)
 
 from .ml_utils import (
     predict_improvement_potential,
@@ -63,6 +84,21 @@ __all__ = [
     'generate_map',
     'analyze_temporal_evolution',
 
+    'fetch_anatel_broadband_data',
+    'fetch_anatel_mobile_data',
+    'get_anatel_provider_stats',
+    'convert_anatel_to_connectivity_points',
+    'fetch_ibge_municipalities',
+    'get_rural_areas_needing_connectivity',
+    'get_ibge_statistics_summary',
+    'check_starlink_availability',
+    'get_starlink_service_plans',
+    'get_starlink_coverage_map',
+    'get_supported_countries',
+    'get_country_config',
+    'get_latam_summary'
+
+
     'predict_improvement_potential',
     'identify_expansion_zones',
     'analyze_starlink_roi',
@@ -91,6 +127,7 @@ __all__ = [
     'export_for_hybrid_simulator',
     'export_for_agrix_boost',
     'export_ecosystem_bundle'
+
 
 
 
