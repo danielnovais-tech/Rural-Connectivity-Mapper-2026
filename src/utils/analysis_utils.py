@@ -5,16 +5,19 @@ from typing import List, Dict
 from datetime import datetime
 from collections import defaultdict
 
+from .i18n_utils import get_translation
+
 logger = logging.getLogger(__name__)
 
 
-def analyze_temporal_evolution(data: List[Dict]) -> Dict:
+def analyze_temporal_evolution(data: List[Dict], language: str = 'en') -> Dict:
     """Analyze temporal evolution of connectivity quality.
     
     Groups data by date and calculates statistics to identify trends.
     
     Args:
         data: List of connectivity point dictionaries
+        language: Language code for insights (en, pt). Default: 'en'
         
     Returns:
         Dict: Analysis results with trends and insights
@@ -87,27 +90,27 @@ def analyze_temporal_evolution(data: List[Dict]) -> Dict:
             'max_quality_score': round(max(all_scores), 2) if all_scores else 0
         }
         
-        # Generate insights
+        # Generate insights with translations
         insights = []
         
         if trends['avg_quality_score'] >= 80:
-            insights.append("Overall connectivity quality is excellent across all points")
+            insights.append(get_translation('insight_excellent_quality', language))
         elif trends['avg_quality_score'] >= 60:
-            insights.append("Overall connectivity quality is good with room for improvement")
+            insights.append(get_translation('insight_good_quality', language))
         else:
-            insights.append("Overall connectivity quality needs significant improvement")
+            insights.append(get_translation('insight_poor_quality', language))
         
         if trends['avg_download'] >= 100:
-            insights.append("Download speeds meet Starlink 2026 target expectations")
+            insights.append(get_translation('insight_download_excellent', language))
         elif trends['avg_download'] >= 50:
-            insights.append("Download speeds are acceptable but below optimal targets")
+            insights.append(get_translation('insight_download_good', language))
         else:
-            insights.append("Download speeds are below target thresholds")
+            insights.append(get_translation('insight_download_poor', language))
         
         if trends['avg_latency'] <= 40:
-            insights.append("Latency is within Starlink 2026 target range")
+            insights.append(get_translation('insight_latency_good', language))
         else:
-            insights.append("Latency exceeds target thresholds and needs optimization")
+            insights.append(get_translation('insight_latency_poor', language))
         
         # Analyze by provider
         provider_stats = defaultdict(list)
@@ -125,7 +128,8 @@ def analyze_temporal_evolution(data: List[Dict]) -> Dict:
                 best_provider = provider
         
         if best_provider:
-            insights.append(f"{best_provider} shows the best average quality score ({best_avg:.1f}/100)")
+            insights.append(get_translation('insight_best_provider', language, 
+                                          provider=best_provider, score=f"{best_avg:.1f}"))
         
         # Prepare date range
         dates = sorted(daily_data.keys())
@@ -155,4 +159,202 @@ def analyze_temporal_evolution(data: List[Dict]) -> Dict:
     
     except Exception as e:
         logger.error(f"Error analyzing temporal evolution: {e}")
+        raise
+
+
+def compare_providers(data: List[Dict]) -> Dict:
+    """Compare ISP performance with detailed metrics analysis.
+    
+    Analyzes and compares providers including satellite-specific metrics
+    like jitter, packet loss, and obstruction for Starlink comparisons.
+    
+    Args:
+        data: List of connectivity point dictionaries
+        
+    Returns:
+        Dict: Detailed provider comparison with metrics breakdown
+    """
+    try:
+        logger.info(f"Comparing providers across {len(data)} points...")
+        
+        if not data:
+            logger.warning("No data provided for provider comparison")
+            return {'providers': {}}
+        
+        # Collect metrics by provider
+        provider_metrics = defaultdict(lambda: {
+            'quality_scores': [],
+            'download_speeds': [],
+            'upload_speeds': [],
+            'latencies': [],
+            'jitters': [],
+            'packet_losses': [],
+            'obstructions': [],
+            'stabilities': []
+        })
+        
+        for point in data:
+            provider = point.get('provider', 'Unknown')
+            quality_score = point.get('quality_score', {})
+            speed_test = point.get('speed_test', {})
+            
+            provider_metrics[provider]['quality_scores'].append(
+                quality_score.get('overall_score', 0)
+            )
+            provider_metrics[provider]['download_speeds'].append(
+                speed_test.get('download', 0)
+            )
+            provider_metrics[provider]['upload_speeds'].append(
+                speed_test.get('upload', 0)
+            )
+            provider_metrics[provider]['latencies'].append(
+                speed_test.get('latency', 0)
+            )
+            provider_metrics[provider]['jitters'].append(
+                speed_test.get('jitter', 0)
+            )
+            provider_metrics[provider]['packet_losses'].append(
+                speed_test.get('packet_loss', 0)
+            )
+            provider_metrics[provider]['obstructions'].append(
+                speed_test.get('obstruction', 0)
+            )
+            provider_metrics[provider]['stabilities'].append(
+                speed_test.get('stability', 0)
+            )
+        
+        # Calculate statistics for each provider
+        providers_summary = {}
+        
+        def calculate_avg(lst):
+            """Helper to calculate average of a list."""
+            return round(sum(lst) / len(lst), 2) if lst else 0
+        
+        def calculate_max(lst):
+            """Helper to calculate max of a list."""
+            return round(max(lst), 2) if lst else 0
+        
+        def calculate_min(lst):
+            """Helper to calculate min of a list."""
+            return round(min(lst), 2) if lst else 0
+        
+        for provider, metrics in provider_metrics.items():
+            providers_summary[provider] = {
+                'count': len(metrics['quality_scores']),
+                'quality_score': {
+                    'avg': calculate_avg(metrics['quality_scores']),
+                    'min': calculate_min(metrics['quality_scores']),
+                    'max': calculate_max(metrics['quality_scores'])
+                },
+                'download': {
+                    'avg': calculate_avg(metrics['download_speeds']),
+                    'min': calculate_min(metrics['download_speeds']),
+                    'max': calculate_max(metrics['download_speeds'])
+                },
+                'upload': {
+                    'avg': calculate_avg(metrics['upload_speeds']),
+                    'min': calculate_min(metrics['upload_speeds']),
+                    'max': calculate_max(metrics['upload_speeds'])
+                },
+                'latency': {
+                    'avg': calculate_avg(metrics['latencies']),
+                    'min': calculate_min(metrics['latencies']),
+                    'max': calculate_max(metrics['latencies'])
+                },
+                'jitter': {
+                    'avg': calculate_avg(metrics['jitters']),
+                    'min': calculate_min(metrics['jitters']),
+                    'max': calculate_max(metrics['jitters'])
+                },
+                'packet_loss': {
+                    'avg': calculate_avg(metrics['packet_losses']),
+                    'min': calculate_min(metrics['packet_losses']),
+                    'max': calculate_max(metrics['packet_losses'])
+                },
+                'obstruction': {
+                    'avg': calculate_avg(metrics['obstructions']),
+                    'min': calculate_min(metrics['obstructions']),
+                    'max': calculate_max(metrics['obstructions'])
+                },
+                'stability': {
+                    'avg': calculate_avg(metrics['stabilities']),
+                    'min': calculate_min(metrics['stabilities']),
+                    'max': calculate_max(metrics['stabilities'])
+                }
+            }
+        
+        # Identify satellite providers (Starlink variants, Viasat, HughesNet)
+        satellite_providers = [
+            p for p in providers_summary.keys() 
+            if any(sat in p for sat in ['Starlink', 'Viasat', 'HughesNet'])
+        ]
+        
+        # Generate insights
+        insights = []
+        
+        # Find best provider overall
+        best_provider = max(
+            providers_summary.items(),
+            key=lambda x: x[1]['quality_score']['avg']
+        )
+        insights.append(
+            f"{best_provider[0]} leads with {best_provider[1]['quality_score']['avg']}/100 average quality score"
+        )
+        
+        # Compare Starlink variants if present
+        starlink_variants = [p for p in satellite_providers if 'Starlink' in p]
+        if len(starlink_variants) >= 2:
+            starlink_comparison = {
+                p: providers_summary[p] for p in starlink_variants
+            }
+            best_starlink = max(
+                starlink_comparison.items(),
+                key=lambda x: x[1]['quality_score']['avg']
+            )
+            insights.append(
+                f"Among Starlink options, {best_starlink[0]} performs best with "
+                f"{best_starlink[1]['download']['avg']} Mbps avg download and "
+                f"{best_starlink[1]['obstruction']['avg']}% avg obstruction"
+            )
+        
+        # Satellite vs terrestrial comparison
+        if satellite_providers:
+            terrestrial_providers = [
+                p for p in providers_summary.keys() 
+                if p not in satellite_providers
+            ]
+            
+            if terrestrial_providers:
+                sat_avg_latency = calculate_avg([
+                    providers_summary[p]['latency']['avg'] 
+                    for p in satellite_providers
+                ])
+                terr_avg_latency = calculate_avg([
+                    providers_summary[p]['latency']['avg'] 
+                    for p in terrestrial_providers
+                ])
+                
+                if sat_avg_latency < terr_avg_latency:
+                    insights.append(
+                        f"Satellite providers show lower latency ({sat_avg_latency} ms) "
+                        f"compared to terrestrial ({terr_avg_latency} ms)"
+                    )
+                else:
+                    insights.append(
+                        f"Terrestrial providers have lower latency ({terr_avg_latency} ms) "
+                        f"vs satellite ({sat_avg_latency} ms)"
+                    )
+        
+        result = {
+            'total_providers': len(providers_summary),
+            'providers': providers_summary,
+            'satellite_providers': satellite_providers,
+            'insights': insights
+        }
+        
+        logger.info("Provider comparison completed")
+        return result
+    
+    except Exception as e:
+        logger.error(f"Error comparing providers: {e}")
         raise

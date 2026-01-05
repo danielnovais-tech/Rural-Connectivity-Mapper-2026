@@ -4,7 +4,12 @@ import logging
 import time
 from typing import Optional, Tuple
 from geopy.geocoders import Nominatim
+
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError, GeocoderUnavailable, GeocoderQuotaExceeded
+
+from geopy.exc import GeocoderTimedOut, GeocoderServiceError
+from .config_utils import get_language, get_default_country
+
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +19,7 @@ geolocator = Nominatim(user_agent="rural-connectivity-mapper-2026")
 # Rate limiting configuration (Nominatim allows 1 request per second)
 RATE_LIMIT_DELAY = 1.0  # seconds between requests
 _last_request_time = 0
+
 
 
 def _wait_for_rate_limit():
@@ -35,6 +41,13 @@ def geocode_coordinates(
     longitude: float,
     timeout: int = 10,
     max_retries: int = 3
+
+def geocode_coordinates(
+    latitude: float, 
+    longitude: float, 
+    timeout: int = 10,
+    country_code: Optional[str] = None
+
 ) -> Optional[str]:
     """Convert coordinates to address using reverse geocoding.
     
@@ -42,13 +55,18 @@ def geocode_coordinates(
         latitude: Latitude coordinate
         longitude: Longitude coordinate
         timeout: Request timeout in seconds (default: 10)
+
         max_retries: Maximum number of retry attempts (default: 3)
+
+        country_code: ISO country code for language preference (default: uses default country)
+
         
     Returns:
         Optional[str]: Address string if successful, None otherwise
     """
     # Validate coordinates first
     try:
+
         lat = float(latitude)
         lon = float(longitude)
         if lat < -90 or lat > 90 or lon < -180 or lon > 180:
@@ -78,6 +96,20 @@ def geocode_coordinates(
             else:
                 logger.warning(f"No address found for coordinates ({latitude}, {longitude})")
                 return None
+
+        logger.debug(f"Geocoding coordinates: ({latitude}, {longitude})")
+        
+        # Determine language from country code
+        if country_code is None:
+            country_code = get_default_country()
+        language = get_language(country_code)
+        
+        location = geolocator.reverse(
+            f"{latitude}, {longitude}",
+            timeout=timeout,
+            language=language
+        )
+
         
         except GeocoderTimedOut:
             logger.warning(f"Geocoding timeout for coordinates ({latitude}, {longitude}) - Attempt {attempt + 1}/{max_retries}")
@@ -116,19 +148,34 @@ def geocode_coordinates(
 
 
 def geocode_address(
+
     address: str,
     timeout: int = 10,
     max_retries: int = 3
+
+    address: str, 
+    timeout: int = 10,
+    country_code: Optional[str] = None
+
 ) -> Optional[Tuple[float, float]]:
     """Convert address to coordinates using forward geocoding.
     
     Args:
         address: Address string to geocode
         timeout: Request timeout in seconds (default: 10)
+
         max_retries: Maximum number of retry attempts (default: 3)
+
+        country_code: ISO country code (optional, for future enhancements)
+
         
     Returns:
         Optional[Tuple[float, float]]: (latitude, longitude) if successful, None otherwise
+        
+    Note:
+        The country_code parameter is currently used for API consistency but not 
+        applied to Nominatim's geocode method, which primarily uses address content
+        to determine location.
     """
     if not address or not isinstance(address, str):
         logger.error(f"Invalid address: {address}")
