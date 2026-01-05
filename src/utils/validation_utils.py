@@ -184,7 +184,10 @@ def validate_csv_row(row: Dict[str, str], row_num: int) -> Tuple[bool, str]:
                         return False, f"Row {row_num}: Invalid {field} {value} (must be between {min_val} and {max_val})"
                         
             except (ValueError, TypeError) as e:
-                return False, f"Row {row_num}: Invalid numeric value for {field}: {row[field]}"
+                return False, (
+                    f"Row {row_num}: Invalid numeric value for {field}: {row[field]} "
+                    f"(error: {e})"
+                )
     
     # Validate provider
     if row['provider'] not in KNOWN_PROVIDERS:
