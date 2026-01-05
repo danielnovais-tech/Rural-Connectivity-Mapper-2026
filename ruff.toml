@@ -13,9 +13,6 @@ select = [
     "UP",  # pyupgrade
     "B",   # flake8-bugbear
 ]
-ignore = [
-    "E501",  # line too long (handled by line-length)
-]
 
 [lint.per-file-ignores]
 "__init__.py" = ["F401"]
