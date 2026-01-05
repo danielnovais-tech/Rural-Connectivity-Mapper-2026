@@ -17,6 +17,12 @@ This document provides comprehensive deployment instructions, configuration deta
 9. [Troubleshooting](#troubleshooting)
 10. [Performance Considerations](#performance-considerations)
 11. [Security Notes](#security-notes)
+12. [Feature Flags](#feature-flags)
+13. [Monitoring and Logging](#monitoring-and-logging)
+14. [Support and Escalation](#support-and-escalation)
+15. [Version History](#version-history)
+16. [Next Release Preview](#next-release-preview)
+17. [Checklist: First-Time Deployment](#checklist-first-time-deployment)
 
 ---
 
