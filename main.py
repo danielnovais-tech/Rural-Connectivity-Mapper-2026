@@ -205,6 +205,14 @@ Examples:
     # Get country code
     country_code = args.country if args.country else get_default_country()
     logger.info(f"Using country: {country_code}")
+
+    # Validate country code early to provide clear feedback
+    available_countries = list_available_countries()
+    if country_code not in available_countries:
+        logger.error(f"Invalid country code: {country_code}")
+        print(f"Error: '{country_code}' is not a valid country code.")
+        print("Use --list-countries to see all available country codes.")
+        sys.exit(1)
     
     # Check if any action was specified
     if not any([args.importar, args.relatorio, args.simulate, args.map, args.analyze, args.export]):
