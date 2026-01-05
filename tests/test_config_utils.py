@@ -73,7 +73,8 @@ def test_get_providers():
     us_providers = get_providers('US')
     
     assert isinstance(us_providers, list)
-    assert 'Verizon' in us_providers or 'AT&T' in us_providers
+    assert 'Verizon' in us_providers
+    assert 'AT&T' in us_providers
 
 
 def test_get_language():
