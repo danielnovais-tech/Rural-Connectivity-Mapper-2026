@@ -1,0 +1,241 @@
+name: Feature Request
+
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement"]
+
+description: Suggest a new feature or enhancement for the Rural Connectivity Mapper
+title: "[Feature]: "
+labels: ["enhancement", "feature-request"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+
+        Thanks for suggesting a feature! Please fill out the form below.
+  
+
+        Thanks for suggesting a new feature! Please fill out the form below to help us understand your request.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Critical - Blocking my use of the tool
+        - High - Would significantly improve my workflow
+        - Medium - Nice to have
+        - Low - Minor enhancement
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: Which area does this feature relate to?
+      options:
+        - Data Collection & Measurement
+        - Data Analysis & Reporting
+        - Visualization & Mapping
+        - CLI/User Interface
+        - Data Import/Export
+        - Provider Integration
+        - Performance & Optimization
+        - Testing & Quality Assurance
+        - Documentation
+        - Infrastructure & Deployment
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: use-case
+    attributes:
+      label: Primary Use Case
+      description: Who would benefit most from this feature?
+      options:
+        - Rural Expansion Planning
+        - ISP Performance Benchmarking
+        - Infrastructure ROI Modeling
+        - Policy Advocacy
+        - Academic Research
+        - General Users
+        - Developers/Contributors
+    validations:
+      required: false
+
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+  
+
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+
+      description: Describe the solution you'd like
+      placeholder: Describe your proposed solution...
+    validations:
+      required: true
+  
+
+      description: Describe the solution you'd like to see
+      placeholder: I would like to see...
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+
+      description: Describe any alternative solutions or features you've considered
+      placeholder: What other approaches did you consider?
+    validations:
+      required: false
+  
+  - type: dropdown
+    id: estimated-effort
+    attributes:
+      label: Estimated Effort
+      description: Your rough estimate of the effort required to implement this feature
+      options:
+        - S (Small - < 2 hours)
+        - M (Medium - 2-8 hours)
+        - L (Large - > 8 hours)
+        - XL (Extra Large - > 1 week)
+        - Unknown
+      default: 4
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+      default: 1
+    validations:
+      required: true
+  
+  - type: checkboxes
+    id: affected-areas
+    attributes:
+      label: Affected Areas
+      description: Which parts of the project would this feature affect?
+      options:
+        - label: CLI Application
+        - label: Data Models
+        - label: Utilities
+        - label: Reporting
+        - label: Mapping
+        - label: Documentation
+        - label: Testing
+        - label: Other
+  
+
+      description: Have you considered any alternative solutions or features?
+      placeholder: I've also thought about...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: starlink-alignment
+    attributes:
+      label: Starlink 2026 Alignment
+      description: Does this feature align with Starlink's 2026 expansion goals?
+      options:
+        - Not applicable
+        - Yes - Supports 10M rural connections target
+        - Yes - Enables 20-30% agricultural productivity gains
+        - Yes - Improves connectivity measurement accuracy
+        - Yes - Other alignment
+    validations:
+      required: false
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Expected Benefits
+      description: What are the expected benefits of this feature?
+      placeholder: |
+        - Benefit 1
+        - Benefit 2
+        - Benefit 3
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical-details
+    attributes:
+      label: Technical Details (Optional)
+      description: Any technical implementation ideas or requirements?
+      placeholder: This could be implemented using...
+    validations:
+      required: false
+
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+
+      description: Add any other context, mockups, or examples about the feature request here
+      placeholder: Screenshots, diagrams, code examples, etc.
+    validations:
+      required: false
+  
+
+      description: Add any other context, screenshots, mockups, or examples
+      placeholder: Screenshots, links to similar features, etc.
+    validations:
+      required: false
+
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+
+      description: Are you willing to contribute to this feature?
+      options:
+        - label: I am willing to submit a PR for this feature
+
+      description: Would you be willing to contribute to this feature?
+      options:
+        - label: I would be willing to submit a PR for this feature
+          required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      description: Please confirm the following
+      options:
+        - label: I have searched existing issues and feature requests
+          required: true
+        - label: This feature aligns with the project's goals
+          required: true
+

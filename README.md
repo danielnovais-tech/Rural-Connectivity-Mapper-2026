@@ -23,14 +23,21 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 - 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
+- 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink, Viasat, HughesNet, Claro, etc.)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+
 - 🔗 **Ecosystem Integration** - Export data for Hybrid Architecture Simulator & AgriX-Boost
 - 🧪 **46 Comprehensive Tests** - 80%+ code coverage with pytest
+- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
+- **🌍 NEW: Crowdsourced Data Collection** - Mobile-friendly web form, API, and CLI for easy data submission
+- 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
+
+
 
 ---
 
@@ -69,6 +76,106 @@ folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
 ```
 
+
+**💡 For production deployments, migrations, and rollback procedures, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+
+### 🐳 Docker Installation (Recommended for Rural Deployments)
+
+Docker containerization simplifies deployment on rural servers, Raspberry Pi, or farm test environments by avoiding dependency conflicts (including speedtest-cli issues).
+
+#### Prerequisites
+- Docker installed ([Get Docker](https://docs.docker.com/get-docker/))
+- Docker Compose (optional, included with Docker Desktop)
+
+#### Quick Start with Docker
+
+**Option 1: Using Docker Compose (Easiest)**
+
+```bash
+# Clone the repository
+git clone https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026.git
+cd Rural-Connectivity-Mapper-2026
+
+# Run demo workflow in container
+docker compose up
+
+# Generated reports will be in the current directory:
+# - demo_report.json, .csv, .txt, .html
+# - demo_connectivity_map.html
+```
+
+**Option 2: Using Docker directly**
+
+```bash
+# Build the Docker image
+docker build -t rural-connectivity-mapper .
+
+# Run demo workflow (files generated inside container)
+docker run --rm rural-connectivity-mapper
+
+# Run demo workflow with volume mount to persist files in current directory
+docker run --rm -v $(pwd):/app rural-connectivity-mapper
+
+# Run CLI commands with volume mount
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --relatorio html
+
+# Run with debug mode
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --debug --simulate --map --analyze
+```
+
+#### Docker CLI Examples
+
+```bash
+# Generate all report formats
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --relatorio json
+
+# Create interactive map
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --map
+
+# Simulate router improvements and analyze
+docker run --rm -v $(pwd):/app rural-connectivity-mapper \
+  python main.py --importar src/data/sample_data.csv --simulate --analyze --relatorio html
+
+# Use custom CSV data
+docker run --rm \
+  -v $(pwd):/app \
+  -v $(pwd)/my_data.csv:/app/data.csv \
+  rural-connectivity-mapper \
+  python main.py --importar /app/data.csv --map --relatorio json
+
+# Run with Docker Compose for one-off commands
+docker compose run --rm rural-mapper python main.py --help
+docker compose run --rm rural-mapper python main.py --importar src/data/sample_data.csv --map
+```
+
+#### Production Deployment Notes
+
+For production environments, consider these security best practices:
+
+```bash
+# Use specific volume mounts instead of mounting entire directory
+docker run --rm \
+  -v $(pwd)/src/data:/app/src/data:ro \
+  -v $(pwd)/output:/app/output \
+  rural-connectivity-mapper
+
+# Or run without volume mounts for isolated operation
+docker run --rm rural-connectivity-mapper python main.py --help
+```
+
+#### Benefits for Rural Deployments
+- ✅ **No dependency conflicts** - All dependencies pre-installed
+- ✅ **Works on Raspberry Pi** - ARM-compatible base image
+- ✅ **Consistent environment** - Same behavior across all systems
+- ✅ **Easy updates** - Just pull new image
+- ✅ **Isolated from host** - Won't affect local Python environment
+- ✅ **Speedtest-cli included** - No manual installation needed
+
+
 ---
 
 ## 📖 Usage
@@ -87,6 +194,31 @@ python demo_workflow.py
 - Console output with statistics
 
 ### CLI Commands
+
+#### 🌍 Crowdsourced Data Collection (NEW!)
+
+**Start the web server for data collection:**
+```bash
+python crowdsource_server.py
+```
+*Opens a mobile-friendly web form at http://localhost:5000*
+
+**Submit data via command line:**
+```bash
+# Interactive mode - guided prompts
+python submit_speedtest.py
+
+# Direct submission with arguments
+python submit_speedtest.py -lat -23.5505 -lon -46.6333 \
+  -p Starlink -d 150.0 -u 20.0 -l 30.0
+
+# Auto-run speedtest and submit
+python submit_speedtest.py --auto-speedtest -p Starlink
+```
+
+**See full crowdsourcing guide:** [docs/CROWDSOURCING.md](docs/CROWDSOURCING.md)
+
+---
 
 #### Import Data
 ```bash
@@ -111,7 +243,13 @@ python main.py --simulate
 ```bash
 python main.py --map
 ```
-*Generates Folium HTML map with color-coded markers*
+*Generates Folium HTML map with color-coded markers and Starlink coverage overlay*
+
+#### Create Map Without Starlink Coverage
+```bash
+python main.py --map --no-starlink-coverage
+```
+*Generates map without the coverage layer for simplified view*
 
 #### Analyze Temporal Evolution
 ```bash
@@ -156,8 +294,41 @@ python main.py --export ecosystem
 | `--importar <csv>` | Import from CSV | Path to file |
 | `--simulate` | Simulate router impact | Flag |
 | `--map` | Generate interactive map | Flag |
+| `--no-starlink-coverage` | Disable Starlink coverage overlay | Flag (use with --map) |
 | `--analyze` | Analyze temporal trends | Flag |
 | `--export <target>` | Export for ecosystem integration | hybrid, agrix, ecosystem |
+
+### Alternative Data Submission Methods
+
+#### 📝 Google Forms Integration (Recommended for Non-Technical Users)
+
+For users who are not comfortable with CSV files or command-line tools, we provide **Google Forms integration** as an easy alternative for data collection.
+
+**Benefits:**
+- ✅ No technical knowledge required
+- ✅ Mobile-friendly for field data collection
+- ✅ Free and easy to share
+- ✅ Automatic data validation
+- ✅ Exports to CSV format compatible with the mapper
+
+**Quick Start:**
+1. Create a Google Form using our template
+2. Share the form link with users
+3. Collect responses in Google Sheets
+4. Export to CSV and import using `--importar`
+
+**📖 Complete Guide:** See [docs/GOOGLE_FORMS_INTEGRATION.md](docs/GOOGLE_FORMS_INTEGRATION.md) for detailed instructions on:
+- Setting up your Google Form
+- Configuring fields and validation
+- Exporting and formatting data
+- Importing into the mapper
+- Troubleshooting common issues
+
+**Example Workflow:**
+```bash
+# After exporting from Google Forms to CSV
+python main.py --importar google_forms_export.csv --map --relatorio html
+```
 
 ---
 
@@ -169,6 +340,7 @@ Rural-Connectivity-Mapper-2026/
 ├── demo_workflow.py             # Complete demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
+├── DEPLOYMENT.md                # Deployment notes
 ├── LICENSE                      # MIT License
 ├── .gitignore                   # Git ignore
 │
@@ -194,6 +366,12 @@ Rural-Connectivity-Mapper-2026/
 │       └── pontos.json          # Data storage
 │
 ├── tests/                       # Test suite (46 tests)
+├── examples/                    # CSV templates for contributions
+│   ├── README.md                # Template documentation
+│   ├── speedtest_template_basic.csv
+│   └── speedtest_template_complete.csv
+│
+├── tests/                       # Test suite (36 tests)
 │   ├── test_models.py
 │   ├── test_validation_utils.py
 │   ├── test_data_utils.py
@@ -216,6 +394,10 @@ Rural-Connectivity-Mapper-2026/
         ├── hybrid_simulator_input.json
         ├── agrix_boost_connectivity.json
         └── ecosystem_manifest.json
+└── docs/
+    ├── API.md                   # API reference
+    └── GOOGLE_FORMS_INTEGRATION.md  # Google Forms setup guide
+
 ```
 
 ---
@@ -356,6 +538,7 @@ pytest tests/ --cov=src --cov-report=html
 
 ## 🗺️ Roadmap
 
+
 ### v1.0.0 (Current) ✅
 - [x] Complete CLI application with ecosystem integration
 - [x] Export data for Hybrid Architecture Simulator (failover testing)
@@ -363,11 +546,14 @@ pytest tests/ --cov=src --cov-report=html
 - [x] Ecosystem bundle generation
 - [x] 46 comprehensive tests
 
+### v1.0.1 (Current Release)
+- [x] Docker containerization ✅ (Moved from v1.1.0)
+
+
 ### v1.1.0 (Q1 2026)
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
-- [ ] Docker containerization
 
 ### v1.2.0 (Q2 2026)
 - [ ] Web dashboard (Flask/Streamlit)
@@ -383,9 +569,118 @@ pytest tests/ --cov=src --cov-report=html
 
 ---
 
-## 🤝 Contributing
+## 📊 How to Contribute Your Speedtest Data
 
-Contributions welcome! Please:
+Help us map rural connectivity across Brazil! Your speedtest data is valuable for:
+- 🗺️ Identifying underserved areas
+- 📈 Tracking ISP performance over time
+- 🎯 Supporting Starlink's 2026 expansion planning
+- 📊 Advocating for better rural internet policies
+
+### Quick Contribution Guide
+
+#### 1️⃣ Download a Template
+
+Choose one of the ready-made CSV templates from the [`/examples/`](examples/) directory:
+
+- **[Basic Template](examples/speedtest_template_basic.csv)** - Simple template with one example entry
+- **[Complete Template](examples/speedtest_template_complete.csv)** - Template with 5 example entries
+
+Or download directly:
+```bash
+curl -O https://raw.githubusercontent.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/main/examples/speedtest_template_basic.csv
+```
+
+#### 2️⃣ Run a Speedtest
+
+Use any of these tools to measure your internet speed:
+
+**Online Tools:**
+- [Speedtest.net](https://www.speedtest.net/) (recommended)
+- [Fast.com](https://fast.com/)
+- [CloudFlare Speed Test](https://speed.cloudflare.com/)
+
+**Command Line:**
+```bash
+pip install speedtest-cli
+speedtest-cli --simple
+```
+
+#### 3️⃣ Fill in Your Data
+
+Edit the CSV template with your results:
+
+| Field | How to Fill | Example |
+|-------|-------------|---------|
+| `id` | Any unique number | 1 |
+| `city` | Your city/location | "Campinas" |
+| `provider` | Your ISP name | "Starlink" |
+| `latitude` | GPS coordinate | -22.9099 |
+| `longitude` | GPS coordinate | -47.0626 |
+| `download` | Download speed (Mbps) | 150.5 |
+| `upload` | Upload speed (Mbps) | 20.3 |
+| `latency` | Ping time (ms) | 28.0 |
+| `jitter` | Jitter (ms) - optional | 3.5 |
+| `packet_loss` | Packet loss (%) - optional | 0.2 |
+| `timestamp` | ISO 8601 format (optional) | 2026-01-15T10:00:00 |
+
+**💡 Tip:** Use [Google Maps](https://www.google.com/maps) to find coordinates - right-click on your location and click the coordinates to copy them.
+
+#### 4️⃣ Submit Your Data
+
+Choose one of these methods:
+
+**Method A: GitHub Pull Request** (Recommended)
+```bash
+# Fork the repository first, then:
+git clone https://github.com/YOUR-USERNAME/Rural-Connectivity-Mapper-2026.git
+cd Rural-Connectivity-Mapper-2026
+git checkout -b data/your-location-name
+
+# Add your CSV file to src/data/ or submit as attachment
+git add your_speedtest_data.csv
+git commit -m "Add speedtest data for [Your City]"
+git push origin data/your-location-name
+
+# Open a Pull Request on GitHub
+```
+
+**Method B: GitHub Issue**
+1. Go to [Issues](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/issues/new)
+2. Title: "Speedtest Data: [Your City]"
+3. Attach your CSV file or paste the data
+4. Add any relevant context (time of day, weather conditions, etc.)
+
+**Method C: Email/Contact**
+- Submit via [GitHub Discussions](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/discussions)
+
+### Data Quality Guidelines
+
+✅ **Do:**
+- Run 3-5 tests and use average values
+- Test at different times of day
+- Close bandwidth-intensive applications
+- Note any unusual conditions (weather, network congestion)
+- Use accurate GPS coordinates
+
+❌ **Don't:**
+- Submit fake or estimated data
+- Include personally identifiable information
+- Submit duplicate measurements without time gaps
+
+### Need Help?
+
+📖 Full documentation in [`/examples/README.md`](examples/README.md)  
+💬 Questions? Open a [Discussion](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/discussions)  
+🐛 Issues? Report a [Bug](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/issues)
+
+**Every data point helps! Thank you for contributing to better rural connectivity in Brazil! 🇧🇷**
+
+---
+
+## 🤝 Contributing Code
+
+Developer contributions are also welcome! Please:
 
 1. Fork the repository
 2. Create feature branch: `git checkout -b feature/amazing-feature`
@@ -397,8 +692,9 @@ Contributions welcome! Please:
 - Add docstrings (Google-style)
 - Include tests for new features
 - Update documentation
+- **Estimate effort** when creating issues (S/M/L/XL or hours)
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for full details.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full details including effort estimation guidelines.
 
 ---
 
@@ -429,9 +725,13 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 📊 Project Statistics
 
+
 - **40+ files** across models, utilities, tests, documentation, exports
 - **5,000+ lines of code** (Python)
 - **46 passing tests** (100% success rate)
+- **32 files** across models, utilities, tests, documentation
+- **3,591 lines of code** (Python)
+- **39 passing tests** (100% success rate)
 - **5 sample cities** with real-world profiles
 - **7 export formats** (JSON, CSV, TXT, HTML, Hybrid Simulator, AgriX-Boost, Ecosystem Bundle)
 - **80%+ test coverage**
