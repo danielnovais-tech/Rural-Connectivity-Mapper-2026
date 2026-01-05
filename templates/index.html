@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rural Connectivity Mapper 2026 - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .rating-excellent {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .rating-good {
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        .rating-fair {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .rating-poor {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            height: 300px;
+        }
+
+        .provider-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        #mapFrame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .insights-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insights-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f9fafb;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .insights-list li:before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Rural Connectivity Mapper 2026</h1>
+            <p class="subtitle">Analyzing rural internet connectivity across Brazil - Real-time Dashboard</p>
+        </header>
+
+        <div id="message"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Points</div>
+                <div class="stat-value" id="totalPoints">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Quality Score</div>
+                <div class="stat-value" id="avgQuality">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Download</div>
+                <div class="stat-value" id="avgDownload">-</div>
+                <div class="stat-label">Mbps</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Latency</div>
+                <div class="stat-value" id="avgLatency">-</div>
+                <div class="stat-label">ms</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="panel">
+                <h2>📊 Connectivity Data</h2>
+                <div id="dataLoading" class="loading">Loading data...</div>
+                <div id="dataTableContainer"></div>
+            </div>
+
+            <div class="panel">
+                <h2>🏢 Provider Distribution</h2>
+                <div id="providerStats"></div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="panel">
+                <h2>📈 Rating Distribution</h2>
+                <div id="ratingStats"></div>
+            </div>
+
+            <div class="panel">
+                <h2>💡 Key Insights</h2>
+                <div id="insights"></div>
+            </div>
+        </div>
+
+        <div class="panel full-width">
+            <h2>🗺️ Interactive Connectivity Map</h2>
+            <div class="actions">
+                <button onclick="loadMap()">Load Map</button>
+                <button onclick="refreshData()">Refresh Data</button>
+                <button onclick="simulateImprovement()">Simulate Router Impact</button>
+                <button onclick="downloadReport('json')">Download JSON</button>
+                <button onclick="downloadReport('csv')">Download CSV</button>
+                <button onclick="downloadReport('html')">Download HTML</button>
+            </div>
+            <div id="mapContainer" style="margin-top: 20px;">
+                <p style="color: #666; text-align: center; padding: 20px;">Click "Load Map" to view the interactive connectivity map</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API base URL
+        const API_BASE = '/api';
+
+        // Show message
+        function showMessage(message, type = 'success') {
+            const msgDiv = document.getElementById('message');
+            msgDiv.className = type;
+            msgDiv.textContent = message;
+            setTimeout(() => {
+                msgDiv.textContent = '';
+                msgDiv.className = '';
+            }, 5000);
+        }
+
+        // Load statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_BASE}/statistics`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const stats = result.statistics;
+                    document.getElementById('totalPoints').textContent = stats.total_points;
+                    document.getElementById('avgQuality').textContent = stats.avg_quality_score;
+                    document.getElementById('avgDownload').textContent = stats.avg_download;
+                    document.getElementById('avgLatency').textContent = stats.avg_latency;
+
+                    // Provider distribution
+                    let providerHTML = '<div class="data-table-wrapper"><table class="data-table"><thead><tr><th>Provider</th><th>Count</th></tr></thead><tbody>';
+                    for (const [provider, count] of Object.entries(stats.providers || {})) {
+                        providerHTML += `<tr><td><span class="provider-badge">${provider}</span></td><td>${count}</td></tr>`;
+                    }
+                    providerHTML += '</tbody></table></div>';
+                    document.getElementById('providerStats').innerHTML = providerHTML;
+
+                    // Rating distribution
+                    let ratingHTML = '<div class="data-table-wrapper"><table class="data-table"><thead><tr><th>Rating</th><th>Count</th></tr></thead><tbody>';
+                    for (const [rating, count] of Object.entries(stats.ratings || {})) {
+                        const ratingClass = `rating-${rating.toLowerCase()}`;
+                        ratingHTML += `<tr><td><span class="${ratingClass}">${rating}</span></td><td>${count}</td></tr>`;
+                    }
+                    ratingHTML += '</tbody></table></div>';
+                    document.getElementById('ratingStats').innerHTML = ratingHTML;
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // Load data
+        async function loadData() {
+            try {
+                const response = await fetch(`${API_BASE}/data`);
+                const result = await response.json();
+                
+                document.getElementById('dataLoading').style.display = 'none';
+                
+                if (result.success) {
+                    const data = result.data;
+                    let tableHTML = '<table class="data-table"><thead><tr><th>Provider</th><th>Quality</th><th>Download</th><th>Upload</th><th>Latency</th></tr></thead><tbody>';
+                    
+                    data.forEach(point => {
+                        const rating = point.quality_score.rating;
+                        const ratingClass = `rating-${rating.toLowerCase()}`;
+                        tableHTML += `
+                            <tr>
+                                <td><span class="provider-badge">${point.provider}</span></td>
+                                <td><span class="${ratingClass}">${point.quality_score.overall_score.toFixed(1)}/100 (${rating})</span></td>
+                                <td>${point.speed_test.download.toFixed(1)} Mbps</td>
+                                <td>${point.speed_test.upload.toFixed(1)} Mbps</td>
+                                <td>${point.speed_test.latency.toFixed(1)} ms</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += '</tbody></table>';
+                    document.getElementById('dataTableContainer').innerHTML = tableHTML;
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('dataLoading').textContent = 'Error loading data';
+            }
+        }
+
+        // Load insights
+        async function loadInsights() {
+            try {
+                const response = await fetch(`${API_BASE}/analysis`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const insights = result.analysis.insights || [];
+                    let insightsHTML = '<ul class="insights-list">';
+                    insights.forEach(insight => {
+                        insightsHTML += `<li>${insight}</li>`;
+                    });
+                    insightsHTML += '</ul>';
+                    document.getElementById('insights').innerHTML = insightsHTML;
+                }
+            } catch (error) {
+                console.error('Error loading insights:', error);
+            }
+        }
+
+        // Load map
+        async function loadMap() {
+            try {
+                const mapContainer = document.getElementById('mapContainer');
+                mapContainer.innerHTML = '<div class="loading">Generating map...</div>';
+                
+                const response = await fetch(`${API_BASE}/map`);
+                const html = await response.text();
+                
+                mapContainer.innerHTML = '<iframe id="mapFrame"></iframe>';
+                const iframe = document.getElementById('mapFrame');
+                iframe.srcdoc = html;
+                
+                showMessage('Map loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error loading map:', error);
+                showMessage('Error loading map', 'error');
+            }
+        }
+
+        // Refresh data
+        async function refreshData() {
+            showMessage('Refreshing data...', 'success');
+            await loadStatistics();
+            await loadData();
+            await loadInsights();
+            showMessage('Data refreshed!', 'success');
+        }
+
+        // Simulate improvement
+        async function simulateImprovement() {
+            if (!confirm('This will simulate router improvements on all data points. Continue?')) {
+                return;
+            }
+            
+            try {
+                showMessage('Simulating router impact...', 'success');
+                const response = await fetch(`${API_BASE}/simulate`, { method: 'POST' });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('Router impact simulation completed! Refreshing data...', 'success');
+                    await refreshData();
+                } else {
+                    showMessage('Error: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error simulating improvement:', error);
+                showMessage('Error simulating improvement', 'error');
+            }
+        }
+
+        // Download report
+        async function downloadReport(format) {
+            try {
+                showMessage(`Generating ${format.toUpperCase()} report...`, 'success');
+                window.location.href = `${API_BASE}/report/${format}`;
+            } catch (error) {
+                console.error('Error downloading report:', error);
+                showMessage('Error downloading report', 'error');
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStatistics();
+            loadData();
+            loadInsights();
+        });
+    </script>
+</body>
+</html>

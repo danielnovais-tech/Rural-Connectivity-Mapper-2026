@@ -9,12 +9,30 @@ __pycache__/
 # Generated reports and maps
 demo_report.*
 demo_connectivity_map.html
+
 dashboard_report.*
+
+demo_ml_analysis.json
+ml_analysis_report.json
+
 report_*.json
 report_*.csv
 report_*.txt
 report_*.html
 connectivity_map_*.html
+connectivity_map.html
+report.json
+report.csv
+report.txt
+report.html
+
+speedtest_data.json
+
+*_backup_*.json
+
+# Ecosystem exports
+exports/
+
 
 # Distribution / packaging
 .Python

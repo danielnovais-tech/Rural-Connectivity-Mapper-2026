@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  rural-mapper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rural-connectivity-mapper
+    volumes:
+      # Mount current directory to preserve generated reports and maps in the host
+      # Reports will be available in the same directory where you run docker compose
+      # WARNING: This mounts the entire project directory. For production use,
+      # consider mounting only specific subdirectories or using named volumes.
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Override default command for custom operations
+    # Default: runs demo_workflow.py
+    # Examples:
+    #   docker compose run --rm rural-mapper python main.py --help
+    #   docker compose run --rm rural-mapper python main.py --importar src/data/sample_data.csv --relatorio json
+    #   docker compose run --rm rural-mapper python main.py --simulate --map --analyze
