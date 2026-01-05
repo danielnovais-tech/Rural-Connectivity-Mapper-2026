@@ -1,0 +1,261 @@
+name: Bug Report
+
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug"]
+
+description: Report a bug or unexpected behavior in the Rural Connectivity Mapper
+title: "[Bug]: "
+labels: ["bug", "triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+
+        Thanks for taking the time to report a bug! Please fill out the form below.
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Run command '...'
+        3. See error
+    validations:
+      required: true
+  
+
+        Thanks for taking the time to report a bug! Please fill out the form below to help us investigate and fix the issue.
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we reach you if we need more information?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - Critical - Application crashes or data loss
+        - High - Major functionality broken
+        - Medium - Feature works but with issues
+        - Low - Minor inconvenience or cosmetic issue
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which part of the application is affected?
+      options:
+        - CLI Application (main.py)
+        - Data Models (ConnectivityPoint, SpeedTest, QualityScore)
+        - Measurement Utils
+        - Geocoding Utils
+        - Validation Utils
+        - Report Generation
+        - Mapping Utils (Folium)
+        - Analysis Utils
+        - Simulation Utils
+        - Data Import/Export
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Connectivity Provider (if relevant)
+      description: If this bug is related to a specific internet provider
+      options:
+        - Not applicable
+        - Starlink
+        - Viasat
+        - HughesNet
+        - Claro
+        - Vivo
+        - TIM
+        - Oi
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Tell us what happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this bug?
+      placeholder: |
+        1. Run command '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+
+      description: What you expected to happen
+      placeholder: Describe what should happen...
+    validations:
+      required: true
+  
+
+      description: What did you expect to happen?
+      placeholder: The application should...
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+
+      description: What actually happened
+      placeholder: Describe what actually happened...
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: estimated-effort
+    attributes:
+      label: Estimated Effort
+      description: Your rough estimate of the effort required to fix this bug
+      options:
+        - S (Small - < 2 hours)
+        - M (Medium - 2-8 hours)
+        - L (Large - > 8 hours)
+        - XL (Extra Large - > 1 week)
+        - Unknown
+      default: 4
+    validations:
+      required: true
+  
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Information about your environment
+      value: |
+        - OS: [e.g., Ubuntu 22.04, macOS 13.0, Windows 11]
+        - Python Version: [e.g., 3.8, 3.9, 3.10]
+        - Project Version: [e.g., 1.0.0]
+      render: markdown
+    validations:
+      required: false
+  
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Paste any relevant error messages or logs
+      render: shell
+    validations:
+      required: false
+  
+
+      description: What actually happened?
+      placeholder: Instead, the application...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: If applicable, paste relevant error messages or logs
+      placeholder: Paste error logs here
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of the software are you running?
+      placeholder: ex. 1.0.0
+    validations:
+      required: false
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: What version of Python are you using?
+      placeholder: ex. 3.8.10
+    validations:
+      required: false
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What OS are you running on?
+      options:
+        - Linux
+        - macOS
+        - Windows
+        - Other
+    validations:
+      required: false
+
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+
+      placeholder: Screenshots, related issues, etc.
+    validations:
+      required: false
+
+      placeholder: Screenshots, data samples, related issues, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our contribution guidelines
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have provided all required information
+          required: true
+
