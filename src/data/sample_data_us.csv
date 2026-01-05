@@ -1,0 +1,6 @@
+id,city,provider,latitude,longitude,download,upload,latency,jitter,packet_loss,timestamp,country
+1,Austin,Starlink,30.2672,-97.7431,180.5,25.3,22.1,2.8,0.05,2026-01-15T10:00:00,US
+2,Denver,Viasat,39.7392,-104.9903,95.4,14.2,55.3,12.5,1.8,2026-01-15T11:00:00,US
+3,Portland,HughesNet,45.5152,-122.6784,72.1,9.5,78.4,18.2,2.2,2026-01-15T12:00:00,US
+4,Nashville,AT&T,36.1627,-86.7816,125.3,18.7,35.6,7.3,0.9,2026-01-15T13:00:00,US
+5,Seattle,Starlink,47.6062,-122.3321,175.2,23.8,24.5,3.1,0.1,2026-01-15T14:00:00,US

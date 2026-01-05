@@ -14,16 +14,19 @@ try:
 except ImportError:
     COLORAMA_AVAILABLE = False
 
+from .i18n_utils import get_translation, get_rating_translation
+
 logger = logging.getLogger(__name__)
 
 
-def generate_report(data: List[Dict], format: str, output_path: str = None) -> str:
+def generate_report(data: List[Dict], format: str, output_path: str = None, language: str = 'en') -> str:
     """Generate report in specified format.
     
     Args:
         data: List of connectivity point dictionaries
         format: Report format (json, csv, txt, html)
         output_path: Optional output file path
+        language: Language code for report (en, pt). Default: 'en'
         
     Returns:
         str: Path to generated report file or report content
@@ -38,9 +41,9 @@ def generate_report(data: List[Dict], format: str, output_path: str = None) -> s
     elif format == 'csv':
         return _generate_csv_report(data, output_path)
     elif format == 'txt':
-        return _generate_txt_report(data, output_path)
+        return _generate_txt_report(data, output_path, language)
     elif format == 'html':
-        return _generate_html_report(data, output_path)
+        return _generate_html_report(data, output_path, language)
     else:
         raise ValueError(f"Unsupported format: {format}. Use json, csv, txt, or html.")
 
@@ -99,6 +102,7 @@ def _generate_csv_report(data: List[Dict], output_path: str = None) -> str:
                     'latency': st.get('latency', ''),
                     'jitter': st.get('jitter', ''),
                     'packet_loss': st.get('packet_loss', ''),
+                    'obstruction': st.get('obstruction', ''),
                     'stability': st.get('stability', ''),
                 })
             
@@ -129,8 +133,14 @@ def _generate_csv_report(data: List[Dict], output_path: str = None) -> str:
         raise
 
 
-def _generate_txt_report(data: List[Dict], output_path: str = None) -> str:
-    """Generate TXT format report with color."""
+def _generate_txt_report(data: List[Dict], output_path: str = None, language: str = 'en') -> str:
+    """Generate TXT format report with color and translations.
+    
+    Args:
+        data: List of connectivity point dictionaries
+        output_path: Optional output file path
+        language: Language code (en, pt)
+    """
     try:
         if output_path is None:
             output_path = f"report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
@@ -140,31 +150,45 @@ def _generate_txt_report(data: List[Dict], output_path: str = None) -> str:
         
         lines = []
         lines.append("=" * 80)
-        lines.append("RURAL CONNECTIVITY MAPPER 2026 - REPORT")
-        lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(get_translation('report_title', language))
+        lines.append(f"{get_translation('generated', language)}: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         lines.append("=" * 80)
-        lines.append(f"\nTotal Points: {len(data)}\n")
+        lines.append(f"\n{get_translation('total_points', language)}: {len(data)}\n")
         
         for i, point in enumerate(data, 1):
-            lines.append(f"\n--- Point {i} ---")
+            lines.append(f"\n--- {get_translation('point', language)} {i} ---")
             lines.append(f"ID: {point.get('id', 'N/A')}")
-            lines.append(f"Location: ({point.get('latitude', 'N/A')}, {point.get('longitude', 'N/A')})")
-            lines.append(f"Provider: {point.get('provider', 'N/A')}")
-            lines.append(f"Timestamp: {point.get('timestamp', 'N/A')}")
+            lines.append(f"{get_translation('location', language)}: ({point.get('latitude', 'N/A')}, {point.get('longitude', 'N/A')})")
+            lines.append(f"{get_translation('provider', language)}: {point.get('provider', 'N/A')}")
+            lines.append(f"{get_translation('timestamp', language)}: {point.get('timestamp', 'N/A')}")
             
             if 'speed_test' in point:
                 st = point['speed_test']
+
+                lines.append(f"\n{get_translation('speed_test', language)}:")
+                lines.append(f"  {get_translation('download', language)}: {st.get('download', 'N/A')} {get_translation('mbps', language)}")
+                lines.append(f"  {get_translation('upload', language)}: {st.get('upload', 'N/A')} {get_translation('mbps', language)}")
+                lines.append(f"  {get_translation('latency', language)}: {st.get('latency', 'N/A')} {get_translation('ms', language)}")
+                lines.append(f"  {get_translation('stability', language)}: {st.get('stability', 'N/A')}/100")
                 lines.append("\nSpeed Test:")
                 lines.append(f"  Download: {st.get('download', 'N/A')} Mbps")
                 lines.append(f"  Upload: {st.get('upload', 'N/A')} Mbps")
                 lines.append(f"  Latency: {st.get('latency', 'N/A')} ms")
+                lines.append(f"  Jitter: {st.get('jitter', 'N/A')} ms")
+                lines.append(f"  Packet Loss: {st.get('packet_loss', 'N/A')}%")
+                obstruction = st.get('obstruction', 0.0)
+                if obstruction > 0:
+                    lines.append(f"  Obstruction: {obstruction}% (satellite)")
                 lines.append(f"  Stability: {st.get('stability', 'N/A')}/100")
+
             
             if 'quality_score' in point:
                 qs = point['quality_score']
-                lines.append("\nQuality Score:")
-                lines.append(f"  Overall: {qs.get('overall_score', 'N/A')}/100")
-                lines.append(f"  Rating: {qs.get('rating', 'N/A')}")
+                lines.append(f"\n{get_translation('quality_score', language)}:")
+                lines.append(f"  {get_translation('overall', language)}: {qs.get('overall_score', 'N/A')}/100")
+                rating = qs.get('rating', 'N/A')
+                translated_rating = get_rating_translation(rating, language) if rating != 'N/A' else 'N/A'
+                lines.append(f"  {get_translation('rating', language)}: {translated_rating}")
         
         lines.append("\n" + "=" * 80)
         
@@ -184,8 +208,14 @@ def _generate_txt_report(data: List[Dict], output_path: str = None) -> str:
         raise
 
 
-def _generate_html_report(data: List[Dict], output_path: str = None) -> str:
-    """Generate HTML format report."""
+def _generate_html_report(data: List[Dict], output_path: str = None, language: str = 'en') -> str:
+    """Generate HTML format report with translations.
+    
+    Args:
+        data: List of connectivity point dictionaries
+        output_path: Optional output file path
+        language: Language code (en, pt)
+    """
     try:
         if output_path is None:
             output_path = f"report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
@@ -198,7 +228,7 @@ def _generate_html_report(data: List[Dict], output_path: str = None) -> str:
         html.append("<html>")
         html.append("<head>")
         html.append("<meta charset='utf-8'>")
-        html.append("<title>Rural Connectivity Mapper 2026 - Report</title>")
+        html.append(f"<title>{get_translation('report_title', language)}</title>")
         html.append("<style>")
         html.append("body { font-family: Arial, sans-serif; margin: 20px; }")
         html.append("h1 { color: #2c3e50; }")
@@ -213,19 +243,19 @@ def _generate_html_report(data: List[Dict], output_path: str = None) -> str:
         html.append("</style>")
         html.append("</head>")
         html.append("<body>")
-        html.append("<h1>Rural Connectivity Mapper 2026 - Report</h1>")
-        html.append(f"<p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>")
-        html.append(f"<p>Total Points: {len(data)}</p>")
+        html.append(f"<h1>{get_translation('report_title', language)}</h1>")
+        html.append(f"<p>{get_translation('generated', language)}: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>")
+        html.append(f"<p>{get_translation('total_points', language)}: {len(data)}</p>")
         
         html.append("<table>")
         html.append("<tr>")
-        html.append("<th>Provider</th>")
-        html.append("<th>Location</th>")
-        html.append("<th>Download (Mbps)</th>")
-        html.append("<th>Upload (Mbps)</th>")
-        html.append("<th>Latency (ms)</th>")
-        html.append("<th>Overall Score</th>")
-        html.append("<th>Rating</th>")
+        html.append(f"<th>{get_translation('provider', language)}</th>")
+        html.append(f"<th>{get_translation('location', language)}</th>")
+        html.append(f"<th>{get_translation('download', language)} ({get_translation('mbps', language)})</th>")
+        html.append(f"<th>{get_translation('upload', language)} ({get_translation('mbps', language)})</th>")
+        html.append(f"<th>{get_translation('latency', language)} ({get_translation('ms', language)})</th>")
+        html.append(f"<th>{get_translation('overall_score', language)}</th>")
+        html.append(f"<th>{get_translation('rating', language)}</th>")
         html.append("</tr>")
         
         for point in data:
@@ -243,7 +273,8 @@ def _generate_html_report(data: List[Dict], output_path: str = None) -> str:
             
             rating = qs.get('rating', 'N/A')
             rating_class = rating.lower() if rating != 'N/A' else ''
-            html.append(f"<td class='{rating_class}'>{rating}</td>")
+            translated_rating = get_rating_translation(rating, language) if rating != 'N/A' else 'N/A'
+            html.append(f"<td class='{rating_class}'>{translated_rating}</td>")
             
             html.append("</tr>")
         
