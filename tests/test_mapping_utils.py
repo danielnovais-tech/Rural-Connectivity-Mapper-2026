@@ -110,7 +110,11 @@ def test_generate_map_with_starlink_coverage(sample_data, tmp_path):
     assert 'Starlink Coverage Zones' in content or 'starlink coverage zones' in content.lower()
     
     # Should contain layer control for toggling layers
-    assert 'LayerControl' in content or 'layer' in content.lower()
+    assert (
+        'LayerControl' in content
+        or 'leaflet-control-layers' in content.lower()
+        or 'layer-control' in content.lower()
+    )
     
     # Should contain legend with coverage information
     assert 'map legend' in content.lower()
