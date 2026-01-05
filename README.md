@@ -661,7 +661,7 @@ python main.py --importar google_forms_export.csv --map --relatorio html
 
 ## 🛰️ Starlink Coverage Layer
 
-The interactive maps now include **live Starlink coverage visualization** for rural Brazil:
+The interactive maps now include **Starlink coverage visualization** for rural Brazil:
 
 ### Features
 - **Coverage Zones**: 5 major regions showing satellite signal strength
