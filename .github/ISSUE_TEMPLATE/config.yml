@@ -1,3 +1,13 @@
+
+blank_issues_enabled: true
+contact_links:
+  - name: Discussions
+    url: https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: Documentation
+    url: https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/blob/main/docs/API.md
+    about: Check out the API documentation for detailed guidance
+
 blank_issues_enabled: false
 contact_links:
   - name: 🗨️ GitHub Discussions
@@ -9,3 +19,4 @@ contact_links:
   - name: 🔧 API Reference
     url: https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/blob/main/docs/API.md
     about: Explore the API documentation
+
