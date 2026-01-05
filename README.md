@@ -55,9 +55,14 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
 - 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
 
+- 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, Starlink API
+- 🛰️ **Starlink API Integration** - Fetch coverage, performance metrics, and compare with competitors (Viasat, HughesNet)
+
+
 - 🛠️ **12 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, ANATEL, IBGE, Starlink, country config
 
 - 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
+
 
 
 - 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
@@ -81,6 +86,9 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, Starlink High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
 - 🏷️ **Tag System** - Categorize points with custom tags
 - 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+
+- 🧪 **58 Comprehensive Tests** - 80%+ code coverage with pytest
+
 
 - 🧪 **73 Comprehensive Tests** - 80%+ code coverage with pytest
 
@@ -381,6 +389,22 @@ python demo_workflow.py
 - `demo_connectivity_map.html` (interactive map)
 - Console output with statistics
 
+### Starlink API Demo
+
+Test the Starlink API module for provider comparison:
+
+```bash
+python demo_starlink_api.py
+```
+
+**Features demonstrated:**
+- Coverage data retrieval with API fallback
+- Performance metrics for multiple locations
+- Provider comparison (Starlink vs. Viasat vs. HughesNet)
+- Quality score calculations and recommendations
+- `demo_connectivity_map.html` (interactive map)
+- Console output with statistics
+
 ### CLI Commands
 
 
@@ -632,6 +656,7 @@ Rural-Connectivity-Mapper-2026/
 ├── upload_csv.py                # 🆕 Standalone CSV upload & validation script
 ├── example_speedtests.csv       # 🆕 Sample CSV with 10 test locations
 ├── demo_workflow.py             # Complete demo
+├── demo_starlink_api.py         # Starlink API demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
 ├── DEPLOYMENT.md                # Deployment notes
@@ -661,6 +686,36 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── simulation_utils.py
 │   │   ├── mapping_utils.py
 │   │   ├── analysis_utils.py
+│   │   └── starlink_api.py      # NEW: Starlink API integration
+│   │
+│   └── data/
+│       ├── sample_data.csv      # Sample points
+│       └── pontos.json          # Data storage
+│
+├── tests/                       # Test suite (58 tests)
+│   ├── test_models.py
+│   ├── test_validation_utils.py
+│   ├── test_data_utils.py
+│   ├── test_measurement_utils.py
+│   ├── test_geocoding_utils.py
+│   ├── test_report_utils.py
+│   ├── test_simulation_utils.py
+│   ├── test_mapping_utils.py
+│   ├── test_analysis_utils.py
+│   └── test_starlink_api.py     # NEW: Starlink API tests
+│
+└── docs/
+    └── API.md                   # API reference
+│   │   └── QualityScore.py
+│   │
+│   ├── utils/                   # Utility modules
+│   │   ├── validation_utils.py
+│   │   ├── data_utils.py
+│   │   ├── measurement_utils.py
+│   │   ├── geocoding_utils.py
+│   │   ├── report_utils.py
+│   │   ├── simulation_utils.py
+│   │   ├── mapping_utils.py
 │   │   ├── anatel_utils.py      # NEW: ANATEL data integration
 │   │   ├── ibge_utils.py        # NEW: IBGE demographics
 │   │   ├── starlink_utils.py    # NEW: Starlink API
@@ -1002,6 +1057,12 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 
 **Test Coverage:**
 
+- 58 total tests (290% of requirement)
+- 5 model tests
+- 31 utility tests
+- 22 Starlink API tests
+
+
 - 73 total tests (365% of original requirement)
 - 5 model tests
 - 31 original utility tests
@@ -1023,6 +1084,7 @@ pytest tests/ --cov=src --cov=app --cov-report=html
 - 5 model tests
 - 31 utility tests
 - 10 ecosystem export tests
+
 
 
 
@@ -1070,7 +1132,7 @@ The tool now supports **10 Latin American countries**:
 | 🇺🇾 Uruguay | UY | URSEC | INE | Active |
 | 🇵🇾 Paraguay | PY | CONATEL | DGEEC | Active |
 | 🇧🇴 Bolivia | BO | ATT | INE | Active |
-=======
+
 4. **Policy Advocacy** - Generate reports for government stakeholders
 5. **Academic Research** - Analyze connectivity's socioeconomic impact
 6. **Failover Testing** - Export data to Hybrid Architecture Simulator for realistic network failover scenarios
@@ -1112,6 +1174,7 @@ The tool now supports **10 Latin American countries**:
 
 ### v1.1.0 (Q1 2026)
 
+- [x] Integration with Starlink APIs ✅ (Completed: starlink_api.py module)
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
 - [ ] GitHub Actions CI/CD
@@ -1257,6 +1320,7 @@ git push origin data/your-location-name
 **Every data point helps! Thank you for contributing to better rural connectivity in Brazil! 🇧🇷**
 
 
+
 ---
 
 ## 🤝 Contributing Code
@@ -1321,6 +1385,12 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ## 📊 Project Statistics
 
 
+- **35+ files** across models, utilities, tests, documentation
+- **4,500+ lines of code** (Python)
+- **58 passing tests** (100% success rate)
+- **9 utility modules** including Starlink API integration
+
+
 - **40 files** across models, utilities, tests, documentation
 - **5,119 lines of code** (Python)
 - **73 passing tests** (100% success rate)
@@ -1378,6 +1448,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **3,591 lines of code** (Python)
 - **39 passing tests** (100% success rate)
+
 
 
 - **5 sample cities** with real-world profiles
