@@ -170,3 +170,48 @@ def test_model_validation():
     assert restored_st.download == 50.0
     assert restored_st.jitter == 0.0
     assert restored_st.obstruction == 0.0
+
+
+
+def test_speed_test_obstruction_calculation():
+    """Test SpeedTest stability calculation with obstruction metric."""
+    # Test with no obstruction (non-satellite connection)
+    speed_test_no_obstruction = SpeedTest(
+        download=100.0,
+        upload=15.0,
+        latency=30.0,
+        jitter=2.0,
+        packet_loss=0.1,
+        obstruction=0.0
+    )
+    
+    # Stability should be high with low jitter and packet loss
+    assert speed_test_no_obstruction.stability > 90
+    
+    # Test with moderate obstruction (satellite connection)
+    speed_test_with_obstruction = SpeedTest(
+        download=150.0,
+        upload=20.0,
+        latency=25.0,
+        jitter=3.0,
+        packet_loss=0.1,
+        obstruction=5.0  # 5% obstruction
+    )
+    
+    # Obstruction should reduce stability score
+    # Base 100 - (3*2) - (0.1*10) - (5*5) = 100 - 6 - 1 - 25 = 68
+    assert 65 <= speed_test_with_obstruction.stability <= 70
+    
+    # Test with high obstruction (poor satellite line of sight)
+    speed_test_high_obstruction = SpeedTest(
+        download=100.0,
+        upload=15.0,
+        latency=30.0,
+        jitter=5.0,
+        packet_loss=1.0,
+        obstruction=10.0  # 10% obstruction
+    )
+    
+    # High obstruction should significantly reduce stability
+    assert speed_test_high_obstruction.stability < 50
+

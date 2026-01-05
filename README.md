@@ -30,6 +30,14 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 - 📈 **Router Impact Simulation** - Model 15-25% quality improvements
 - 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
 - 🔍 **Temporal Analysis** - Track connectivity trends over time
+
+- 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, Starlink High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
+- 🏷️ **Tag System** - Categorize points with custom tags
+- 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+- **36 comprehensive tests** (80%+ code coverage with pytest)
+- **15 sample cities** with fresh 2026 data
+- **8 ISP providers** including Starlink Gen2 and High Performance variants
+
 - 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
 - 🛰️ **Satellite Metrics** - Track jitter, packet loss, and obstruction for satellite ISPs
 - 🏷️ **Tag System** - Categorize points with custom tags
@@ -449,6 +457,28 @@ Rural-Connectivity-Mapper-2026/
 
 ## 📊 Sample Data
 
+
+Pre-configured connectivity data for 15 Brazilian cities with fresh 2026 metrics:
+
+### Starlink Comparison (2026)
+
+| Provider | Cities | Avg Download | Avg Upload | Avg Latency | Avg Obstruction | Avg Quality |
+|----------|--------|--------------|------------|-------------|-----------------|-------------|
+| **Starlink High Performance** ⭐ | 2 | 197.0 Mbps | 28.8 Mbps | 21.8 ms | 0.7% | **96.7/100** |
+| **Starlink Gen2** ⭐ | 2 | 168.9 Mbps | 23.7 Mbps | 27.7 ms | 1.9% | **89.4/100** |
+| Claro | 2 | 90.3 Mbps | 14.7 Mbps | 40.6 ms | 0.0% | 71.2/100 |
+| Vivo | 2 | 83.4 Mbps | 12.8 Mbps | 47.0 ms | 0.0% | 63.0/100 |
+| TIM | 2 | 77.7 Mbps | 11.0 Mbps | 53.3 ms | 0.0% | 59.8/100 |
+| Viasat | 2 | 73.7 Mbps | 9.5 Mbps | 69.9 ms | 8.9% | 47.5/100 |
+| HughesNet | 2 | 64.2 Mbps | 7.5 Mbps | 91.9 ms | 11.2% | 24.0/100 |
+| Oi | 1 | 58.3 Mbps | 6.5 Mbps | 78.9 ms | 0.0% | 44.7/100 |
+
+### Key Findings
+- **Starlink High Performance** delivers the best overall experience with 197 Mbps download and minimal 0.7% obstruction
+- **Starlink Gen2** provides excellent performance at 169 Mbps with low 1.9% obstruction
+- Traditional fiber ISPs (Claro, Vivo, TIM) show good speeds but higher latency (40-53 ms)
+- Legacy satellite providers (Viasat, HughesNet) suffer from high obstruction (9-11%) and latency (70-92 ms)
+
 Pre-configured connectivity data for 10 Brazilian cities (2026 data):
 
 | City | Provider | Download | Upload | Latency | Jitter | Packet Loss | Obstruction | Quality Score |
@@ -464,6 +494,7 @@ Pre-configured connectivity data for 10 Brazilian cities (2026 data):
 | **Porto Alegre** | Oi | 81.2 Mbps | 13.8 Mbps | 39.2 ms | 7.8 ms | 1.1% | 0% | 66.7/100 (Good) |
 | **Belo Horizonte** | **Starlink Gen2** ⭐ | 172.8 Mbps | 24.2 Mbps | 26.9 ms | 2.8 ms | 0.08% | 3.8% | **92.5/100 (Excellent)** |
 
+
 ---
 
 ## 🎯 Starlink 2026 Metrics
@@ -472,6 +503,9 @@ Pre-configured connectivity data for 10 Brazilian cities (2026 data):
 - **Download Speed:** 50-200 Mbps
 - **Upload Speed:** 10-20 Mbps
 - **Latency:** 20-40 ms
+- **Jitter:** <5 ms (lower is better)
+- **Packet Loss:** <1% (lower is better)
+- **Obstruction:** <2% for satellite dishes (lower is better)
 - **Quality Score Weighting:** Speed (40%) + Latency (30%) + Stability (30%)
 
 ### Quality Score Algorithm
@@ -481,6 +515,28 @@ Overall Score = (Speed Score × 0.40) + (Latency Score × 0.30) + (Stability Sco
 # Component calculations:
 Speed Score = ((download/200 + upload/20) / 2) × 100
 Latency Score = 100 - (latency - 20) × 1.25  # Capped at 100
+
+Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 5)
+```
+
+### Satellite-Specific Metrics
+- **Obstruction:** Percentage of time the satellite dish has its view blocked by obstacles (trees, buildings)
+  - **Excellent:** <2% obstruction
+  - **Good:** 2-5% obstruction
+  - **Fair:** 5-10% obstruction
+  - **Poor:** >10% obstruction
+- **Jitter:** Variation in latency, critical for real-time applications (VoIP, gaming, video calls)
+- **Packet Loss:** Percentage of data packets that fail to reach their destination
+
+### Performance Comparison: Starlink Gen2 vs High Performance
+| Metric | Gen2 Standard | High Performance | Improvement |
+|--------|---------------|------------------|-------------|
+| Download | 169 Mbps | 197 Mbps | +17% |
+| Upload | 24 Mbps | 29 Mbps | +21% |
+| Latency | 28 ms | 22 ms | -21% |
+| Obstruction | 1.9% | 0.7% | -63% |
+| Quality Score | 89.4/100 | 96.7/100 | +8% |
+=======
 Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 0.2)
 ```
 
@@ -488,6 +544,7 @@ Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 0.2)
 - **Jitter**: Variation in latency (ms) - affects real-time applications
 - **Packet Loss**: Percentage of lost packets - critical for reliability
 - **Obstruction**: Percentage of sky view blocked (satellite-specific) - Starlink performance indicator
+
 
 ### Rating Tiers
 - **Excellent:** ≥80/100 (Starlink target)
@@ -792,6 +849,13 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **46 passing tests** (100% success rate)
 - **32 files** across models, utilities, tests, documentation
 
+- **3,591+ lines of code** (Python)
+- **37 passing tests** (100% success rate)
+- **15 sample cities** with real-world 2026 profiles
+- **8 ISP providers** (Starlink Gen2, Starlink High Performance, and traditional ISPs)
+- **4 export formats** (JSON, CSV, TXT, HTML)
+
+
 - **3,800+ lines of code** (Python)
 - **39 passing tests** (100% success rate)
 - **10 sample cities** with real-world 2026 profiles
@@ -801,6 +865,7 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **39 passing tests** (100% success rate)
 - **5 sample cities** with real-world profiles
 - **7 export formats** (JSON, CSV, TXT, HTML, Hybrid Simulator, AgriX-Boost, Ecosystem Bundle)
+
 
 - **80%+ test coverage**
 - **3 integrated ecosystem components**

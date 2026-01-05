@@ -12,7 +12,11 @@ class SpeedTest:
         latency (float): Latency in milliseconds
         jitter (float): Jitter in milliseconds
         packet_loss (float): Packet loss percentage
+
+        obstruction (float): Obstruction percentage (0-100, satellite-specific)
+
         obstruction (float): Obstruction percentage (for satellite connections, 0-100)
+
         stability (float): Connection stability score (0-100)
     """
     
@@ -34,7 +38,11 @@ class SpeedTest:
             latency: Latency in milliseconds
             jitter: Jitter in milliseconds (default: 0.0)
             packet_loss: Packet loss percentage (default: 0.0)
+
+            obstruction: Obstruction percentage for satellite connections (default: 0.0)
+
             obstruction: Obstruction percentage for satellite (default: 0.0)
+
             stability: Connection stability score, auto-calculated if None
         """
         self.download = download
@@ -66,10 +74,16 @@ class SpeedTest:
         packet_loss_penalty = min(self.packet_loss * 10, 40)
         score -= packet_loss_penalty
         
+
+        # Reduce score based on obstruction (satellite-specific)
+        # Obstruction penalty: -5 points per 1% obstruction
+        obstruction_penalty = min(self.obstruction * 5, 50)
+
         # Reduce score based on obstruction (for satellite connections)
         # Obstruction penalty: -0.2 points per 1% obstruction, capped at 20 points
         # This is particularly important for Starlink and other satellite providers
         obstruction_penalty = min(self.obstruction * 0.2, 20)
+
         score -= obstruction_penalty
         
         # Ensure score is between 0 and 100
