@@ -1,0 +1,183 @@
+name: Performance Issue
+description: Report slow performance, high resource usage, or connectivity metric problems
+title: "[Performance]: "
+labels: ["performance", "optimization"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a performance issue! This helps us make the tool faster and more efficient.
+
+  - type: dropdown
+    id: performance-type
+    attributes:
+      label: Performance Issue Type
+      description: What kind of performance issue are you experiencing?
+      options:
+        - Slow Execution Time
+        - High Memory Usage
+        - High CPU Usage
+        - Network/API Timeout
+        - Connectivity Measurement Inaccuracy
+        - Large Dataset Processing
+        - Slow Report Generation
+        - Slow Map Rendering
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-operation
+    attributes:
+      label: Affected Operation
+      description: Which operation is slow or inefficient?
+      options:
+        - Speed Test Measurement
+        - Data Import (CSV)
+        - Data Export (JSON/CSV/HTML)
+        - Map Generation
+        - Report Generation
+        - Simulation
+        - Analysis/Statistics
+        - Geocoding
+        - Quality Score Calculation
+        - Multiple Operations
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Performance Issue Description
+      description: Describe the performance problem in detail
+      placeholder: When I run X command with Y data, it takes Z seconds/uses W GB memory...
+    validations:
+      required: true
+
+  - type: input
+    id: dataset-size
+    attributes:
+      label: Dataset Size
+      description: How many connectivity points are you working with?
+      placeholder: ex. 100 points, 10,000 points, 500 MB CSV file
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected-performance
+    attributes:
+      label: Expected Performance
+      description: What performance did you expect?
+      placeholder: I expected it to complete in less than 10 seconds...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-performance
+    attributes:
+      label: Actual Performance
+      description: What performance are you actually seeing?
+      placeholder: |
+        - Execution time: 5 minutes
+        - Memory usage: 2 GB
+        - CPU usage: 100%
+    validations:
+      required: true
+
+  - type: dropdown
+    id: connectivity-metric
+    attributes:
+      label: Affected Connectivity Metric (if applicable)
+      description: Which metric is showing performance issues?
+      options:
+        - Not applicable
+        - Download Speed Measurement
+        - Upload Speed Measurement
+        - Latency/Ping Measurement
+        - Jitter Measurement
+        - Packet Loss Measurement
+        - Quality Score Calculation
+        - All Metrics
+    validations:
+      required: false
+
+  - type: dropdown
+    id: provider-specific
+    attributes:
+      label: Provider-Specific Issue?
+      description: Does this issue only occur with specific providers?
+      options:
+        - Not applicable
+        - All Providers
+        - Starlink Only
+        - Satellite Providers (Starlink, Viasat, HughesNet)
+        - Traditional ISPs (Claro, Vivo, TIM, Oi)
+        - Specific Provider (please describe in detail)
+    validations:
+      required: false
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this performance issue?
+      placeholder: |
+        1. Run command '...'
+        2. With dataset of size '...'
+        3. Observe performance metrics
+    validations:
+      required: true
+
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Information
+      description: Details about your system
+      placeholder: |
+        - OS: Ubuntu 22.04
+        - Python: 3.10.5
+        - RAM: 8 GB
+        - CPU: Intel i5-8250U
+        - Network: Starlink (150 Mbps down, 20 Mbps up, 30ms latency)
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: profiling-data
+    attributes:
+      label: Profiling Data (Optional)
+      description: If you've profiled the code, paste relevant output
+      placeholder: Paste profiling output here
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggested-fix
+    attributes:
+      label: Suggested Fix (Optional)
+      description: Do you have any ideas for how to improve performance?
+      placeholder: This could be optimized by...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Logs, screenshots, benchmarks, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have tested with the latest version
+          required: true
+        - label: I have searched for similar performance issues
+          required: true
