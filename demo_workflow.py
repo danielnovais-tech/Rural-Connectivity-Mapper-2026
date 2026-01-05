@@ -259,7 +259,7 @@ def main():
         print(f"✓ Generated interactive map: {map_path}")
         
         # Step 9: Generate map with Starlink coverage overlay
-        logger.info("Step 7: Generating map with Starlink coverage overlay...")
+        logger.info("Step 8: Generating map with Starlink coverage overlay...")
         coverage_map_path = generate_map(improved_data, 'demo_connectivity_map_with_coverage.html', show_starlink_coverage=True)
         print(f"✓ Generated map with Starlink coverage: {coverage_map_path}")
         
