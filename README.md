@@ -72,6 +72,9 @@ folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
 ```
 
+
+**💡 For production deployments, migrations, and rollback procedures, see [DEPLOYMENT.md](DEPLOYMENT.md)**
+
 ### 🐳 Docker Installation (Recommended for Rural Deployments)
 
 Docker containerization simplifies deployment on rural servers, Raspberry Pi, or farm test environments by avoiding dependency conflicts (including speedtest-cli issues).
@@ -167,6 +170,7 @@ docker run --rm rural-connectivity-mapper python main.py --help
 - ✅ **Easy updates** - Just pull new image
 - ✅ **Isolated from host** - Won't affect local Python environment
 - ✅ **Speedtest-cli included** - No manual installation needed
+
 
 ---
 
@@ -318,6 +322,7 @@ Rural-Connectivity-Mapper-2026/
 ├── demo_workflow.py             # Complete demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
+├── DEPLOYMENT.md                # Deployment notes
 ├── LICENSE                      # MIT License
 ├── .gitignore                   # Git ignore
 │
