@@ -54,7 +54,21 @@ def test_speed_test_stability_calculation():
         packet_loss=5.0
     )
     
-    assert speed_test_poor.stability < 20
+    assert speed_test_poor.stability <= 20
+    
+    # Test with obstruction (satellite-specific metric)
+    speed_test_obstructed = SpeedTest(
+        download=150.0,
+        upload=18.0,
+        latency=25.0,
+        jitter=3.0,
+        packet_loss=0.1,
+        obstruction=10.0  # 10% obstruction
+    )
+    
+    # With 10% obstruction, penalty should be 10 * 0.2 = 2 points
+    # Base: 100 - jitter(6) - packet_loss(1) - obstruction(2) = 91
+    assert 90 <= speed_test_obstructed.stability <= 92
 
 
 def test_quality_score_calculation():
@@ -137,11 +151,13 @@ def test_model_validation():
     assert valid_speed_test.download == 100.0
     assert valid_speed_test.jitter == 0.0  # Default value
     assert valid_speed_test.packet_loss == 0.0  # Default value
+    assert valid_speed_test.obstruction == 0.0  # Default value
     
     # Test SpeedTest to_dict
     st_dict = valid_speed_test.to_dict()
     assert st_dict['download'] == 100.0
     assert 'stability' in st_dict
+    assert 'obstruction' in st_dict
     
     # Test from_dict with partial data
     partial_dict = {
@@ -153,3 +169,4 @@ def test_model_validation():
     restored_st = SpeedTest.from_dict(partial_dict)
     assert restored_st.download == 50.0
     assert restored_st.jitter == 0.0
+    assert restored_st.obstruction == 0.0

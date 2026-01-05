@@ -7,7 +7,14 @@ from .geocoding_utils import geocode_coordinates, geocode_address
 from .report_utils import generate_report
 from .simulation_utils import simulate_router_impact
 from .mapping_utils import generate_map
+from .analysis_utils import analyze_temporal_evolution, compare_providers
 from .analysis_utils import analyze_temporal_evolution
+from .export_utils import (
+    export_for_hybrid_simulator,
+    export_for_agrix_boost,
+    export_ecosystem_bundle
+)
+
 
 __all__ = [
     'validate_coordinates',
@@ -22,5 +29,10 @@ __all__ = [
     'generate_report',
     'simulate_router_impact',
     'generate_map',
-    'analyze_temporal_evolution'
+    'analyze_temporal_evolution',
+    'compare_providers'
+    'export_for_hybrid_simulator',
+    'export_for_agrix_boost',
+    'export_ecosystem_bundle'
+
 ]
