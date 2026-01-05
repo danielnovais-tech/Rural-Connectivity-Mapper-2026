@@ -14,6 +14,7 @@ report_*.csv
 report_*.txt
 report_*.html
 connectivity_map_*.html
+*_backup_*.json
 
 # Distribution / packaging
 .Python

@@ -133,6 +133,12 @@ Examples:
     )
     
     parser.add_argument(
+        '--no-starlink-coverage',
+        action='store_true',
+        help='Disable Starlink coverage overlay on the map'
+    )
+    
+    parser.add_argument(
         '--analyze',
         action='store_true',
         help='Analyze temporal evolution'
@@ -200,7 +206,10 @@ Examples:
     # Generate map
     if args.map:
         logger.info("Generating interactive map...")
-        map_path = generate_map(data)
+        include_coverage = not args.no_starlink_coverage
+        if include_coverage:
+            logger.info("Including Starlink coverage overlay layer")
+        map_path = generate_map(data, include_starlink_coverage=include_coverage)
         logger.info(f"Map generated: {map_path}")
     
     logger.info("Rural Connectivity Mapper 2026 - Completed successfully")
