@@ -1,0 +1,177 @@
+{
+  "countries": {
+    "BR": {
+      "name": "Brazil",
+      "language": "pt",
+      "default_center": {
+        "latitude": -15.7801,
+        "longitude": -47.9292
+      },
+      "zoom_level": 4,
+      "providers": [
+        "Starlink",
+        "Viasat",
+        "HughesNet",
+        "Claro",
+        "Vivo",
+        "TIM",
+        "Oi",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "US": {
+      "name": "United States",
+      "language": "en",
+      "default_center": {
+        "latitude": 39.8283,
+        "longitude": -98.5795
+      },
+      "zoom_level": 4,
+      "providers": [
+        "Starlink",
+        "Viasat",
+        "HughesNet",
+        "AT&T",
+        "Verizon",
+        "T-Mobile",
+        "CenturyLink",
+        "Frontier",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "CA": {
+      "name": "Canada",
+      "language": "en",
+      "default_center": {
+        "latitude": 56.1304,
+        "longitude": -106.3468
+      },
+      "zoom_level": 4,
+      "providers": [
+        "Starlink",
+        "Xplornet",
+        "Bell",
+        "Rogers",
+        "Telus",
+        "Shaw",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "GB": {
+      "name": "United Kingdom",
+      "language": "en",
+      "default_center": {
+        "latitude": 54.7023,
+        "longitude": -3.2765
+      },
+      "zoom_level": 6,
+      "providers": [
+        "Starlink",
+        "BT",
+        "Virgin Media",
+        "Sky",
+        "TalkTalk",
+        "Vodafone",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "AU": {
+      "name": "Australia",
+      "language": "en",
+      "default_center": {
+        "latitude": -25.2744,
+        "longitude": 133.7751
+      },
+      "zoom_level": 4,
+      "providers": [
+        "Starlink",
+        "NBN Co",
+        "Telstra",
+        "Optus",
+        "TPG",
+        "Vodafone",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "DE": {
+      "name": "Germany",
+      "language": "de",
+      "default_center": {
+        "latitude": 51.1657,
+        "longitude": 10.4515
+      },
+      "zoom_level": 6,
+      "providers": [
+        "Starlink",
+        "Deutsche Telekom",
+        "Vodafone",
+        "O2",
+        "1&1",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "FR": {
+      "name": "France",
+      "language": "fr",
+      "default_center": {
+        "latitude": 46.2276,
+        "longitude": 2.2137
+      },
+      "zoom_level": 6,
+      "providers": [
+        "Starlink",
+        "Orange",
+        "SFR",
+        "Bouygues Telecom",
+        "Free",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "IN": {
+      "name": "India",
+      "language": "en",
+      "default_center": {
+        "latitude": 20.5937,
+        "longitude": 78.9629
+      },
+      "zoom_level": 5,
+      "providers": [
+        "Starlink",
+        "Jio",
+        "Airtel",
+        "BSNL",
+        "Vi",
+        "ACT Fibernet",
+        "Various",
+        "Unknown"
+      ]
+    },
+    "MX": {
+      "name": "Mexico",
+      "language": "es",
+      "default_center": {
+        "latitude": 23.6345,
+        "longitude": -102.5528
+      },
+      "zoom_level": 5,
+      "providers": [
+        "Starlink",
+        "Telmex",
+        "Telcel",
+        "AT&T Mexico",
+        "Izzi",
+        "Megacable",
+        "Various",
+        "Unknown"
+      ]
+    }
+  },
+  "default_country": "BR"
+}

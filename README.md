@@ -10,51 +10,161 @@
 [![Release](https://img.shields.io/github/v/release/danielnovais-tech/Rural-Connectivity-Mapper-2026?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026/releases/latest)
 [![codecov](https://img.shields.io/badge/coverage-83%25-green?style=flat-square)](https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026)
 
-Python-based tool to map and analyze rural internet connectivity in Brazil, aligned with Starlink's 2026 expansion roadmap.
+
+Python-based tool to map and analyze rural internet connectivity across Latin America, aligned with Starlink's 2026 expansion roadmap.
 
 ## 🌍 Overview
 
-The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across Brazil, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across Latin America, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+
+**NEW in v1.1:** Real ANATEL & IBGE data integration, Starlink API, Interactive Streamlit Dashboard, and support for 10 LATAM countries!
+
+Python-based tool to map and analyze rural internet connectivity worldwide, aligned with Starlink's 2026 expansion roadmap.
+
+## 🌍 Overview
+
+The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and visualizing internet connectivity quality across multiple countries, with a focus on Starlink's satellite internet expansion. The tool measures, analyzes, and reports on connectivity metrics including download/upload speeds, latency, stability, and overall quality scores.
+
+**Multi-Country Support:** Now supports 9 countries with country-specific provider lists and localized settings.
+
 
 **Aligned with Starlink's 2026 roadmap:** 10M rural connections & 20-30% agricultural productivity gains.
 
 ---
 
-## ✨ Features
+
+#!/usr/bin/env python3
+"""
+README Cleanup and Reorganization Script
+
+This script processes the messy, repetitive README content and produces
+a clean, organized version by:
+1. Removing duplicate sections and content
+2. Fixing version inconsistencies
+3. Consolidating features and statistics
+4. Standardizing installation and usage instructions
+"""
+
+import re
+from collections import OrderedDict
+from datetime import datetime
+from typing import List, Dict, Tuple
 
 
-- ⚡ **CSV Upload Script** - Standalone validator for easy speedtest data import (NEW!)
-- 🖥️ **CLI Application** - Full command-line interface with 6 operational modes
-- 🖥️ **CLI Application** - Full command-line interface with 7 operational modes
-- 📊 **Data Models** - ConnectivityPoint, SpeedTest, QualityScore with serialization
-- 🛠️ **9 Utility Modules** - Measurement, geocoding, validation, reporting, simulation, mapping, analysis, export
-- 🗺️ **Interactive Folium Maps** - Color-coded quality markers with popups
-- 🛰️ **Starlink Coverage Overlay** - Optional toggleable layer showing coverage zones for installation planning
-- 📈 **Router Impact Simulation** - Model 15-25% quality improvements
-- 📋 **Multi-Format Reporting** - JSON, CSV, TXT, HTML exports
-- 🔍 **Temporal Analysis** - Track connectivity trends over time
+class READMECleaner:
+    def __init__(self, input_content: str):
+        self.input_content = input_content
+        self.clean_content = ""
+        self.sections = OrderedDict()
+        self.version = "1.1.0"
+        self.current_date = datetime.now().strftime("%B %d, %Y")
+        
+    def parse_sections(self):
+        """Parse the messy README into logical sections"""
+        lines = self.input_content.split('\n')
+        current_section = "header"
+        section_content = []
+        
+        for line in lines:
+            # Check for section headers
+            if line.strip().startswith('# '):
+                if current_section != "header":
+                    self.sections[current_section] = '\n'.join(section_content)
+                current_section = line.strip('# ').strip()
+                section_content = [line]
+            elif line.strip().startswith('## '):
+                if current_section and section_content:
+                    self.sections[current_section] = '\n'.join(section_content)
+                current_section = line.strip('# ').strip()
+                section_content = [line]
+            else:
+                section_content.append(line)
+        
+        # Add the last section
+        if section_content:
+            self.sections[current_section] = '\n'.join(section_content)
+    
+    def remove_duplicates(self, text: str) -> str:
+        """Remove duplicate lines and sections from text"""
+        lines = text.split('\n')
+        seen = set()
+        unique_lines = []
+        
+        for line in lines:
+            # Normalize line for comparison (strip extra spaces, ignore markdown symbols)
+            normalized = re.sub(r'[#\-\*]', '', line).strip()
+            if not normalized or normalized not in seen:
+                seen.add(normalized)
+                unique_lines.append(line)
+            elif line.strip().startswith('#'):
+                # Keep section headers even if duplicate content
+                unique_lines.append(line)
+        
+        return '\n'.join(unique_lines)
+    
+    def consolidate_features(self) -> str:
+        """Consolidate all feature lists into a single, organized list"""
+        features = {
+            "Core Functionality": [
+                "🌐 **Multi-Country Support** - 10 LATAM countries (BR, AR, CL, CO, MX, PE, EC, UY, PY, BO)",
+                "📊 **Data Integration** - ANATEL, IBGE, and Starlink API integration",
+                "🖥️ **CLI Application** - Full command-line interface with 7 operational modes",
+                "📱 **Web Dashboard** - Interactive Streamlit dashboard with real-time visualization",
+            ],
+            "Data Analysis": [
+                "📈 **Temporal Analysis** - Track connectivity trends over time",
+                "🏢 **Provider Comparison** - Benchmark ISPs with country-specific lists",
+                "🧮 **Quality Scoring** - Comprehensive algorithm with 2026 metrics",
+                "🤖 **ML-Enhanced Analysis** - Machine learning for rural connectivity optimization",
+            ],
+            "Visualization": [
+                "🗺️ **Interactive Maps** - Folium maps with color-coded quality markers",
+                "🛰️ **Starlink Coverage** - Coverage zones and signal strength visualization",
+                "📊 **Chart Visualizations** - Plotly charts for data exploration",
+            ],
+            "Data Management": [
+                "📤 **CSV Upload & Validation** - Easy data import with validation",
+                "📋 **Multi-Format Export** - JSON, CSV, TXT, HTML reports",
+                "🔗 **Ecosystem Integration** - Export for Hybrid Architecture Simulator & AgriX-Boost",
+                "🌐 **REST API** - Full API for data management and integration",
+            ],
+            "Deployment & Testing": [
+                "🐳 **Docker Support** - Containerized deployment for rural environments",
+                "🧪 **Comprehensive Testing** - 73+ tests with 80%+ code coverage",
+                "⚙️ **CI/CD Pipeline** - GitHub Actions for automated testing and deployment",
+            ]
+        }
+        
+        features_text = "## ✨ Features\n\n"
+        for category, feature_list in features.items():
+            features_text += f"### {category}\n\n"
+            for feature in feature_list:
+                features_text += f"- {feature}\n"
+            features_text += "\n"
+        
+        return features_text
+    
+    def consolidate_installation(self) -> str:
+        """Consolidate installation instructions"""
+        return """## 🚀 Installation
 
-- 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, Starlink High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
-- 🏷️ **Tag System** - Categorize points with custom tags
-- 🐛 **Debug Mode** - Enhanced logging for troubleshooting
-- **36 comprehensive tests** (80%+ code coverage with pytest)
-- **15 sample cities** with fresh 2026 data
-- **8 ISP providers** including Starlink Gen2 and High Performance variants
+### Requirements
+- **Python 3.8+** or **Docker**
+- Internet connection (for geocoding and speedtest APIs)
+- Git (for cloning repository)
 
-- 🏢 **Provider Comparison** - Benchmark ISPs (Starlink Gen2, High Performance, Viasat, HughesNet, Claro, Vivo, TIM, Oi)
-- 🛰️ **Satellite Metrics** - Track jitter, packet loss, and obstruction for satellite ISPs
-- 🏷️ **Tag System** - Categorize points with custom tags
-- 🐛 **Debug Mode** - Enhanced logging for troubleshooting
+### Quick Install (Local)
 
-- 🧪 **55 Comprehensive Tests** - 80%+ code coverage with pytest
+```bash
+# Clone the repository
+git clone https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026.git
+cd Rural-Connectivity-Mapper-2026
 
-- 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
-- 🔗 **Ecosystem Integration** - Export data for Hybrid Architecture Simulator & AgriX-Boost
-- 🧪 **46 Comprehensive Tests** - 80%+ code coverage with pytest
-- 🧪 **36 Comprehensive Tests** - 80%+ code coverage with pytest
-- **🌍 NEW: Crowdsourced Data Collection** - Mobile-friendly web form, API, and CLI for easy data submission
-- 🧪 **39 Comprehensive Tests** - 80%+ code coverage with pytest
+# Install dependencies
+pip install -r requirements.txt
 
+# Run demo workflow
+python demo_workflow.py
 
 
 
@@ -70,9 +180,10 @@ The Rural Connectivity Mapper 2026 is a comprehensive platform for analyzing and
 ### Quick Install
 
 ```bash
-# Clone the repository
+# Clone and run with Docker Compose
 git clone https://github.com/danielnovais-tech/Rural-Connectivity-Mapper-2026.git
 cd Rural-Connectivity-Mapper-2026
+docker compose up
 
 # Install dependencies
 pip install -r requirements.txt
@@ -93,6 +204,20 @@ pandas>=2.0.0          # Data manipulation
 requests>=2.31.0       # HTTP client
 folium>=0.14.0         # Interactive maps
 matplotlib>=3.7.0      # Data visualization
+streamlit>=1.28.0      # Web dashboard
+streamlit-folium>=0.15.0  # Folium maps in Streamlit
+plotly>=5.17.0         # Interactive charts
+Flask>=3.0.0           # Web framework
+Flask-CORS>=4.0.0      # CORS support
+scikit-learn>=1.3.0    # Machine learning
+babel>=2.14.0          # Internationalization (i18n)
+
+
+def consolidate_usage(self) -> str:
+    """Consolidate usage instructions"""
+    return """## 📖 Usage
+
+
 ```
 
 
@@ -121,6 +246,7 @@ docker compose up
 # Generated reports will be in the current directory:
 # - demo_report.json, .csv, .txt, .html
 # - demo_connectivity_map.html
+
 ```
 
 **Option 2: Using Docker directly**
@@ -142,6 +268,7 @@ docker run --rm -v $(pwd):/app rural-connectivity-mapper \
 # Run with debug mode
 docker run --rm -v $(pwd):/app rural-connectivity-mapper \
   python main.py --debug --simulate --map --analyze
+
 ```
 
 #### Docker CLI Examples
@@ -169,6 +296,26 @@ docker run --rm \
 # Run with Docker Compose for one-off commands
 docker compose run --rm rural-mapper python main.py --help
 docker compose run --rm rural-mapper python main.py --importar src/data/sample_data.csv --map
+
+# List supported countries
+python main.py --list-countries
+
+# Import data and generate report
+python main.py --importar data.csv --country BR --relatorio html
+
+# Create interactive map
+python main.py --importar data.csv --map --starlink-coverage
+
+# Analyze trends
+python main.py --importar data.csv --analyze --language pt
+
+# ML-enhanced analysis
+python main.py --importar data.csv --ml-analyze
+
+# Ecosystem integration exports
+python main.py --export ecosystem
+
+
 ```
 
 #### Production Deployment Notes
@@ -184,6 +331,7 @@ docker run --rm \
 
 # Or run without volume mounts for isolated operation
 docker run --rm rural-connectivity-mapper python main.py --help
+
 ```
 
 #### Benefits for Rural Deployments
@@ -198,6 +346,81 @@ docker run --rm rural-connectivity-mapper python main.py --help
 ---
 
 ## 📖 Usage
+
+
+### 🌐 Web Dashboard (NEW in v1.1)
+
+Launch the interactive Streamlit dashboard for browser-based analysis:
+
+
+### Quick Start - Streamlit Dashboard (NEW!)
+
+Launch the interactive web dashboard:
+
+
+```bash
+streamlit run dashboard.py
+```
+
+
+**Dashboard Features:**
+- **📊 Dashboard Overview** - View statistics, data table, and generate reports
+- **📤 Upload Data** - Import CSV files with connectivity data
+- **🚀 Speed Test** - Run on-demand speed tests on your current connection
+- **🗺️ Map View** - Interactive Folium maps with color-coded quality markers
+- **📈 Analysis** - Temporal evolution trends and insights
+- **🔧 Simulation** - Model router impact on connectivity quality
+
+**CSV Upload Format:**
+```csv
+id,city,provider,latitude,longitude,download,upload,latency,jitter,packet_loss,timestamp
+1,São Paulo,Starlink,-23.5505,-46.6333,165.4,22.8,28.5,3.2,0.1,2026-01-15T10:30:00
+```
+
+The dashboard automatically opens at `http://localhost:8501` and provides a user-friendly interface for all connectivity analysis tasks.
+
+**Features:**
+- 🌍 Select from 10 LATAM countries
+- 📊 View ANATEL broadband and mobile data
+- 👥 Explore IBGE demographic statistics
+- 🛰️ Check Starlink availability and service plans
+- 🌎 Compare connectivity across LATAM countries
+- 🗺️ Interactive maps with real-time data
+
+
+### Web Dashboard (NEW! 🎉)
+
+Start the web-based dashboard for a modern GUI experience:
+
+```bash
+python app.py
+```
+
+Then open your browser to `http://localhost:5000`
+
+**Dashboard Features:**
+- 📊 Real-time connectivity statistics and KPIs
+- 📈 Interactive data tables with provider/rating distributions
+- 🗺️ Embedded interactive Folium maps
+- 💡 AI-powered insights and recommendations
+- ⚡ One-click router impact simulation
+- 📥 Download reports in multiple formats (JSON, CSV, HTML)
+- 🔄 Live data refresh capabilities
+
+**REST API Endpoints:**
+- `GET /api/data` - Retrieve all connectivity points
+- `GET /api/data/<id>` - Get specific point by ID
+- `POST /api/data` - Add new connectivity point
+- `GET /api/statistics` - Get summary statistics
+- `GET /api/analysis` - Get temporal analysis
+- `POST /api/simulate` - Simulate router improvements
+- `GET /api/report/<format>` - Generate and download reports
+- `GET /api/map` - Generate interactive map
+- `GET /api/health` - Health check endpoint
+
+---
+
+## 📖 CLI Usage
 
 ### Quick Start - CSV Upload Script ⚡
 
@@ -232,6 +455,8 @@ python upload_csv.py data.csv --dry-run --verbose
 
 See `example_speedtests.csv` for a complete sample file with 10 test locations across Brazil.
 
+
+
 ### Quick Start - Demo Workflow
 
 Run the complete demo to see all features:
@@ -245,7 +470,26 @@ python demo_workflow.py
 - `demo_connectivity_map.html` (interactive map)
 - Console output with statistics
 
+### Starlink API Demo
+
+Test the Starlink API module for provider comparison:
+
+```bash
+python demo_starlink_api.py
+```
+
+**Features demonstrated:**
+- Coverage data retrieval with API fallback
+- Performance metrics for multiple locations
+- Provider comparison (Starlink vs. Viasat vs. HughesNet)
+- Quality score calculations and recommendations
+- `demo_connectivity_map.html` (interactive map)
+- Console output with statistics
+
 ### CLI Commands
+
+
+#### List Available Countries
 
 #### 🌍 Crowdsourced Data Collection (NEW!)
 
@@ -273,28 +517,66 @@ python submit_speedtest.py --auto-speedtest -p Starlink
 ---
 
 #### Import Data
+
 ```bash
-python main.py --importar src/data/sample_data.csv
+python main.py --list-countries
+```
+*Shows all supported country codes and names*
+
+#### Import Data (with Country)
+```bash
+python main.py --importar src/data/sample_data.csv --country BR
+python main.py --importar src/data/sample_data_us.csv --country US
 ```
 
 #### Generate Reports
 ```bash
-python main.py --relatorio html    # HTML report
+
+python main.py --relatorio html    # HTML report (default country)
+python main.py --relatorio json --country US    # JSON report for US
+python main.py --relatorio csv --country CA     # CSV report for Canada
+
+python main.py --relatorio html    # HTML report (English)
 python main.py --relatorio json    # JSON report
 python main.py --relatorio csv     # CSV report
+
 python main.py --relatorio txt     # Text report
+
+# Generate reports in Portuguese
+python main.py --relatorio html --language pt    # HTML report in Portuguese
+python main.py --relatorio txt --lang pt         # Text report in Portuguese
 ```
 
 #### Simulate Router Improvements
 ```bash
 python main.py --simulate
+python main.py --simulate --country US
 ```
 *Models 15-25% quality score boost from router upgrades*
 
 #### Create Interactive Map
 ```bash
 python main.py --map
+python main.py --map --country US  # Map centered on United States
 ```
+
+*Generates Folium HTML map with color-coded markers and Starlink coverage zones*
+
+
+*Generates Folium HTML map with color-coded markers and country-specific center*
+
+
+#### Create Map with Starlink Coverage Overlay
+```bash
+python main.py --map --starlink-coverage
+```
+*Generates interactive map with optional Starlink coverage zones showing Active, Planned, and Limited coverage areas. Helps farmers identify optimal installation locations.*
+
+#### Analyze Temporal Evolution
+```bash
+python main.py --analyze
+python main.py --analyze --country GB  # Analyze UK data
+
 *Generates Folium HTML map with color-coded markers and Starlink coverage overlay*
 
 #### Create Map Without Starlink Coverage
@@ -305,23 +587,87 @@ python main.py --map --no-starlink-coverage
 
 #### Analyze Temporal Evolution
 ```bash
-python main.py --analyze
+python main.py --analyze                # Analyze in English
+python main.py --analyze --language pt  # Analyze in Portuguese
+
 ```
-*Shows trends, insights, provider statistics*
+*Shows trends, insights, provider statistics in selected language*
+
+#### **NEW: ML-Enhanced Geospatial Analysis**
+```bash
+python main.py --ml-analyze
+```
+*Perform machine learning analysis for:*
+- Rural area identification and prioritization
+- Starlink expansion zone recommendations
+- ROI analysis for satellite internet deployment
+- Improvement potential predictions
 
 #### Enable Debug Mode
 ```bash
-python main.py --debug --importar data.csv
+python main.py --debug --importar data.csv --country DE
 ```
 
 #### Combined Workflow
 ```bash
 python main.py --debug \
-  --importar src/data/sample_data.csv \
+  --country US \
+  --importar src/data/sample_data_us.csv \
   --simulate \
   --map \
+  --starlink-coverage \
   --analyze \
+  --ml-analyze \
   --relatorio html
+```
+
+
+### Using the New Data Integration Features
+
+#### Fetch ANATEL Data
+```python
+from src.utils import fetch_anatel_broadband_data, fetch_anatel_mobile_data
+
+# Get broadband data
+broadband = fetch_anatel_broadband_data(state='SP')
+
+# Get mobile coverage data
+mobile = fetch_anatel_mobile_data(state='RJ')
+```
+
+#### Fetch IBGE Demographics
+```python
+from src.utils import get_rural_areas_needing_connectivity, get_ibge_statistics_summary
+
+# Get priority rural areas
+priority_areas = get_rural_areas_needing_connectivity()
+
+# Get Brazil connectivity summary
+summary = get_ibge_statistics_summary()
+```
+
+#### Check Starlink Availability
+```python
+from src.utils import check_starlink_availability, get_starlink_service_plans
+
+# Check availability at coordinates
+availability = check_starlink_availability(-15.7801, -47.9292)
+
+# Get service plans
+plans = get_starlink_service_plans()
+```
+
+#### Work with LATAM Countries
+```python
+from src.utils import get_supported_countries, get_country_config
+
+# Get all supported countries
+countries = get_supported_countries()  # ['BR', 'AR', 'CL', 'CO', 'MX', ...]
+
+# Get country configuration
+config = get_country_config('AR')
+print(config.name)  # 'Argentina'
+print(config.telecom_regulator)  # 'ENACOM'
 ```
 
 #### Export for Ecosystem Integration
@@ -337,18 +683,54 @@ python main.py --export ecosystem
 ```
 *Generates data exports for integration with Hybrid Architecture Simulator (failover testing) and AgriX-Boost (farm dashboards)*
 
+
 ### CLI Arguments Reference
 
 | Argument | Description | Choices/Format |
 |----------|-------------|----------------|
 | `--debug` | Enable verbose logging | Flag |
+| `--country <code>` | ISO country code | BR, US, CA, GB, AU, DE, FR, IN, MX |
+| `--list-countries` | List all available countries | Flag |
 | `--relatorio <format>` | Generate report | json, csv, txt, html |
 | `--importar <csv>` | Import from CSV | Path to file |
 | `--simulate` | Simulate router impact | Flag |
 | `--map` | Generate interactive map | Flag |
+| `--starlink-coverage` | Add Starlink coverage overlay | Flag (requires --map) |
 | `--no-starlink-coverage` | Disable Starlink coverage overlay | Flag (use with --map) |
 | `--analyze` | Analyze temporal trends | Flag |
+| `--ml-analyze` | **NEW:** ML-enhanced geospatial analysis | Flag |
+| `--language <code>` or `--lang <code>` | Language for reports/analysis | en (English), pt (Portuguese) |
 | `--export <target>` | Export for ecosystem integration | hybrid, agrix, ecosystem |
+
+
+def get_supported_countries(self) -> str:
+    """Generate supported countries table"""
+    countries = [
+        ("🇧🇷 Brazil", "BR", "ANATEL", "IBGE", "Active (98.5% coverage)"),
+        ("🇦🇷 Argentina", "AR", "ENACOM", "INDEC", "Active (97.0% coverage)"),
+        ("🇨🇱 Chile", "CL", "SUBTEL", "INE", "Active (98.0% coverage)"),
+        ("🇨🇴 Colombia", "CO", "CRC", "DANE", "Active (90.0% coverage)"),
+        ("🇲🇽 Mexico", "MX", "IFT", "INEGI", "Active (95.0% coverage)"),
+        ("🇵🇪 Peru", "PE", "OSIPTEL", "INEI", "Active (88.0% coverage)"),
+        ("🇪🇨 Ecuador", "EC", "ARCOTEL", "INEC", "Active"),
+        ("🇺🇾 Uruguay", "UY", "URSEC", "INE", "Active"),
+        ("🇵🇾 Paraguay", "PY", "CONATEL", "DGEEC", "Active"),
+        ("🇧🇴 Bolivia", "BO", "ATT", "INE", "Active"),
+    ]
+    
+    table = "## 🌎 Supported Countries\n\n"
+    table += "| Country | Code | Telecom Regulator | Stats Agency | Starlink Status |\n"
+    table += "|---------|------|-------------------|--------------|-----------------|\n"
+    
+    for name, code, regulator, stats, status in countries:
+        table += f"| {name} | {code} | {regulator} | {stats} | {status} |\n"
+    
+    return table
+
+def get_project_stats(self) -> str:
+    """Generate consistent project statistics"""
+    return f"""## 📊 Project Statistics
+
 
 ### Alternative Data Submission Methods
 
@@ -382,6 +764,43 @@ For users who are not comfortable with CSV files or command-line tools, we provi
 python main.py --importar google_forms_export.csv --map --relatorio html
 ```
 
+
+
+---
+
+## 🛰️ Starlink Coverage Layer
+
+The interactive maps now include **Starlink coverage visualization** for rural Brazil:
+
+### Features
+- **Coverage Zones**: 5 major regions showing satellite signal strength
+  - Central Brazil (Brasília) - Excellent coverage
+  - Southeast Brazil (São Paulo/Rio) - Excellent coverage
+  - South Brazil - Good coverage
+  - Northeast Brazil - Good coverage
+  - North Brazil (Amazon) - Expanding coverage
+
+- **Signal Points**: 11+ locations with actual signal strength measurements (0-100)
+- **Toggle Layers**: Use the layer control to show/hide:
+  - Starlink Coverage Zones
+  - Starlink Signal Points
+  - Speedtest Data Points
+
+- **Color Coding**:
+  - 🟢 Green: Excellent signal (85+/100)
+  - 🟡 Yellow: Good signal (70-84/100)
+  - 🟠 Orange: Fair signal (50-69/100)
+
+### Implementation Note
+Currently uses **simulated coverage data** based on Starlink's 2026 expansion roadmap. The architecture is ready to integrate with official Starlink APIs when available. Coverage zones reflect known deployment priorities and satellite constellation patterns.
+
+### Using the Map
+1. Generate a map: `python main.py --map`
+2. Open the HTML file in your browser
+3. Use the **Layer Control** (top right) to toggle different layers
+4. Click on markers and zones to see detailed information
+5. The **Legend** (bottom right) explains all indicators
+
 ---
 
 ## 📁 Project Structure
@@ -389,19 +808,62 @@ python main.py --importar google_forms_export.csv --map --relatorio html
 ```
 Rural-Connectivity-Mapper-2026/
 ├── main.py                      # CLI application
+├── dashboard.py                 # NEW: Streamlit web dashboard
+=======
+├── app.py                       # Flask web application (NEW!)
 ├── upload_csv.py                # 🆕 Standalone CSV upload & validation script
 ├── example_speedtests.csv       # 🆕 Sample CSV with 10 test locations
 ├── demo_workflow.py             # Complete demo
+├── demo_starlink_api.py         # Starlink API demo
 ├── requirements.txt             # Dependencies
 ├── README.md                    # This file
 ├── DEPLOYMENT.md                # Deployment notes
 ├── LICENSE                      # MIT License
 ├── .gitignore                   # Git ignore
 │
+├── templates/                   # Web dashboard templates (NEW!)
+│   └── index.html              # Main dashboard page
+├── config/                      # Configuration files
+│   └── countries.json           # Country-specific settings
+│
 ├── src/
 │   ├── models/                  # Data models
-│   │   ├── ConnectivityPoint.py
+│   │   ├── ConnectivityPoint.py # With country support
 │   │   ├── SpeedTest.py
+│   │   └── QualityScore.py
+│   │
+│   ├── utils/                   # Utility modules (12 modules)
+│   │   ├── validation_utils.py
+│   ├── utils/                   # Utility modules
+│   │   ├── config_utils.py      # Country configuration loader
+│   │   ├── validation_utils.py  # Country-aware validation
+│   │   ├── data_utils.py
+│   │   ├── measurement_utils.py
+│   │   ├── geocoding_utils.py   # Multi-language support
+│   │   ├── report_utils.py
+│   │   ├── simulation_utils.py
+│   │   ├── mapping_utils.py
+│   │   ├── analysis_utils.py
+│   │   └── starlink_api.py      # NEW: Starlink API integration
+│   │
+│   └── data/
+│       ├── sample_data.csv      # Sample points
+│       └── pontos.json          # Data storage
+│
+├── tests/                       # Test suite (58 tests)
+│   ├── test_models.py
+│   ├── test_validation_utils.py
+│   ├── test_data_utils.py
+│   ├── test_measurement_utils.py
+│   ├── test_geocoding_utils.py
+│   ├── test_report_utils.py
+│   ├── test_simulation_utils.py
+│   ├── test_mapping_utils.py
+│   ├── test_analysis_utils.py
+│   └── test_starlink_api.py     # NEW: Starlink API tests
+│
+└── docs/
+    └── API.md                   # API reference
 │   │   └── QualityScore.py
 │   │
 │   ├── utils/                   # Utility modules
@@ -413,12 +875,27 @@ Rural-Connectivity-Mapper-2026/
 │   │   ├── simulation_utils.py
 │   │   ├── mapping_utils.py
 │   │   ├── analysis_utils.py
+│   │   └── starlink_coverage_utils.py
+│   │   ├── anatel_utils.py      # NEW: ANATEL data integration
+│   │   ├── ibge_utils.py        # NEW: IBGE demographics
+│   │   ├── starlink_utils.py    # NEW: Starlink API
+│   │   └── country_config.py    # NEW: LATAM country configs
+│   │   └── ml_utils.py          # **NEW:** ML analysis
+│   │   ├── mapping_utils.py     # Country-specific centers
+│   │   └── analysis_utils.py
+│   │   ├── mapping_utils.py
+│   │   ├── analysis_utils.py
 │   │   └── export_utils.py      # NEW: Ecosystem exports
 │   │
 │   └── data/
-│       ├── sample_data.csv      # Sample points
+│       ├── sample_data.csv      # Sample Brazil data
+│       ├── sample_data_us.csv   # Sample US data
 │       └── pontos.json          # Data storage
 │
+├── tests/                       # Test suite (45 tests)
+├── tests/                       # Test suite (73 tests)
+├── tests/                       # Test suite (47 tests)
+├── tests/                       # Test suite (46 tests)
 ├── tests/                       # Test suite (55 tests)
 ├── tests/                       # Test suite (46 tests)
 ├── examples/                    # CSV templates for contributions
@@ -428,6 +905,7 @@ Rural-Connectivity-Mapper-2026/
 │
 ├── tests/                       # Test suite (36 tests)
 │   ├── test_models.py
+│   ├── test_config_utils.py     # Config tests (NEW)
 │   ├── test_validation_utils.py
 │   ├── test_data_utils.py
 │   ├── test_measurement_utils.py
@@ -436,6 +914,13 @@ Rural-Connectivity-Mapper-2026/
 │   ├── test_simulation_utils.py
 │   ├── test_mapping_utils.py
 │   ├── test_analysis_utils.py
+│   └── test_starlink_coverage_utils.py
+│   ├── test_anatel_utils.py     # NEW: ANATEL tests
+│   ├── test_ibge_utils.py       # NEW: IBGE tests
+│   ├── test_starlink_utils.py   # NEW: Starlink tests
+│   └── test_country_config.py   # NEW: Country config tests
+│   └── test_app.py             # Web app tests (NEW!)
+│   └── test_ml_utils.py         # **NEW:** ML tests
 │   └── test_upload_csv.py       # 🆕 CSV upload script tests
 │   └── test_export_utils.py     # NEW: Ecosystem export tests
 │
@@ -500,6 +985,44 @@ Pre-configured connectivity data for 10 Brazilian cities (2026 data):
 
 ---
 
+## 🌎 Multi-Country Support
+
+The tool now supports **9 countries** with country-specific configurations:
+
+| Country | Code | Language | Key Providers |
+|---------|------|----------|---------------|
+| **Brazil** | BR | Portuguese | Starlink, Viasat, HughesNet, Claro, Vivo, TIM, Oi |
+| **United States** | US | English | Starlink, Viasat, HughesNet, AT&T, Verizon, T-Mobile |
+| **Canada** | CA | English | Starlink, Xplornet, Bell, Rogers, Telus, Shaw |
+| **United Kingdom** | GB | English | Starlink, BT, Virgin Media, Sky, TalkTalk, Vodafone |
+| **Australia** | AU | English | Starlink, NBN Co, Telstra, Optus, TPG, Vodafone |
+| **Germany** | DE | German | Starlink, Deutsche Telekom, Vodafone, O2, 1&1 |
+| **France** | FR | French | Starlink, Orange, SFR, Bouygues Telecom, Free |
+| **India** | IN | English | Starlink, Jio, Airtel, BSNL, Vi, ACT Fibernet |
+| **Mexico** | MX | Spanish | Starlink, Telmex, Telcel, AT&T Mexico, Izzi, Megacable |
+
+### Country Configuration Features
+
+- **Localized Geocoding**: Addresses returned in the country's primary language
+- **Provider Validation**: Country-specific ISP lists for accurate validation
+- **Map Centering**: Interactive maps automatically center on the selected country
+- **Customizable**: Add new countries by editing `config/countries.json`
+
+### Example: Using Different Countries
+
+```bash
+# Analyze US data
+python main.py --country US --importar src/data/sample_data_us.csv --map
+
+# Generate report for Canada
+python main.py --country CA --analyze --relatorio json
+
+# List all supported countries
+python main.py --list-countries
+```
+
+---
+
 ## 🎯 Starlink 2026 Metrics
 
 ### Target Specifications
@@ -539,7 +1062,7 @@ Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 5)
 | Latency | 28 ms | 22 ms | -21% |
 | Obstruction | 1.9% | 0.7% | -63% |
 | Quality Score | 89.4/100 | 96.7/100 | +8% |
-=======
+
 Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 0.2)
 ```
 
@@ -556,6 +1079,64 @@ Stability Score = 100 - (jitter × 2 + packet_loss × 10 + obstruction × 0.2)
 - **Poor:** <40/100
 
 ---
+
+
+## 🤖 Machine Learning Features
+
+### ML-Enhanced Geospatial Analysis
+
+The toolkit now includes advanced machine learning capabilities for optimizing rural connectivity and Starlink expansion strategies.
+
+#### Key ML Capabilities
+
+1. **Rural Area Identification**
+   - Automatically identifies rural areas based on distance from major cities
+   - Uses geospatial features to classify urban vs. rural zones
+   - Threshold: >100km from major city = rural area
+
+2. **Improvement Potential Prediction**
+   - ML models predict which areas have highest improvement potential
+   - Considers current quality score, distance from cities, and connectivity gaps
+   - Generates priority scores (0-100) for each location
+
+3. **Starlink Expansion Zone Recommendation**
+   - K-means clustering to identify optimal expansion zones
+   - Prioritizes zones based on rural characteristics and connectivity gaps
+   - Provides actionable recommendations for each zone
+
+4. **ROI Analysis**
+   - Calculates Starlink suitability score for deployment
+   - Analyzes rural coverage percentage and high-priority areas
+   - Generates strategic recommendations based on ML insights
+
+### ML Analysis Output
+
+```json
+{
+  "roi_analysis": {
+    "rural_percentage": 60.0,
+    "starlink_suitability_score": 75.5,
+    "recommendations": [
+      "STRONG FIT: Over 50% of points are in rural areas"
+    ]
+  },
+  "expansion_zones": {
+    "zone_1": {
+      "priority_score": 85.2,
+      "is_primarily_rural": true,
+      "recommendation": "HIGH PRIORITY: Rural area with poor connectivity"
+    }
+  },
+  "top_priority_areas": [...]
+}
+```
+
+### ML Algorithms Used
+
+- **K-Means Clustering**: For expansion zone identification
+- **Feature Engineering**: Geospatial distance calculations, quality metrics
+- **Ensemble Methods**: For robust prediction and prioritization
+- **Geospatial Analytics**: Haversine distance, coordinate-based features
 
 ## 🔗 Ecosystem Integration
 
@@ -616,6 +1197,7 @@ When using `--export ecosystem`, the following files are generated in `exports/e
 
 **Documentation:** See [ECOSYSTEM_INTEGRATION.md](docs/ECOSYSTEM_INTEGRATION.md) for detailed integration guide.
 
+
 ---
 
 ## 🧪 Testing
@@ -625,16 +1207,55 @@ When using `--export ecosystem`, the following files are generated in `exports/e
 pytest tests/ -v
 ```
 
+### Run Web App Tests Only
+```bash
+pytest tests/test_app.py -v
+```
+
 ### Run with Coverage
 ```bash
-pytest tests/ --cov=src --cov-report=html
+pytest tests/ --cov=src --cov=app --cov-report=html
 ```
 
 **Test Coverage:**
+
+- 38 total tests (190% of requirement)
+- 5 model tests
+- 33 utility tests
+
+
+- 58 total tests (290% of requirement)
+- 5 model tests
+- 31 utility tests
+- 22 Starlink API tests
+
+
+- 73 total tests (365% of original requirement)
+- 5 model tests
+- 31 original utility tests
+- 37 new integration tests (ANATEL, IBGE, Starlink, Country Config)
+
+
+- 47 total tests
+- 5 model tests
+- 31 utility tests
+- 11 web application tests
+
+
+- **47 total tests** (including 11 ML tests)
+- 5 model tests
+- 31 utility tests
+- 11 ML tests
+
 - 46 total tests (230% of requirement)
 - 5 model tests
 - 31 utility tests
 - 10 ecosystem export tests
+
+
+
+
+
 - 80%+ code coverage
 
 ### Linting
@@ -699,17 +1320,80 @@ flake8 src/ tests/ main.py demo_workflow.py
 
 ## 🌍 Use Cases
 
-1. **Rural Expansion Planning** - Identify priority areas for Starlink installations
+
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations using coverage overlay
 2. **ISP Performance Benchmarking** - Compare Starlink vs. traditional providers
+3. **Installation Site Selection** - Visualize coverage zones to determine optimal Dishy placement
+4. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
+5. **Policy Advocacy** - Generate reports for government stakeholders
+6. **Academic Research** - Analyze connectivity's socioeconomic impact
+
+
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations across LATAM
+
+1. **Rural Expansion Planning** - Identify priority areas for Starlink installations using ML
+
+2. **ISP Performance Benchmarking** - Compare Starlink vs. traditional providers
+
+3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades with ML predictions
+4. **Policy Advocacy** - Generate ML-enhanced reports for government stakeholders
+5. **Academic Research** - Analyze connectivity's socioeconomic impact with geospatial ML
+6. **Starlink Deployment Strategy** - Optimize satellite internet expansion with ML zone recommendations
+
 3. **Infrastructure ROI Modeling** - Estimate impact of router upgrades
+
+4. **Policy Advocacy** - Generate reports for government stakeholders using real ANATEL/IBGE data
+5. **Academic Research** - Analyze connectivity's socioeconomic impact with demographic integration
+6. **Cross-Country Analysis** - Compare connectivity metrics across 10 LATAM countries
+7. **Starlink Market Entry** - Assess service availability and competitive landscape
+8. **Digital Divide Studies** - Track rural-urban connectivity gaps with IBGE statistics
+
+---
+
+## 🌎 Supported Countries
+
+The tool now supports **10 Latin American countries**:
+
+| Country | Code | Telecom Regulator | Stats Agency | Starlink Status |
+|---------|------|-------------------|--------------|-----------------|
+| 🇧🇷 Brazil | BR | ANATEL | IBGE | Active (98.5% coverage) |
+| 🇦🇷 Argentina | AR | ENACOM | INDEC | Active (97.0% coverage) |
+| 🇨🇱 Chile | CL | SUBTEL | INE | Active (98.0% coverage) |
+| 🇨🇴 Colombia | CO | CRC | DANE | Active (90.0% coverage) |
+| 🇲🇽 Mexico | MX | IFT | INEGI | Active (95.0% coverage) |
+| 🇵🇪 Peru | PE | OSIPTEL | INEI | Active (88.0% coverage) |
+| 🇪🇨 Ecuador | EC | ARCOTEL | INEC | Active |
+| 🇺🇾 Uruguay | UY | URSEC | INE | Active |
+| 🇵🇾 Paraguay | PY | CONATEL | DGEEC | Active |
+| 🇧🇴 Bolivia | BO | ATT | INE | Active |
+
 4. **Policy Advocacy** - Generate reports for government stakeholders
 5. **Academic Research** - Analyze connectivity's socioeconomic impact
 6. **Failover Testing** - Export data to Hybrid Architecture Simulator for realistic network failover scenarios
 7. **Farm Automation** - Integrate with AgriX-Boost to provide connectivity layer for agricultural IoT and monitoring
 
+
+
+
 ---
 
 ## 🗺️ Roadmap
+
+
+### v1.1.0 (Q1 2026) ✅ COMPLETED
+- [x] Real-time ANATEL data integration
+- [x] IBGE demographics integration  
+- [x] Starlink API integration
+- [x] Streamlit web dashboard
+- [x] Support for 10 LATAM countries
+- [x] Country-specific configurations
+
+
+### v1.1.0 (Q1 2026) - COMPLETED ✅
+- [x] Multi-country support (9 countries)
+- [x] Country-specific provider lists
+- [x] Localized geocoding
+- [x] Configurable map centers
 
 
 ### v1.0.0 (Current) ✅
@@ -724,6 +1408,10 @@ flake8 src/ tests/ main.py demo_workflow.py
 
 
 ### v1.1.0 (Q1 2026)
+
+- [x] Web dashboard (Streamlit)
+- [x] Real-time speedtest integration
+- [x] Integration with Starlink APIs ✅ (Completed: starlink_api.py module)
 - [ ] Real-time speedtest integration
 - [ ] SQLite database backend
 
@@ -732,17 +1420,30 @@ flake8 src/ tests/ main.py demo_workflow.py
 - [ ] GitHub Actions CI/CD
 
 
-### v1.2.0 (Q2 2026)
+
+### v1.2.0 (Q2 2026) - COMPLETED! ✅
+- [x] Web dashboard (Flask)
+- [x] REST API endpoints
+- [ ] Machine learning predictions
+
+### v1.2.0 (Q2 2026) - **COMPLETED EARLY!**
 - [ ] Web dashboard (Flask/Streamlit)
 - [ ] REST API endpoints
-- [ ] Machine learning predictions
+- [x] **Machine learning predictions** ✅
 - [ ] GeoJSON/KML export
 
 ### v2.0.0 (H2 2026)
-- [ ] Multi-language support (Portuguese/English)
+
+- [ ] Multi-language UI (Portuguese/Spanish/English)
+- [ ] Mobile app for field data collection
+- [ ] Advanced analytics (churn prediction)
+- [ ] Live Starlink satellite tracking
+- [ ] Additional countries support
+- [x] Multi-language support (Portuguese/English) ✅ **Completed!**
 - [ ] Mobile app for field data collection
 - [ ] Advanced analytics (churn prediction)
 - [ ] Integration with Starlink APIs
+- [ ] Deep learning models for connectivity forecasting
 
 ---
 
@@ -853,6 +1554,8 @@ git push origin data/your-location-name
 
 **Every data point helps! Thank you for contributing to better rural connectivity in Brazil! 🇧🇷**
 
+
+
 ---
 
 ## 🤝 Contributing Code
@@ -885,10 +1588,24 @@ Copyright (c) 2025 Daniel Azevedo Novais
 
 ## 🙏 Acknowledgments
 
-- **SpaceX Starlink** - 2026 expansion targets and Gen2/High Performance dish innovation
+
+- **SpaceX Starlink** - 2026 expansion targets and satellite innovation
+
+- **ANATEL** - Brazilian telecommunications data and regulatory framework
+- **IBGE** - Brazilian demographic and geographic statistics
+- **LATAM Regulators** - ENACOM, SUBTEL, CRC, IFT, OSIPTEL, and others
 - **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
 - **Satellite ISPs** - Viasat, HughesNet for rural comparisons
-- **Open Source Community** - geopy, folium, pytest, pandas
+- **Open Source Community** - geopy, folium, pytest, pandas, streamlit, plotly
+
+- **Global ISPs** - AT&T, Verizon, Bell, BT, Telstra, Deutsche Telekom and many others
+
+- **SpaceX Starlink** - 2026 expansion targets and Gen2/High Performance dish innovation
+
+- **Brazilian ISPs** - Claro, Vivo, TIM, Oi for benchmarking
+- **Satellite ISPs** - Viasat, HughesNet for rural comparisons
+- **Open Source Community** - geopy, folium, pytest, pandas, scikit-learn
+
 
 ---
 
@@ -903,6 +1620,52 @@ Copyright (c) 2025 Daniel Azevedo Novais
 ## 📊 Project Statistics
 
 
+- **35+ files** across models, utilities, tests, documentation
+- **4,000+ lines of code** (Python)
+- **45 passing tests** (100% success rate)
+- **5 sample cities** with real-world profiles
+- **4 export formats** (JSON, CSV, TXT, HTML)
+- **5 Starlink coverage zones** + 11 signal points
+
+
+- **35+ files** across models, utilities, tests, documentation
+- **4,500+ lines of code** (Python)
+- **58 passing tests** (100% success rate)
+- **9 utility modules** including Starlink API integration
+
+
+- **40 files** across models, utilities, tests, documentation
+- **5,119 lines of code** (Python)
+- **73 passing tests** (100% success rate)
+- **10 LATAM countries** fully configured
+- **4 data sources** (ANATEL, IBGE, Starlink API, Manual)
+- **6 dashboard views** in Streamlit
+- **4 export formats** (JSON, CSV, TXT, HTML)
+
+
+- **35 files** across models, utilities, tests, documentation, web app
+- **4,800+ lines of code** (Python, HTML, CSS, JavaScript)
+- **47 passing tests** (100% success rate)
+
+
+- **35+ files** across models, utilities, tests, documentation
+- **5,500+ lines of code** (Python)
+- **47 passing tests** (100% success rate)
+
+
+- **38 files** across models, utilities, tests, documentation, config
+- **4,500+ lines of code** (Python)
+- **46 passing tests** (100% success rate)
+- **9 supported countries** with localized settings
+- **10+ sample cities** with real-world profiles
+- **4 export formats** (JSON, CSV, TXT, HTML)
+
+
+- **35 files** across models, utilities, tests, documentation
+- **4,000+ lines of code** (Python)
+- **50 passing tests** (100% success rate)
+- **2 supported languages** (English, Portuguese)
+
 - **35 files** across models, utilities, tests, documentation
 - **4,000+ lines of code** (Python)
 - **55 passing tests** (100% success rate)
@@ -913,6 +1676,10 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **5,000+ lines of code** (Python)
 - **46 passing tests** (100% success rate)
 - **32 files** across models, utilities, tests, documentation
+
+- **3,700+ lines of code** (Python)
+- **38 passing tests** (100% success rate)
+
 
 - **3,591+ lines of code** (Python)
 - **37 passing tests** (100% success rate)
@@ -928,23 +1695,50 @@ Copyright (c) 2025 Daniel Azevedo Novais
 - **4 export formats** (JSON, CSV, TXT, HTML)
 - **3,591 lines of code** (Python)
 - **39 passing tests** (100% success rate)
+
+
+
+
 - **5 sample cities** with real-world profiles
 - **7 export formats** (JSON, CSV, TXT, HTML, Hybrid Simulator, AgriX-Boost, Ecosystem Bundle)
 
 
+
+
 - **80%+ test coverage**
+- **6 Starlink coverage zones** (Active, Planned, Limited)
+
+- **14 REST API endpoints** for data integration
+
 - **3 integrated ecosystem components**
+
 
 ---
 
-**🇧🇷 Made with ❤️ for improving rural connectivity in Brazil**
 
-*Supporting Starlink's 2026 roadmap to connect 10M rural users and enable 20-30% agricultural productivity gains.*
+**🇧🇷 🇦🇷 🇨🇱 🇨🇴 🇲🇽 Made with ❤️ for improving rural connectivity across Latin America**
+
+**🌍 Made with ❤️ for improving rural connectivity worldwide**
+
+*Supporting Starlink's 2026 roadmap to connect 10M rural users globally and enable 20-30% agricultural productivity gains.*
+
 
 *Part of the Rural Connectivity Ecosystem 2026 - integrating with Hybrid Architecture Simulator and AgriX-Boost.*
 
 ---
 
+
+## 📚 Additional Documentation
+
+- **[New Features Guide](docs/NEW_FEATURES.md)** - Comprehensive guide for ANATEL, IBGE, Starlink API, and LATAM support
+- **[API Reference](docs/API.md)** - Full API documentation
+
+---
+
+**Release Date:** January 4, 2026  
+**Version:** 1.1.0  
+
 **Release Date:** January 3, 2026  
 **Version:** 1.0.0  
+
 **Status:** Production Ready ✅
