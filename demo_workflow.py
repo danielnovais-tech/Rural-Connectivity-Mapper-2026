@@ -8,7 +8,11 @@ from pathlib import Path
 from src.models import ConnectivityPoint, SpeedTest
 from src.utils import (
     load_data, save_data, generate_report, simulate_router_impact,
+
+    generate_map, analyze_temporal_evolution, validate_csv_row
+
     generate_map, analyze_temporal_evolution, compare_providers
+
 )
 
 
@@ -41,8 +45,20 @@ def main():
         data_path = 'src/data/pontos.json'
         
         points = []
+        skipped_count = 0
+        
         with open(csv_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
+
+            
+            for row_num, row in enumerate(reader, start=2):  # start=2 because row 1 is header
+                # Validate row
+                is_valid, error_msg = validate_csv_row(row, row_num)
+                if not is_valid:
+                    logger.warning(error_msg)
+                    skipped_count += 1
+                    continue
+
             for row in reader:
                 speed_test = SpeedTest(
                     download=float(row['download']),
@@ -61,11 +77,40 @@ def main():
                     timestamp=row.get('timestamp', datetime.now().isoformat()),
                     point_id=row.get('id')
                 )
+
                 
-                points.append(point.to_dict())
+                try:
+                    speed_test = SpeedTest(
+                        download=float(row['download']),
+                        upload=float(row['upload']),
+                        latency=float(row['latency']),
+                        jitter=float(row.get('jitter', 0)),
+                        packet_loss=float(row.get('packet_loss', 0))
+                    )
+                    
+                    point = ConnectivityPoint(
+                        latitude=float(row['latitude']),
+                        longitude=float(row['longitude']),
+                        provider=row['provider'],
+                        speed_test=speed_test,
+                        timestamp=row.get('timestamp', datetime.now().isoformat()),
+                        point_id=row.get('id')
+                    )
+                    
+                    points.append(point.to_dict())
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Row {row_num}: Error creating point - {e}")
+                    skipped_count += 1
+                    continue
+        
+        if not points:
+            logger.error("No valid data points found in CSV")
+            sys.exit(1)
         
         save_data(data_path, points)
         print(f"✓ Imported {len(points)} connectivity points from CSV")
+        if skipped_count > 0:
+            print(f"  (Skipped {skipped_count} invalid rows)")
         
         # Step 2: Load data
         logger.info("Step 2: Loading data...")

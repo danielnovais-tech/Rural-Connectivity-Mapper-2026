@@ -1,6 +1,6 @@
 """Utils package for Rural Connectivity Mapper."""
 
-from .validation_utils import validate_coordinates, validate_speed_test, validate_provider
+from .validation_utils import validate_coordinates, validate_speed_test, validate_provider, validate_csv_row
 from .data_utils import load_data, save_data, backup_data
 from .measurement_utils import measure_speed
 from .geocoding_utils import geocode_coordinates, geocode_address
@@ -34,6 +34,7 @@ __all__ = [
     'validate_coordinates',
     'validate_speed_test',
     'validate_provider',
+    'validate_csv_row',
     'load_data',
     'save_data',
     'backup_data',
