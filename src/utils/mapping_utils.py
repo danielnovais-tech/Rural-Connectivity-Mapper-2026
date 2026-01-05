@@ -400,7 +400,6 @@ def generate_map(data: List[Dict], output_path: str = None, include_starlink_cov
                     # Add coverage polygons
                     for feature in coverage_data.get('features', []):
                         properties = feature.get('properties', {})
-                        geometry = feature.get('geometry', {})
                         
                         # Determine color and opacity based on coverage type
                         coverage_type = properties.get('coverage_type', 'Unknown')
