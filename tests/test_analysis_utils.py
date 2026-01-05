@@ -140,6 +140,23 @@ def test_analyze_insights(sample_data):
     assert all(isinstance(insight, str) for insight in insights)
 
 
+def test_analyze_insights_portuguese(sample_data):
+    """Test that Portuguese insights are generated."""
+    analysis = analyze_temporal_evolution(sample_data, language='pt')
+    
+    insights = analysis['insights']
+    
+    # Should have some insights
+    assert len(insights) > 0
+    assert all(isinstance(insight, str) for insight in insights)
+    
+    # Check that at least one insight is in Portuguese
+    # (e.g., contains Portuguese words like "qualidade", "velocidade", etc.)
+    insights_text = ' '.join(insights)
+    # Check for Portuguese-specific characters or words
+    assert any(word in insights_text.lower() for word in ['qualidade', 'velocidade', 'latência', 'atendem', 'apresenta'])
+
+
 def test_provider_stats(sample_data):
     """Test provider statistics in analysis."""
     analysis = analyze_temporal_evolution(sample_data)
