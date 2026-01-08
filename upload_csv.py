@@ -136,7 +136,7 @@ def validate_optional_numeric(value: str, field_name: str) -> tuple[bool, str]:
         return False, f"Invalid {field_name}: '{value}'. Must be a number"
 
 
-def validate_row(row: dict, row_num: int) -> tuple[bool, list[str]]:
+def validate_row(row: dict[str, str], row_num: int) -> tuple[bool, list[str]]:
     """Validate a single CSV row.
 
     Args:
@@ -146,7 +146,7 @@ def validate_row(row: dict, row_num: int) -> tuple[bool, list[str]]:
     Returns:
         Tuple of (is_valid, list_of_errors)
     """
-    errors = []
+    errors: list[str] = []
 
     # Check required fields exist
     for field in REQUIRED_FIELDS:
@@ -191,7 +191,7 @@ def validate_row(row: dict, row_num: int) -> tuple[bool, list[str]]:
     return len(errors) == 0, errors
 
 
-def load_and_validate_csv(csv_path: str) -> tuple[list[dict], list[str], dict]:
+def load_and_validate_csv(csv_path: str) -> tuple[list[dict[str, str]], list[str], dict[str, int | dict[str, int]]]:
     """Load and validate CSV file.
 
     Args:
@@ -200,14 +200,19 @@ def load_and_validate_csv(csv_path: str) -> tuple[list[dict], list[str], dict]:
     Returns:
         Tuple of (valid_rows, errors, statistics)
     """
-    valid_rows = []
-    all_errors = []
-    stats: dict = {
+    valid_rows: list[dict[str, str]] = []
+    all_errors: list[str] = []
+    stats: dict[str, int | dict[str, int]] = {
         'total_rows': 0,
         'valid_rows': 0,
         'invalid_rows': 0,
         'missing_optional_fields': {}
     }
+    # Type assertions for stats counters
+    assert isinstance(stats['total_rows'], int)
+    assert isinstance(stats['valid_rows'], int)
+    assert isinstance(stats['invalid_rows'], int)
+    assert isinstance(stats['missing_optional_fields'], dict)
 
     try:
         with open(csv_path, 'r', encoding='utf-8') as f:  # noqa: UP015
@@ -248,7 +253,7 @@ def load_and_validate_csv(csv_path: str) -> tuple[list[dict], list[str], dict]:
         return [], [f"Error reading CSV file: {str(e)}"], stats
 
 
-def convert_to_json(rows: list[dict]) -> list[dict]:
+def convert_to_json(rows: list[dict[str, str]]) -> list[dict[str, str | float]]:
     """Convert CSV rows to JSON format.
 
     Args:
@@ -257,10 +262,10 @@ def convert_to_json(rows: list[dict]) -> list[dict]:
     Returns:
         List of dictionaries in JSON format
     """
-    json_data = []
+    json_data: list[dict[str, str | float]] = []
 
     for row in rows:
-        entry = {
+        entry: dict[str, str | float] = {
             'timestamp': row['timestamp'],
             'latitude': float(row['latitude']),
             'longitude': float(row['longitude']),
@@ -287,7 +292,7 @@ def convert_to_json(rows: list[dict]) -> list[dict]:
     return json_data
 
 
-def save_json(data: list[dict], output_path: str) -> None:
+def save_json(data: list[dict[str, str | float]], output_path: str) -> None:
     """Save data to JSON file.
 
     Args:
@@ -301,7 +306,7 @@ def save_json(data: list[dict], output_path: str) -> None:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-def print_validation_report(stats: dict, errors: list[str], verbose: bool = False) -> None:
+def print_validation_report(stats: dict[str, int | dict[str, int]], errors: list[str], verbose: bool = False) -> None:
     """Print validation report.
 
     Args:
@@ -313,19 +318,20 @@ def print_validation_report(stats: dict, errors: list[str], verbose: bool = Fals
     print("CSV VALIDATION REPORT")
     print("=" * 80)
     print(f"\nTotal rows processed: {stats['total_rows']}")
-    print(f"Valid rows: {stats['valid_rows']} ✓")
-    print(f"Invalid rows: {stats['invalid_rows']} ✗")
+    print(f"Valid rows: {stats['valid_rows']}")
+    print(f"Invalid rows: {stats['invalid_rows']}")
 
-    if stats['missing_optional_fields']:
+    missing_fields = stats['missing_optional_fields']
+    if missing_fields and isinstance(missing_fields, dict):
         print("\nOptional fields summary:")
-        for field, count in stats['missing_optional_fields'].items():
-            print(f"  • {field}: missing in {count} row(s)")
+        for field, count in missing_fields.items():
+            print(f"  - {field}: missing in {count} row(s)")
 
     if errors:
-        print(f"\n⚠️  Found {len(errors)} validation error(s):")
+        print(f"\n[WARNING] Found {len(errors)} validation error(s):")
         if verbose:
             for error in errors[:MAX_ERRORS_DISPLAYED]:
-                print(f"  • {error}")
+                print(f"  - {error}")
             if len(errors) > MAX_ERRORS_DISPLAYED:
                 print(f"  ... and {len(errors) - MAX_ERRORS_DISPLAYED} more error(s)")
         else:
@@ -379,15 +385,15 @@ Optional CSV columns:
     args = parser.parse_args()
 
     # Print header
-    print("\n🌐 Rural Connectivity Mapper 2026 - CSV Upload Script")
-    print(f"📁 Input: {args.csv_file}")
+    print("\n*** Rural Connectivity Mapper 2026 - CSV Upload Script ***")
+    print(f"Input: {args.csv_file}")
     if not args.dry_run:
-        print(f"💾 Output: {args.output}")
+        print(f"Output: {args.output}")
     else:
-        print("🔍 Mode: Dry-run (validation only)")
+        print("Mode: Dry-run (validation only)")
 
     # Load and validate CSV
-    print("\n⏳ Validating CSV file...")
+    print("\nValidating CSV file...")
     valid_rows, errors, stats = load_and_validate_csv(args.csv_file)
 
     # Print validation report
@@ -395,11 +401,11 @@ Optional CSV columns:
 
     # Exit if there are errors
     if errors:
-        print("❌ Validation failed. Please fix the errors above and try again.\n")
+        print("[ERROR] Validation failed. Please fix the errors above and try again.\n")
         sys.exit(1)
 
     if stats['valid_rows'] == 0:
-        print("❌ No valid rows found in CSV file.\n")
+        print("[ERROR] No valid rows found in CSV file.\n")
         sys.exit(1)
 
     # Convert to JSON format
@@ -407,13 +413,13 @@ Optional CSV columns:
 
     # Save to file unless dry-run
     if not args.dry_run:
-        print(f"💾 Saving {len(json_data)} record(s) to {args.output}...")
+        print(f"Saving {len(json_data)} record(s) to {args.output}...")
         save_json(json_data, args.output)
-        print(f"✅ Successfully saved data to {args.output}")
+        print(f"[SUCCESS] Successfully saved data to {args.output}")
     else:
-        print("✅ Validation successful! (Dry-run mode - no file saved)")
+        print("[SUCCESS] Validation successful! (Dry-run mode - no file saved)")
 
-    print("\n🎉 CSV upload completed successfully!\n")
+    print("\n*** CSV upload completed successfully! ***\n")
 
 
 if __name__ == '__main__':
