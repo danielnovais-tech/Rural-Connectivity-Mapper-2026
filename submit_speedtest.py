@@ -118,6 +118,13 @@ def interactive_submit():
     
     choice = input("\nChoice (1/2) [2]: ").strip()
     
+    # Initialize variables
+    download = 0.0
+    upload = 0.0
+    latency = 0.0
+    jitter = 0.0
+    packet_loss = 0.0
+    
     if choice == '1' and SPEEDTEST_AVAILABLE:
         results = run_speedtest()
         if results:
